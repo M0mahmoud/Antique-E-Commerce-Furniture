@@ -80,5 +80,14 @@
     "legal2": "Terms of Use",
     "legal3": "Disclaimer",
     "footerText": "© 2023 All rights reserved."
+  },
+  "offer": {
+    "weeklySale": "Weekly Sale on 60% Off All Products",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "emailPlaceholder": "Enter email",
+    "bookNow": "Book Now"
   }
 }

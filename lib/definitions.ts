@@ -33,6 +33,11 @@ export const LoginFormSchema = object({
   password: string().min(1, { message: "Password field must not be empty." }),
 });
 
+export const OfferSchema = object({
+  discount: string({ message: "Discount field must not be empty." }),
+  date: string({ message: "Date field must not be empty." }),
+});
+
 export type SessionPayload = {
   userId: string | number;
   expiresAt: Date;
