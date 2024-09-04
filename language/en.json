@@ -1,0 +1,84 @@
+{
+  "Hero": {
+    "Home": {
+      "title": "The Best Place for Elegant and Beautiful Furniture",
+      "text": "Shop now for all your home needs, including furniture, decor, office furniture, and home appliances, from Homzmart. Purchase at the best prices in Egypt, with delivery right to your doorstep.",
+      "btn": "Shop Now"
+    },
+    "Services": {
+      "title": "Our Services for Elegant and Beautiful Furniture",
+      "text": "Explore our wide range of services, from home decoration to interior design consultations. Our experts are here to make your dream home a reality.",
+      "btn": "Learn More"
+    },
+    "Shop": {
+      "title": "Shop by Elegant and Beautiful Furniture",
+      "text": "Find the perfect items for every room in your home. Browse our categories and start shopping now.",
+      "btn": "Browse Now"
+    }
+  },
+  "header": {
+    "brand": "Furniture",
+    "toggle": "D",
+    "nav": {
+      "home": "Home",
+      "shop": "Shop",
+      "about": "About us",
+      "services": "Services",
+      "contact": "Contact us",
+      "noauth": "SignIn Now",
+      "isauth": "Your Profile"
+    },
+    "input": "Search for products...",
+    "user": "User",
+    "cart": "Cart"
+  },
+  "whyChooseSection": {
+    "title": "Why Choose Us",
+    "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.",
+    "fastFreeShipping": {
+      "title": "Fast Shipping",
+      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+    },
+    "easyToShop": {
+      "title": "Easy to Shop",
+      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+    },
+    "support247": {
+      "title": "24/7 Support",
+      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+    },
+    "hassleFreeReturns": {
+      "title": "Free Returns",
+      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+    }
+  },
+  "Auth": {
+    "login": "Login",
+    "register": "Register",
+    "emailOrUsername": "Email or username",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+
+    "signIn": "Sign in",
+    "name": "Name",
+    "username": "Username",
+    "email": "Email",
+    "repeatPassword": "Repeat password",
+    "iAgreeToTheTerms": "I have read and agree to the terms"
+  },
+  "footer": {
+    "companyName": "Furniture.",
+    "description": "This text is for demonstration purposes only. Use this text to help you get a better idea of what the text looks like and how it appears. This is not the final text, but a placeholder.",
+    "explore": "Explore",
+    "visit": "Visit",
+    "address": "Head Office: 1234 Street, City, Country",
+    "phone": "Phone",
+    "email": "Email",
+    "legal": "Legal",
+    "legal1": "Privacy Policy",
+    "legal2": "Terms of Use",
+    "legal3": "Disclaimer",
+    "footerText": "© 2023 All rights reserved."
+  }
+}
