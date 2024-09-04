@@ -1,6 +1,8 @@
+import { useTranslations } from "next-intl";
 import React from "react";
 
 const Benefits = () => {
+  const t = useTranslations("Benefits");
   return (
     <section id="benefits">
       <div className="container mx-auto">
@@ -26,12 +28,9 @@ const Benefits = () => {
               </svg>
             </span>
             <h2 className="text-center text-xl text-secondary-foreground font-semibold">
-              Eco-friendly
+              {t("ecoFriendly.title")}
             </h2>
-            <p className="text-center">
-              Decorate your space with eco-friendly furniture with low VOCs,
-              environmentally friendly materials and safe coatings.
-            </p>
+            <p className="text-center">{t("ecoFriendly.description")}</p>
           </div>
           <div className="flex flex-col items-center">
             <svg
@@ -57,12 +56,9 @@ const Benefits = () => {
             </svg>
 
             <h2 className="text-center text-xl text-secondary-foreground font-semibold">
-              Unbeatable quality
+              {t("unbeatableQuality.title")}
             </h2>
-            <p className="text-center">
-              We choose raw materials from the best manufacturers, so our
-              furniture and decor are of the highest quality at the best prices.
-            </p>
+            <p className="text-center">{t("unbeatableQuality.description")}</p>
           </div>
           <div className="flex flex-col items-center">
             <span>
@@ -81,13 +77,9 @@ const Benefits = () => {
               </svg>
             </span>
             <h2 className="text-center text-xl text-secondary-foreground font-semibold">
-              Delivery to your door
+              {t("deliveryToYourDoor.title")}
             </h2>
-            <p className="text-center">
-              We will deliver to your door anywhere in the world. If you're not
-              100% satisfied, let us know within 30 days and we'll solve the
-              problem.
-            </p>
+            <p className="text-center">{t("deliveryToYourDoor.description")}</p>
           </div>
         </div>
       </div>

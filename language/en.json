@@ -89,5 +89,19 @@
     "seconds": "Seconds",
     "emailPlaceholder": "Enter email",
     "bookNow": "Book Now"
+  },
+  "Benefits": {
+    "ecoFriendly": {
+      "title": "Eco-friendly",
+      "description": "Decorate your space with eco-friendly furniture with low VOCs, environmentally friendly materials and safe coatings."
+    },
+    "unbeatableQuality": {
+      "title": "Unbeatable quality",
+      "description": "We choose raw materials from the best manufacturers, so our furniture and decor are of the highest quality at the best prices."
+    },
+    "deliveryToYourDoor": {
+      "title": "Delivery to your door",
+      "description": "We will deliver to your door anywhere in the world. If you're not 100% satisfied, let us know within 30 days and we'll solve the problem."
+    }
   }
 }
