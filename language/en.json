@@ -59,13 +59,25 @@
     "password": "Password",
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot password?",
-
     "signIn": "Sign in",
     "name": "Name",
     "username": "Username",
     "email": "Email",
+    "phone": "Phone Number",
+    "message": "Message",
+    "sending": "Sending...",
+    "send": "Send Message",
     "repeatPassword": "Repeat password",
-    "iAgreeToTheTerms": "I have read and agree to the terms"
+    "iAgreeToTheTerms": "I have read and agree to the terms",
+    "createAccount": "Create an account",
+    "enterYourInfo": "Enter your information to get started",
+    "alreadyHaveAccount": "Already have an account?",
+    "signInHere": "SignIn",
+    "signInTitle": "SignIn",
+    "enterEmailToSignIn": "Enter your email below to SignIn to your account",
+    "dontHaveAccount": "Don't have an account?",
+    "signUpHere": "Sign up",
+    "submitting": "Submitting..."
   },
   "footer": {
     "companyName": "Furniture.",
@@ -103,5 +115,10 @@
       "title": "Delivery to your door",
       "description": "We will deliver to your door anywhere in the world. If you're not 100% satisfied, let us know within 30 days and we'll solve the problem."
     }
+  },
+  "SupportSection": {
+    "heading": "Looking for support?",
+    "description": "We might already have what you’re looking for. See our FAQs or head to our dedicated Help Center.",
+    "contactButton": "Contact Us"
   }
 }

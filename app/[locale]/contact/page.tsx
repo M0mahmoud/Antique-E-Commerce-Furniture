@@ -1,15 +1,14 @@
+import { getTranslations } from "next-intl/server";
 import ContactForm from "./ContactForm";
 
-const ContactPage = () => {
+const ContactPage = async () => {
+  const s = await getTranslations("SupportSection");
   return (
     <section className="contactus" id="contactus">
       <div className="container mx-auto">
         <div className="mx-auto max-w-lg w-full py-8 text-center">
-          <h2 className="capitalize">Looking for support?</h2>
-          <p className="mb-8">
-            We might already have what you’re looking for. See our FAQs or head
-            to our dedicated Help Center.
-          </p>
+          <h2 className="capitalize">{s("heading")}</h2>
+          <p className="mb-8">{s("heading")}</p>
         </div>
         <div className="">
           <ContactForm />

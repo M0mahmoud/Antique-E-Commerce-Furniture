@@ -4,10 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "@/navigation";
 import { signupAction } from "@/server/auth";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 
 const SignupForm = () => {
+  const t = useTranslations("Auth");
   const router = useRouter();
   const [state, action] = useFormState(signupAction, undefined);
 
@@ -26,7 +28,7 @@ const SignupForm = () => {
     >
       <div className="flex flex-col gap-2">
         <div>
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">{t("name")}</Label>
           <Input
             id="name"
             name="name"
@@ -39,19 +41,19 @@ const SignupForm = () => {
         )}
 
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("email")}</Label>
           <Input
             id="email"
             name="email"
             placeholder="john@example.com"
-            className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3"
+            className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3 text-left placeholder:text-left"
           />
         </div>
         {state?.errors?.email && (
           <p className="text-sm text-red-500">{state.errors.email}</p>
         )}
         <div>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t("password")}</Label>
           <Input
             id="password"
             name="password"
@@ -81,6 +83,7 @@ const SignupForm = () => {
 export default SignupForm;
 
 export function SignupButton() {
+  const t = useTranslations("Auth");
   const { pending } = useFormStatus();
 
   return (
@@ -89,7 +92,7 @@ export function SignupButton() {
       type="submit"
       className="mt-4 w-full text-white py-2 px-4 "
     >
-      {pending ? "Submitting..." : "Sign Up"}
+      {pending ? t("submitting") : t("signUpHere")}
     </Button>
   );
 }

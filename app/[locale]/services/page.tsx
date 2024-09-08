@@ -8,8 +8,9 @@ import support from "@/images/support.svg";
 import truck from "@/images/truck.svg";
 import { Link } from "@/navigation";
 import { getTranslations } from "next-intl/server";
-const ServicesPage =async () => {
-  const t =await  getTranslations("whyChooseSection");
+const ServicesPage = async () => {
+  const t = await getTranslations("whyChooseSection");
+  const s = await getTranslations("SupportSection");
   const features = [
     {
       imgSrc: support,
@@ -76,19 +77,15 @@ const ServicesPage =async () => {
           </div>
         </div>
       </section>
-      <ProductsSection />
       <div className="container mx-auto">
         <div className="mx-auto max-w-lg w-full pt-8 pb-12 text-center">
-          <h2 className="capitalize">Looking for support?</h2>
-          <p className="mb-8">
-            We might already have what you’re looking for. See our FAQs or head
-            to our dedicated Help Center.
-          </p>
+          <h2 className="capitalize">{s("heading")}</h2>
+          <p className="mb-8">{s("description")}</p>
           <Link
             href={"/contact"}
             className="px-4 py-4 rounded-md bg-secondary-foreground text-white"
           >
-            Contact Us
+            {s("contactButton")}
           </Link>
         </div>
       </div>

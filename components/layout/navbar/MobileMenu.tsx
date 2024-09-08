@@ -27,10 +27,6 @@ const MobileMenu = ({ isLogin }: { isLogin: boolean }) => {
       href: "/services",
     },
     {
-      name: t("nav.about"),
-      href: "/about",
-    },
-    {
       name: t("nav.contact"),
       href: "/contact",
     },

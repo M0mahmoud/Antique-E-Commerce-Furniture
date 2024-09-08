@@ -23,10 +23,6 @@ const Navbar = async () => {
       href: "/services",
     },
     {
-      name: t("nav.about"),
-      href: "/about",
-    },
-    {
       name: t("nav.contact"),
       href: "/contact",
     },
