@@ -3,8 +3,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Tajawal } from "next/font/google";
 
-import Footer from "@/components/Footer";
-import Navbar from "@/components/layout/navbar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -29,9 +27,7 @@ export default async function RootLayout({
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
       <body suppressHydrationWarning className={tajawal.className}>
         <NextIntlClientProvider messages={messages}>
-          <Navbar />
           {children}
-          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>

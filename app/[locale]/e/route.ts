@@ -1,5 +1,4 @@
 import connectDB from "@/db";
-import { UserDocument } from "@/lib/definitions";
 import { key } from "@/lib/session";
 import User from "@/models/User";
 import { jwtVerify } from "jose";
@@ -24,8 +23,6 @@ export async function GET(request: NextRequest) {
       }
     );
     if (!user) notFound();
-    console.log("---------=============----user:", user);
-    console.log("!user:", !user);
     return NextResponse.redirect(
       new URL(`${request.nextUrl.pathname}/confirmed`, request.url)
     );

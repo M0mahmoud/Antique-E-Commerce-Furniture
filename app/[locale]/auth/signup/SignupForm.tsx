@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "@/navigation";
 import { signupAction } from "@/server/auth";
+import { CreateEmailToken, SendEmail } from "@/server/email";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
@@ -19,11 +20,26 @@ const SignupForm = () => {
     }
   }, [state?.success]);
 
+  const path = window.location.pathname;
+  const [, locale] = path.split("/");
+
   return (
     <form
       action={async (form) => {
         action(form);
-        console.log("state not changed yet");
+        // TODO: Refactor
+        const email = form.get("email") as string;
+        const createToken = await CreateEmailToken(email);
+        const link = `http://localhost:3000/${locale}/e?token=${createToken}`;
+        await SendEmail({
+          email: email,
+          subject: "Confirm Your Email",
+          title: "Confirm Your Email",
+          paraghraph:
+            "Thank you for signing up! Please confirm your email address by clicking the link we've sent to your inbox. If you didn't receive the email, be sure to check your spam or junk folder.",
+          link,
+          linktext: "Confirm Now!",
+        });
       }}
     >
       <div className="flex flex-col gap-2">

@@ -10,11 +10,13 @@ const UserPage = async () => {
   const user: UserDocument = await getUser();
   return (
     <>
-      <p className="bg-destructive text-white border-destructive/50 p-3 rounded-md">
-        Please confirm your email address by clicking the link we've sent to
-        your inbox. If you didn't receive the email, be sure to check your spam
-        or junk folder.
-      </p>
+      {!user?.emailConfirmed && (
+        <p className="bg-destructive text-white border-destructive/50 p-3 rounded-md">
+          Please confirm your email address by clicking the link we've sent to
+          your inbox. If you didn't receive the email, be sure to check your
+          spam or junk folder.
+        </p>
+      )}
       <div className="flex gap-4 justify-start mb-4 border-b pb-8">
         <Image
           src="https://placecats.com/bella/500/500"

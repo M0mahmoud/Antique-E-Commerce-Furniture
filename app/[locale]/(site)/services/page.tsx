@@ -1,4 +1,4 @@
-import ProductsSection from "@/app/(HomeSections)/ProductsSection";
+import ProductsSection from "@/components/(HomeSections)/ProductsSection";
 import Hero from "@/components/Hero";
 import ServicesCard from "@/components/layout/services/ServicesCard";
 import bag from "@/images/bag.svg";
