@@ -47,9 +47,9 @@ export const sidebarSections: SidebarItem[] = [
     icon: ShoppingBasket,
     path: "#",
     subItems: [
-      { label: "Products", path: "#", icon: ShoppingBasket },
-      { label: "Add Product", path: "#", icon: FilePlus2 },
-      { label: "Manage Products", path: "#", icon: FolderKanban },
+      { label: "Products", path: "/admin/products", icon: ShoppingBasket },
+      { label: "Add Product", path: "/admin/products/add", icon: FilePlus2 },
+      { label: "Manage Products", path: "/admin/products/manage", icon: FolderKanban },
     ],
   },
   {

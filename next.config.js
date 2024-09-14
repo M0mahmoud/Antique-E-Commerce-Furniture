@@ -9,6 +9,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "placecats.com",
       },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+      },
     ],
   },
 };
