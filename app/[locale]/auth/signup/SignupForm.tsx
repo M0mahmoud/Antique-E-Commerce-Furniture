@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { baseUrl } from "@/lib/definitions";
 import { useRouter } from "@/navigation";
 import { signupAction } from "@/server/auth";
 import { CreateEmailToken, SendEmail } from "@/server/email";
@@ -30,7 +31,7 @@ const SignupForm = () => {
         // TODO: Refactor
         const email = form.get("email") as string;
         const createToken = await CreateEmailToken(email);
-        const link = `http://localhost:3000/${locale}/e?token=${createToken}`;
+        const link = `${baseUrl}/${locale}/e?token=${createToken}`;
         await SendEmail({
           email: email,
           subject: "Confirm Your Email",
