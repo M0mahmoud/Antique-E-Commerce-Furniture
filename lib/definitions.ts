@@ -1,4 +1,8 @@
-import { array, boolean, number, object, string, z } from "zod";
+import { array, number, object, string, z } from "zod";
+
+export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : "http://localhost:3000";
 
 export type AuthFormState =
   | {

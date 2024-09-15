@@ -4,9 +4,11 @@ import { getMessages } from "next-intl/server";
 import { Tajawal } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
+import { baseUrl } from "@/lib/definitions";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "Furniture",
   description: "Modern Interior Design Studio",
 };
@@ -15,6 +17,7 @@ const tajawal = Tajawal({
   subsets: ["arabic"],
   weight: ["200", "300", "400", "500", "700", "800", "900"],
 });
+
 export default async function RootLayout({
   children,
   params: { locale },
