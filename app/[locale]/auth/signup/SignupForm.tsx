@@ -18,7 +18,7 @@ const SignupForm = () => {
     if (state?.success === true) {
       router.push("/user");
     }
-  }, [state?.success]);
+  }, [state?.success, router]);
 
   const path = window.location.pathname;
   const [, locale] = path.split("/");

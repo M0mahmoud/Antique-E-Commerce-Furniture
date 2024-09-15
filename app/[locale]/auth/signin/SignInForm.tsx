@@ -17,7 +17,7 @@ export function SignInForm() {
     if (state?.success === true) {
       router.push("/user");
     }
-  }, [state?.success]);
+  }, [state?.success, router]);
 
   return (
     <form action={action}>

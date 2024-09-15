@@ -1,44 +1,5 @@
-export async function GET(res: Response) {
-  return Response.json([
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-    {
-      title: "Product Title",
-      price: 86,
-    },
-  ]);
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  return NextResponse.json({ msg: "Will Fetch Products From DB" });
 }
