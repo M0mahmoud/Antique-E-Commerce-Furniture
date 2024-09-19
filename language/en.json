@@ -120,5 +120,9 @@
     "heading": "Looking for support?",
     "description": "We might already have what you’re looking for. See our FAQs or head to our dedicated Help Center.",
     "contactButton": "Contact Us"
+  },
+  "gallery": {
+    "title": "Our Gallery",
+    "desc": "Explore our collection of stunning images showcasing our work and inspiration."
   }
 }
