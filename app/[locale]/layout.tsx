@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Tajawal } from "next/font/google";
 
+import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { baseUrl } from "@/lib/definitions";
 import "./globals.css";
@@ -31,7 +32,7 @@ export default async function RootLayout({
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
       <body suppressHydrationWarning className={tajawal.className}>
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <ClientProvider>{children}</ClientProvider>
           <Toaster position="top-right" />
         </NextIntlClientProvider>
       </body>

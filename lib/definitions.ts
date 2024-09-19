@@ -79,6 +79,7 @@ export interface ProductDocument {
   deliveryTime?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  _id?: string;
 }
 
 export const ProductSchema = object({

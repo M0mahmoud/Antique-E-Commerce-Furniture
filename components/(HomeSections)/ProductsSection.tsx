@@ -1,59 +1,20 @@
+"use client";
 import ProductCard from "@/components/layout/product/ProductCard";
-import { Button } from "@/components/ui/button";
-import product_1 from "@/images/products/product_1.png";
-import product_11 from "@/images/products/product_11.png";
-import product_2 from "@/images/products/product_2.png";
-import product_22 from "@/images/products/product_22.png";
-import product_3 from "@/images/products/product_3.png";
-import product_33 from "@/images/products/product_33.png";
-import product_4 from "@/images/products/product_4.png";
+import { ProductDocument } from "@/lib/definitions";
 import { Link } from "@/navigation";
 
+import { useQuery } from "@tanstack/react-query";
+import { Loader } from "lucide-react";
+
 const ProductsSection = () => {
-  const products = [
-    {
-      image: product_22.src,
-      title: "Sakarias Armchair",
-      price: (Math.random() * 99 + 1).toFixed(2),
-      rating: Math.floor(Math.random() * 5) + 1,
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      const res = await fetch("/api/products");
+      const result = await res.json();
+      return result;
     },
-    {
-      image: product_11.src,
-      title: "Sakarias Armchair",
-      price: (Math.random() * 99 + 1).toFixed(2),
-      rating: Math.floor(Math.random() * 5) + 1,
-    },
-    {
-      image: product_33.src,
-      title: "Sakarias Armchair",
-      price: (Math.random() * 99 + 1).toFixed(2),
-      rating: Math.floor(Math.random() * 5) + 1,
-    },
-    {
-      image: product_1.src,
-      title: "Sakarias Armchair",
-      price: (Math.random() * 99 + 1).toFixed(2),
-      rating: Math.floor(Math.random() * 5) + 1,
-    },
-    {
-      image: product_2.src,
-      title: "Sakarias Armchair",
-      price: (Math.random() * 99 + 1).toFixed(2),
-      rating: Math.floor(Math.random() * 5) + 1,
-    },
-    {
-      image: product_3.src,
-      title: "Sakarias Armchair",
-      price: (Math.random() * 99 + 1).toFixed(2),
-      rating: Math.floor(Math.random() * 5) + 1,
-    },
-    {
-      image: product_4.src,
-      title: "Sakarias Armchair",
-      price: (Math.random() * 99 + 1).toFixed(2),
-      rating: Math.floor(Math.random() * 5) + 1,
-    },
-  ];
+  });
   return (
     <section className="py-12 md:py-16" id="product-section">
       <div className="container mx-auto">
@@ -74,15 +35,18 @@ const ProductsSection = () => {
               Explore
             </Link>
           </div>
-          {products.map((el) => (
-            <ProductCard
-              image={el.image}
-              key={el.title}
-              title={el.title}
-              price={el.price}
-              rating={el.rating}
-            />
-          ))}
+          {isLoading && (
+            <Loader className="w-10 h-10 text-primary m-auto animate-spin" />
+          )}
+          {error && (
+            <p className="text-xl text-destructive font-light">
+              {error.message}
+            </p>
+          )}
+          {data &&
+            data?.map((el: ProductDocument) => (
+              <ProductCard key={el._id} {...el} />
+            ))}
         </div>
       </div>
     </section>
