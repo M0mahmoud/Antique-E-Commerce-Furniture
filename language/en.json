@@ -1,17 +1,20 @@
 {
   "Hero": {
     "Home": {
-      "title": "The Best Place for Elegant and Beautiful Furniture",
+      "title": "The Best Place for",
+      "titleSt": "Elegant and Beautiful Furniture",
       "text": "Shop now for all your home needs, including furniture, decor, office furniture, and home appliances, from Homzmart. Purchase at the best prices in Egypt, with delivery right to your doorstep.",
       "btn": "Shop Now"
     },
     "Services": {
-      "title": "Our Services for Elegant and Beautiful Furniture",
+      "title": "Our Services for",
+      "titleSt": "Elegant and Beautiful Furniture",
       "text": "Explore our wide range of services, from home decoration to interior design consultations. Our experts are here to make your dream home a reality.",
       "btn": "Learn More"
     },
     "Shop": {
-      "title": "Shop by Elegant and Beautiful Furniture",
+      "title": "Shop by",
+      "titleSt": "Elegant and Beautiful Furniture",
       "text": "Find the perfect items for every room in your home. Browse our categories and start shopping now.",
       "btn": "Browse Now"
     }
