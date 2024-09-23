@@ -12,6 +12,7 @@ const ProductsSection = () => {
     queryFn: async () => {
       const res = await fetch("/api/products");
       const result = await res.json();
+      console.log(`result:`, result);
       return result;
     },
   });

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { array, number, object, string, z } from "zod";
 
 export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
@@ -116,4 +117,22 @@ export type FormState = {
   success: boolean;
   errors?: Record<string, string[]>;
   message?: string;
+};
+
+export type CartItem = {
+  productId: Types.ObjectId;
+  quantity: number;
+  priceAtAddition: number;
+  discountPriceAtAddition?: number;
+  totalPrice: number;
+};
+
+export type CartDocument = {
+  userId: Types.ObjectId;
+  items: CartItem[];
+  subTotal: number;
+  discountTotal: number;
+  grandTotal: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
