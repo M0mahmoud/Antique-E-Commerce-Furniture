@@ -189,3 +189,83 @@ export async function DELETE(req: NextRequest) {
     );
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    const { session, isAuth } = await verifySession();
+
+    if (!isAuth) {
+      return NextResponse.json(
+        { msg: "Please, sign in first" },
+        { status: 400 }
+      );
+    }
+
+    const { itemId, quantity } = await req.json();
+
+    if (!itemId || !quantity || quantity < 1) {
+      return NextResponse.json(
+        { msg: "Invalid item ID or quantity" },
+        { status: 400 }
+      );
+    }
+
+    await connectDB();
+    const cart = await Cart.findOne({ userId: session?.userId });
+
+    if (!cart) {
+      return NextResponse.json({ msg: "Cart not found" }, { status: 404 });
+    }
+
+    const itemIndex = cart.items.findIndex(
+      (item: { _id: { toString: () => string } }) =>
+        item._id.toString() === itemId
+    );
+
+    if (itemIndex === -1) {
+      return NextResponse.json(
+        { msg: "Item not found in cart" },
+        { status: 404 }
+      );
+    }
+
+    const product = await Product.findById(cart.items[itemIndex].product);
+
+    if (!product) {
+      return NextResponse.json({ msg: "Product not found" }, { status: 404 });
+    }
+
+    // Update item quantity and total price
+    cart.items[itemIndex].quantity = quantity;
+    cart.items[itemIndex].totalPrice = quantity * product.price;
+
+    // Recalculate totals
+    cart.subTotal = cart.items.reduce(
+      (acc: number, item: { totalPrice: number }) => acc + item.totalPrice,
+      0
+    );
+
+    cart.discountTotal = cart.items.reduce(
+      (
+        acc: number,
+        item: { discountPriceAtAddition: number; quantity: number }
+      ) => acc + (item.discountPriceAtAddition || 0) * item.quantity,
+      0
+    );
+
+    cart.grandTotal = cart.subTotal - cart.discountTotal;
+
+    await cart.save();
+
+    return NextResponse.json(
+      { msg: "Cart item quantity updated", cart },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating cart item quantity:", error);
+    return NextResponse.json(
+      { msg: "Error updating cart item quantity" },
+      { status: 500 }
+    );
+  }
+}
