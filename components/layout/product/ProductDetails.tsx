@@ -79,12 +79,10 @@ export default function ProductDetails({
       <h1 className="text-3xl font-bold mb-2">{product.productName}</h1>
       <p className="text-gray-600 mb-4">{product.category}</p>
       <div className="flex items-center mb-4">
-        <span className="text-2xl font-bold mr-2">
-          ${product.discountPrice || product.price}
-        </span>
+        <span className="text-2xl font-bold mr-2">${product.price}</span>
         {product.discountPrice && (
           <span className="text-lg text-gray-500 line-through">
-            ${product.price}
+            ${product.discountPrice}
           </span>
         )}
       </div>

@@ -3,8 +3,9 @@ import { baseUrl } from "@/lib/definitions";
 import CarouselImages from "@/components/layout/product/CarouselImages";
 import ProductDetails from "@/components/layout/product/ProductDetails";
 import ProductsTags from "@/components/layout/product/ProductTags";
+import Loading from "@/components/Loading";
 import { Link } from "@/navigation";
-import { ArrowLeft, Loader } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -52,13 +53,7 @@ const ProductPage = async ({ params }: { params: { handle: string } }) => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Suspense
-        fallback={
-          <div className="w-full h-dvh grid place-content-center">
-            <Loader className="text-primary w-10 h-w-10 animate-spin" />
-          </div>
-        }
-      >
+      <Suspense fallback={<Loading />}>
         <Link
           className="mb-4 flex items-center bg-secondary w-fit py-2 px-3 rounded-lg"
           href="/"

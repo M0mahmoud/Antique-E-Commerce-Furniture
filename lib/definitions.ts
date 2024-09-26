@@ -3,7 +3,7 @@ import { array, number, object, string, z } from "zod";
 
 export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : "http://localhost:3000";
+  : "https://localhost:3000";
 
 export type AuthFormState =
   | {
@@ -120,7 +120,8 @@ export type FormState = {
 };
 
 export type CartItem = {
-  productId: Types.ObjectId;
+  _id?: string;
+  product?: string | ProductDocument;
   quantity: number;
   priceAtAddition: number;
   discountPriceAtAddition?: number;
@@ -128,7 +129,7 @@ export type CartItem = {
 };
 
 export type CartDocument = {
-  userId: Types.ObjectId;
+  userId?: string;
   items: CartItem[];
   subTotal: number;
   discountTotal: number;

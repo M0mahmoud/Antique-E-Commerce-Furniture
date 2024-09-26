@@ -2,7 +2,7 @@ import { CartDocument } from "@/lib/definitions";
 import { Schema, model, models } from "mongoose";
 
 const CartItemSchema = new Schema({
-  productId: {
+  product: {
     type: Schema.Types.ObjectId,
     ref: "Product",
     required: true,

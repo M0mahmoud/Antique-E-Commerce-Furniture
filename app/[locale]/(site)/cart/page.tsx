@@ -1,162 +1,255 @@
+"use client";
 import product_11 from "@/images/products/product_11.png";
+
+import Loading from "@/components/Loading";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { baseUrl, ProductDocument } from "@/lib/definitions";
+import { Link } from "@/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { revalidatePath } from "next/cache";
 import Image from "next/image";
-import React from "react";
+import { Suspense, useEffect, useState } from "react";
+import { toast } from "sonner";
+
+// TODO: Fix Type Errors
+type CartItem = {
+  _id: string;
+  product: ProductDocument;
+  quantity: number;
+  priceAtAddition: number;
+  discountPriceAtAddition?: number;
+  totalPrice: number;
+};
+
+type CartDocument = {
+  userId: string;
+  items: CartItem[];
+  subTotal: number;
+  discountTotal: number;
+  grandTotal: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
 
 const CartPage = () => {
+  const [cart, setCart] = useState<CartDocument | null>(null);
+  const queryClient = useQueryClient();
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["cart"],
+    queryFn: async () => {
+      const response = await fetch(`/api/cart`);
+      if (!response.ok) throw new Error("Failed to fetch cart");
+      const data = await response.json();
+      return data;
+    },
+  });
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      setCart(data);
+    }
+  }, [data, isLoading]);
+
+  const updateQuantity = async (itemId: string, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    try {
+      const response = await fetch(`/api/cart/item/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity: newQuantity }),
+      });
+      if (!response.ok) throw new Error("Failed to update quantity");
+      const updatedCart = await response.json();
+      setCart(updatedCart);
+    } catch (error) {
+      console.error("Error updating quantity:", error);
+    }
+  };
+
+  // TODO: Refactor
+  const removeItem = useMutation({
+    mutationFn: async (itemId: string) => {
+      // TODO: For Testing || Recalculate
+      const updatedItems = cart?.items.filter((item) => item._id !== itemId);
+      const subTotal =
+        updatedItems?.reduce(
+          (acc, item) => acc + item.priceAtAddition * item.quantity,
+          0
+        ) || 0;
+      const discountTotal =
+        updatedItems?.reduce(
+          (acc, item) =>
+            acc + (item.discountPriceAtAddition || 0) * item.quantity,
+          0
+        ) || 0;
+      const grandTotal = subTotal - discountTotal;
+      if (cart) {
+        setCart({
+          ...cart,
+          items: updatedItems || [],
+          subTotal,
+          discountTotal,
+          grandTotal,
+        });
+      }
+
+      const response = await fetch(`/api/cart`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          itemId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to remove item");
+      }
+      const updatedCart = await response.json();
+      return updatedCart;
+    },
+    onSuccess: () => {
+      toast.success("Product removed from cart");
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+    onError: (error) => {
+      console.error(":error", error);
+      toast.error("Error removing item");
+    },
+  });
+
   return (
     <>
-      <section className="cart-hero" id="cart-hero">
-        <div className="container">
-          <div className="row justify-content-between">
-            <div className="col-lg-5">
-              <div className="intro-excerpt">
-                <h1>Cart</h1>
-              </div>
-            </div>
-            <div className="col-lg-7" />
-          </div>
-        </div>
-      </section>
-      <section className="untree_co-section before-footer-section">
-        <div className="container">
-          <div className="row mb-5">
-            <form className="col-md-12" method="post">
-              <div className="site-blocks-table">
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th className="product-thumbnail">Image</th>
-                      <th className="product-name">Product</th>
-                      <th className="product-price">Price</th>
-                      <th className="product-quantity">Quantity</th>
-                      <th className="product-total">Total</th>
-                      <th className="product-remove">Remove</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="product-thumbnail">
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
+        <div className="grid gap-6 md:grid-cols-3">
+          <Suspense fallback={<Loading />}>
+            <div className="md:col-span-2 space-y-4">
+              {cart?.items?.map((item) => (
+                <Card key={item?._id} className="overflow-hidden">
+                  <CardContent className="p-4">
+                    <div className="flex flex-col sm:flex-row items-center">
+                      <div className="w-full sm:w-1/4 mb-4 sm:mb-0">
                         <Image
-                          src={product_11}
-                          alt="Image"
-                          className="img-fluid"
+                          src={item?.product?.mainProductImage}
+                          alt={item?.product?.productName}
+                          width={96}
+                          height={96}
+                          className="rounded-md bg-cover w-24 h-24 sm:h-36 sm:w-36 mx-auto"
                         />
-                      </td>
-                      <td className="product-name">
-                        <h2 className="h5 text-black">Product 1</h2>
-                      </td>
-                      <td>$49.00</td>
-                      <td>
-                        <div
-                          className="input-group mb-3 d-flex align-items-center quantity-container"
-                          style={{ maxWidth: "120px" }}
-                        >
-                          <div className="input-group-prepend">
-                            <button
-                              className="btn btn-outline-black decrease"
-                              type="button"
-                            >
-                              −
-                            </button>
-                          </div>
-                          <input
-                            type="text"
-                            className="form-control text-center quantity-amount"
-                            value="1"
-                            placeholder=""
-                            aria-label="Example text with button addon"
-                            aria-describedby="button-addon1"
-                          />
-                          <div className="input-group-append">
-                            <button
-                              className="btn btn-outline-black increase"
-                              type="button"
-                            >
-                              +
-                            </button>
-                          </div>
+                      </div>
+                      <div className="w-full sm:w-3/4 sm:pl-4 flex flex-col sm:flex-row items-center justify-between">
+                        <div className="text-center sm:text-left mb-4 sm:mb-0">
+                          <h3 className="font-semibold text-xl">
+                            {item?.product?.productName}
+                          </h3>
+                          <p className="text-dark mb-0">
+                            Price: ${item?.priceAtAddition}
+                          </p>
+                          <p className="">
+                            Discount: ${item?.discountPriceAtAddition}
+                          </p>
                         </div>
-                      </td>
-                      <td>$49.00</td>
-                      <td>
-                        <a href="#" className="btn btn-black btn-sm">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 448 512"
+                        <div className="flex items-center space-x-2">
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() =>
+                              updateQuantity(item?._id!, item?.quantity - 1)
+                            }
                           >
-                            <path d="M135.2 17.7L128 32 32 32C14.3 32 0 46.3 0 64S14.3 96 32 96l384 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-96 0-7.2-14.3C307.4 6.8 296.3 0 284.2 0L163.8 0c-12.1 0-23.2 6.8-28.6 17.7zM416 128L32 128 53.2 467c1.6 25.3 22.6 45 47.9 45l245.8 0c25.3 0 46.3-19.7 47.9-45L416 128z" />
-                          </svg>
-                        </a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </form>
-          </div>
-
-          <div className="row py-4">
-            <div className="col-md-6 pl-5 mb-4">
-              <div className="row">
-                <div className="col-md-7">
-                  <div className="row">
-                    <div className="col-md-12 text-right border-bottom mb-5">
-                      <h3 className="text-black h4 text-uppercase">
-                        Cart Totals
-                      </h3>
+                            <Minus className="h-4 w-4" />
+                          </Button>
+                          <Input
+                            type="number"
+                            value={item?.quantity}
+                            onChange={(e) =>
+                              updateQuantity(
+                                item?._id!,
+                                parseInt(e.target.value)
+                              )
+                            }
+                            className="w-16 text-center"
+                          />
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() =>
+                              updateQuantity(item?._id!, item?.quantity + 1)
+                            }
+                          >
+                            <Plus className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="icon"
+                            onClick={() => {
+                              removeItem.mutate(item?._id!);
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="row mb-3">
-                    <div className="col-md-6">
-                      <span className="text-black">Subtotal</span>
-                    </div>
-                    <div className="col-md-6 text-right">
-                      <strong className="text-black">$230.00</strong>
-                    </div>
-                  </div>
-                  <div className="row mb-5">
-                    <div className="col-md-6">
-                      <span className="text-black">Total</span>
-                    </div>
-                    <div className="col-md-6 text-right">
-                      <strong className="text-black">$230.00</strong>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-12">
-                      <button className="btn btn-black btn-lg py-3 btn-block rounded-3">
-                        Proceed To Checkout
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-            <div className="col-md-6 mb-4">
-              <div className="row">
-                <div className="col-md-12">
-                  <label className="text-black h4" htmlFor="coupon">
-                    Coupon
-                  </label>
-                  <p>Enter your coupon code if you have one.</p>
-                </div>
-                <div className="col-md-8 mb-3 mb-md-0">
-                  <input
-                    type="text"
-                    className="form-control py-3"
-                    id="coupon"
-                    placeholder="Coupon Code"
-                  />
-                </div>
-                <div className="col-md-4">
-                  <button className="btn btn-black rounded-3">Apply</button>
-                </div>
-              </div>
+          </Suspense>
+          <Suspense fallback={<Loading />}>
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Order Summary</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 border-b pb-4 mb-4">
+                    {cart?.items.map((item) => (
+                      <div
+                        key={item?._id}
+                        className="flex justify-between text-sm"
+                      >
+                        <span>
+                          {item?.product?.productName} (X{item?.quantity})
+                        </span>
+                        <span>
+                          ${(item?.priceAtAddition * item?.quantity).toFixed(2)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="flex justify-between mb-2">
+                    <span>Subtotal</span>
+                    <span>${cart?.subTotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between mb-2">
+                    <span>Discount</span>
+                    <span>-${cart?.discountTotal.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-bold">
+                    <span>Grand Total</span>
+                    <span>${cart?.grandTotal.toFixed(2)}</span>
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full">Proceed to Checkout</Button>
+                </CardFooter>
+              </Card>
             </div>
-          </div>
+          </Suspense>
         </div>
-      </section>
+      </div>
     </>
   );
 };

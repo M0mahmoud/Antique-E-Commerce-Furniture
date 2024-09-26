@@ -18,7 +18,7 @@ const ProductCard: React.FC<ProductDocument> = ({
   return (
     <div className="pb-5 mb-md-0">
       <div className="block relative pb-2 before:bottom-0 before:left-0 before:right-0 before:absolute before:content-[''] before:bg-slate-200 before:h-[70%] before:-z-[1] before:rounded-md before:transition-all hover:before:h-full">
-        <Link href={`/product/${productName}`}>
+        <Link href={`/product/${_id}`}>
           <Image
             alt="Product"
             src={mainProductImage}
