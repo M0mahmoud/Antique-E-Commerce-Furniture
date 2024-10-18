@@ -33,8 +33,8 @@ export async function createSession(id: number | string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ userId: id, expiresAt });
 
-  cookies().delete("session");
-  cookies().set("session", session, {
+  (await cookies()).delete("session");
+  (await cookies()).set("session", session, {
     httpOnly: true,
     secure: true,
     expires: expiresAt,
@@ -47,7 +47,7 @@ export async function verifySession(): Promise<{
   isAuth: boolean;
   session?: SessionPayload;
 }> {
-  const cookie = cookies().get("session")?.value;
+  const cookie = (await cookies()).get("session")?.value;
   if (!cookie) {
     console.log("Session cookie not found");
     return { isAuth: false };

@@ -17,11 +17,12 @@ async function getProduct(handle: string) {
   }
   return res.json();
 }
-export async function generateMetadata({
-  params,
-}: {
-  params: { handle: string };
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ handle: string }>;
+  }
+): Promise<Metadata> {
+  const params = await props.params;
   const url = `${baseUrl}/products/${params.handle}`;
   const product = await getProduct(params.handle);
 
@@ -47,7 +48,8 @@ export async function generateMetadata({
   };
 }
 
-const ProductPage = async ({ params }: { params: { handle: string } }) => {
+const ProductPage = async (props: { params: Promise<{ handle: string }> }) => {
+  const params = await props.params;
   const handle = params.handle;
   const product = await getProduct(handle);
 

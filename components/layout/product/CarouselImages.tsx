@@ -21,7 +21,8 @@ const CarouselImages = ({ product }: { product: ProductDocument }) => {
           src={selectedImage || "/placeholder.svg"}
           alt={product?.productName}
           fill
-          className="rounded-lg"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="rounded-lg object-cover"
           loading="lazy"
         />
       </div>
@@ -44,7 +45,8 @@ const CarouselImages = ({ product }: { product: ProductDocument }) => {
                     src={image}
                     alt={`${product?.productName} view ${index + 1}`}
                     fill
-                    className="rounded bg-cover"
+                    sizes="(max-width: 768px) 33vw, (max-width: 1200px) 25vw, 20vw"
+                    className="rounded object-cover"
                     loading="lazy"
                   />
                 </div>

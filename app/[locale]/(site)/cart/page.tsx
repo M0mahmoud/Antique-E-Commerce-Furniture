@@ -10,8 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { baseUrl, ProductDocument } from "@/lib/definitions";
-import { Link } from "@/navigation";
+import { ProductDocument } from "@/lib/definitions";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AlertCircle, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";

@@ -15,17 +15,18 @@ export const metadata: Metadata = {
 };
 
 const tajawal = Tajawal({
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   weight: ["200", "300", "400", "500", "700", "800", "900"],
 });
 
 export default async function RootLayout({
   children,
-  params: { locale },
+  params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
   const messages = await getMessages();
 
   return (

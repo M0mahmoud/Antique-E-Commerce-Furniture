@@ -7,13 +7,12 @@ import { useRouter } from "@/navigation";
 import { signupAction } from "@/server/auth";
 import { CreateEmailToken, SendEmail } from "@/server/email";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect } from "react";
 
 const SignupForm = () => {
   const t = useTranslations("Auth");
   const router = useRouter();
-  const [state, action] = useFormState(signupAction, undefined);
+  const [state, action, isPending] = useActionState(signupAction, undefined);
 
   useEffect(() => {
     if (state?.success === true) {
@@ -91,25 +90,16 @@ const SignupForm = () => {
         {state?.message && (
           <p className="text-sm text-red-500">{state.message}</p>
         )}
-        <SignupButton />
+        <Button
+          aria-disabled={isPending}
+          type="submit"
+          className="mt-4 w-full text-white py-2 px-4 "
+        >
+          {isPending ? t("submitting") : t("signUpHere")}
+        </Button>
       </div>
     </form>
   );
 };
 
 export default SignupForm;
-
-export function SignupButton() {
-  const t = useTranslations("Auth");
-  const { pending } = useFormStatus();
-
-  return (
-    <Button
-      aria-disabled={pending}
-      type="submit"
-      className="mt-4 w-full text-white py-2 px-4 "
-    >
-      {pending ? t("submitting") : t("signUpHere")}
-    </Button>
-  );
-}

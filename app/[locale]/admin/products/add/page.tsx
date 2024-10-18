@@ -13,13 +13,15 @@ import { Textarea } from "@/components/ui/textarea";
 import Upload from "@/components/Upload";
 import { FormState } from "@/lib/definitions";
 import { addProductAction } from "@/server/products";
-import { useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useState } from "react";
 
-const AddProduct = () => {
-  const [state, action] = useFormState<FormState, FormData>(addProductAction, {
-    success: false,
-  });
+export default function AddProduct() {
+  const [state, action, isPending] = useActionState<FormState, FormData>(
+    addProductAction,
+    {
+      success: false,
+    }
+  );
   const [mainImageUrl, setMainImageUrl] = useState<string>("");
 
   const onSuccess = (result: { url: string }) => {
@@ -207,24 +209,14 @@ const AddProduct = () => {
         )}
       </div>
       <div>
-        <AddProductButton />
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="bg-primary text-white p-3 rounded-lg"
+        >
+          {isPending ? "Adding Product..." : "Add Product"}
+        </Button>
       </div>
     </form>
   );
-};
-
-function AddProductButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <Button
-      type="submit"
-      disabled={pending}
-      className="bg-primary text-white p-3 rounded-lg"
-    >
-      {pending ? "Adding Product..." : "Add Product"}
-    </Button>
-  );
 }
-
-export default AddProduct;

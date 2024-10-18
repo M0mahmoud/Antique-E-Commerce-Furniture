@@ -4,7 +4,7 @@ import { decrypt } from "./lib/session";
 
 export default async function middleware(request: NextRequest) {
   const [, locale, ...segments] = request.nextUrl.pathname.split("/");
-  console.log("segments:", segments);
+  console.log("SEGMENTS:", segments);
 
   // TODO: Refactor
   if (locale != null && segments.join("/") === "admin") {

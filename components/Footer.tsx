@@ -40,8 +40,8 @@ const Footer = async () => {
                   alt="logo"
                   width={90}
                   height={90}
+                  style={{ width: "90px", height: "auto" }}
                   src="/anD.svg"
-                  className="bg-cover"
                 />
               </Link>
             </div>

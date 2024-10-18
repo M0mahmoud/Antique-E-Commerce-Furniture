@@ -6,14 +6,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { contactFormAction } from "@/server/contactFormAction";
 import { SendHorizontal } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
 
 export default function ContactForm() {
   const t = useTranslations("Auth");
-  const [state, formAction] = useFormState(contactFormAction, {
+  const [state, formAction, isPending] = useActionState(contactFormAction, {
     message: "",
     success: false,
   });
+
   return (
     <form action={formAction} className="space-y-4 mx-auto max-w-2xl pb-12">
       <div className="grid grid-cols-2 gap-4">
@@ -54,21 +55,14 @@ export default function ContactForm() {
           {state.message}
         </div>
       )}
-      <SubmitForm />
+      <Button
+        aria-disabled={isPending}
+        type="submit"
+        className="bg-primary text-white"
+      >
+        <span>{isPending ? t("sending") : t("send")}</span>
+        <SendHorizontal className="text-white h-4 ms-2 rtl:rotate-180" />
+      </Button>
     </form>
-  );
-}
-function SubmitForm() {
-  const t = useTranslations("Auth");
-  const { pending } = useFormStatus();
-  return (
-    <Button
-      aria-disabled={pending}
-      type="submit"
-      className="bg-primary text-white"
-    >
-      <span>{pending ? t("sending") : t("send")}</span>
-      <SendHorizontal className="text-white h-4 ms-2 rtl:rotate-180" />
-    </Button>
   );
 }

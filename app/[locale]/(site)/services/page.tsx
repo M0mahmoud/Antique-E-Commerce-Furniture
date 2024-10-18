@@ -1,4 +1,3 @@
-import ProductsSection from "@/components/(HomeSections)/ProductsSection";
 import Hero from "@/components/Hero";
 import ServicesCard from "@/components/layout/services/ServicesCard";
 import bag from "@/images/bag.svg";
@@ -8,6 +7,7 @@ import support from "@/images/support.svg";
 import truck from "@/images/truck.svg";
 import { Link } from "@/navigation";
 import { getTranslations } from "next-intl/server";
+
 const ServicesPage = async () => {
   const t = await getTranslations("whyChooseSection");
   const s = await getTranslations("SupportSection");

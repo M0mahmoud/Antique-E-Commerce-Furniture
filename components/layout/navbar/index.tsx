@@ -1,6 +1,6 @@
 import { verifySession } from "@/lib/session";
 import { Link } from "@/navigation";
-import { User } from "lucide-react";
+import { ShoppingCart, User, UserPlus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import MobileMenu from "./MobileMenu";
@@ -29,37 +29,48 @@ const Navbar = async () => {
   ];
 
   return (
-    <nav className="flex items-center justify-between p-4 lg:px-6 bg-[#429365]">
-      <Link
-        href="/"
-        prefetch={true}
-        className="flex items-center justify-start"
-      >
-        <Image alt="logo" width={90} height={90} src="/an.svg" />
-      </Link>
-      <div className="flex w-full items-center justify-end gap-6">
-        <ul className="hidden gap-6 text-lg md:flex md:items-center md:justify-end text-white">
-          {LINKS.map((el) => (
-            <li key={el.name}>
-              <Link href={el.href} className="text-nowrap text-lg">
-                {el.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <Search />
-
+    <nav className="w-full bg-[#429365] p-4 lg:px-6">
+      <div className="container flex items-center justify-between">
         <Link
-          href={isAuth ? "/user" : "/auth/signup"}
-          className="text-nowrap hidden md:block"
+          href="/"
+          prefetch={true}
+          className="flex items-center justify-start"
         >
-          <User className="h-5 text-white" />
+          <Image alt="logo" width={90} height={90} src="/an.svg" />
         </Link>
-      </div>
+        <div className="flex w-full items-center justify-end gap-6">
+          <ul className="hidden gap-6 text-lg md:flex md:items-center md:justify-end text-white">
+            {LINKS.map((el) => (
+              <li key={el.name}>
+                <Link href={el.href} className="text-nowrap text-lg">
+                  {el.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-      <div className="block md:hidden cursor-pointer">
-        <MobileMenu isLogin={isAuth} />
+          <Search />
+
+          {isAuth ? (
+            <>
+              <Link href={"/cart"} className="text-nowrap hidden md:block">
+                <ShoppingCart className="h-5 text-white" />
+                <span className="sr-only">Cart</span>
+              </Link>
+              <Link href="/user" className="text-nowrap hidden md:block">
+                <User className="h-5 text-white" />
+              </Link>
+            </>
+          ) : (
+            <Link href={"/auth/signup"} className="text-nowrap hidden md:block">
+              <UserPlus className="h-5 text-white" />
+            </Link>
+          )}
+        </div>
+
+        <div className="block md:hidden cursor-pointer">
+          <MobileMenu isLogin={isAuth} />
+        </div>
       </div>
     </nav>
   );

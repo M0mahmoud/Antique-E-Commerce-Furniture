@@ -1,17 +1,17 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "@/navigation";
 import { loginAction } from "@/server/auth";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState, useEffect } from "react";
 
 export function SignInForm() {
   const t = useTranslations("Auth");
   const router = useRouter();
-  const [state, action] = useFormState(loginAction, undefined);
+  const [state, action, isPending] = useActionState(loginAction, undefined);
 
   useEffect(() => {
     if (state?.success === true) {
@@ -50,23 +50,14 @@ export function SignInForm() {
         {state?.message && (
           <p className="text-sm text-red-500">{state.message}</p>
         )}
-        <SignInButton />
+        <Button
+          aria-disabled={isPending}
+          type="submit"
+          className="mt-4 w-full text-white py-2 px-4"
+        >
+          {isPending ? t("submitting") : t("signIn")}
+        </Button>
       </div>
     </form>
-  );
-}
-
-export function SignInButton() {
-  const t = useTranslations("Auth");
-  const { pending } = useFormStatus();
-
-  return (
-    <Button
-      aria-disabled={pending}
-      type="submit"
-      className="mt-4 w-full text-white py-2 px-4"
-    >
-      {pending ? t("submitting") : t("signIn")}
-    </Button>
   );
 }
