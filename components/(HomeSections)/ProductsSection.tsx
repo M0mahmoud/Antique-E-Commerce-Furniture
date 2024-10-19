@@ -1,7 +1,7 @@
 "use client";
 import ProductCard from "@/components/layout/product/ProductCard";
+import { Link } from "@/i18n/routing";
 import { ProductDocument } from "@/lib/definitions";
-import { Link } from "@/navigation";
 
 import { useQuery } from "@tanstack/react-query";
 import { Loader } from "lucide-react";

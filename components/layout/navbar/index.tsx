@@ -1,5 +1,5 @@
+import { Link } from "@/i18n/routing";
 import { verifySession } from "@/lib/session";
-import { Link } from "@/navigation";
 import { ShoppingCart, User, UserPlus } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
@@ -31,11 +31,7 @@ const Navbar = async () => {
   return (
     <nav className="w-full bg-[#429365] p-4 lg:px-6">
       <div className="container flex items-center justify-between">
-        <Link
-          href="/"
-          prefetch={true}
-          className="flex items-center justify-start"
-        >
+        <Link href="/" className="flex items-center justify-start">
           <Image alt="logo" width={90} height={90} src="/an.svg" />
         </Link>
         <div className="flex w-full items-center justify-end gap-6">

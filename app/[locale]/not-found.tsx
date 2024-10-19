@@ -1,10 +1,11 @@
+import { Link } from "@/i18n/routing";
 import img404 from "@/images/404.svg";
-import { Link } from "@/navigation";
 import Image from "next/image";
 
-export default function NotFound() {
+// Catching unknown routes
+export default function NotFoundPage() {
   return (
-    <div className="w-full h-full text-center text-dark py-12">
+    <div className="grid place-content-center w-full min-h-dvh text-center text-dark py-12">
       <Image
         src={img404}
         width={288}

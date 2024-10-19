@@ -1,7 +1,7 @@
 "use client";
 
+import { Link, usePathname, useRouter } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { Link, usePathname, useRouter } from "@/navigation";
 import {
   FolderHeart,
   ListOrdered,

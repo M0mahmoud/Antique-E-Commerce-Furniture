@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "@/navigation";
+import { useRouter } from "@/i18n/routing";
 import { loginAction } from "@/server/auth";
 import { useTranslations } from "next-intl";
 import { useActionState, useEffect } from "react";

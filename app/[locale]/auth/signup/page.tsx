@@ -1,13 +1,15 @@
+import { Link, redirect } from "@/i18n/routing";
 import { verifySession } from "@/lib/session";
-import { Link, redirect } from "@/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import SignupForm from "./SignupForm";
 
 const SignUp = async () => {
   const t = await getTranslations("Auth");
   const { isAuth } = await verifySession();
+  const locale = await getLocale();
+
   if (isAuth) {
-    redirect("/user");
+    redirect({ href: "/user", locale });
   }
   return (
     <div className="flex flex-col p-4 lg:w-1/3 min-h-dvh justify-center mx-auto">

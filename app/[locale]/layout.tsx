@@ -5,7 +5,9 @@ import { Tajawal } from "next/font/google";
 
 import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { routing } from "@/i18n/routing";
 import { baseUrl } from "@/lib/definitions";
+import { notFound } from "next/navigation";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,6 +30,11 @@ export default async function RootLayout({
 }>) {
   const { locale } = await params;
   const messages = await getMessages();
+
+  // Ensure that the incoming `locale` is valid
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
 
   return (
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>

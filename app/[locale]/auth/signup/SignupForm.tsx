@@ -2,16 +2,18 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "@/i18n/routing";
 import { baseUrl } from "@/lib/definitions";
-import { useRouter } from "@/navigation";
 import { signupAction } from "@/server/auth";
 import { CreateEmailToken, SendEmail } from "@/server/email";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useActionState, useEffect } from "react";
 
 const SignupForm = () => {
   const t = useTranslations("Auth");
   const router = useRouter();
+  const locale = useLocale();
+
   const [state, action, isPending] = useActionState(signupAction, undefined);
 
   useEffect(() => {
@@ -20,8 +22,8 @@ const SignupForm = () => {
     }
   }, [state?.success, router]);
 
-  const path = window.location.pathname;
-  const [, locale] = path.split("/");
+  // const path = window.location.pathname;
+  // const [, locale] = path.split("/");
 
   return (
     <form

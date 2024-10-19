@@ -1,4 +1,4 @@
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/routing";
 import React from "react";
 
 const ThankYou = () => {

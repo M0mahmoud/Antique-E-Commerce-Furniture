@@ -1,11 +1,11 @@
 import Hero from "@/components/Hero";
 import ServicesCard from "@/components/layout/services/ServicesCard";
+import { Link } from "@/i18n/routing";
 import bag from "@/images/bag.svg";
 import couch from "@/images/couch.png";
 import returnImg from "@/images/return.svg";
 import support from "@/images/support.svg";
 import truck from "@/images/truck.svg";
-import { Link } from "@/navigation";
 import { getTranslations } from "next-intl/server";
 
 const ServicesPage = async () => {

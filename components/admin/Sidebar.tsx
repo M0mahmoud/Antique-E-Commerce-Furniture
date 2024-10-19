@@ -1,6 +1,6 @@
 "use client";
 import { sidebarSections } from "@/app/constant";
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/routing";
 import { ChevronDown, Menu } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";

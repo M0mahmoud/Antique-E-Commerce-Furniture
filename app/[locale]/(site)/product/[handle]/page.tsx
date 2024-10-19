@@ -4,7 +4,7 @@ import CarouselImages from "@/components/layout/product/CarouselImages";
 import ProductDetails from "@/components/layout/product/ProductDetails";
 import ProductsTags from "@/components/layout/product/ProductTags";
 import Loading from "@/components/Loading";
-import { Link } from "@/navigation";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -17,11 +17,9 @@ async function getProduct(handle: string) {
   }
   return res.json();
 }
-export async function generateMetadata(
-  props: {
-    params: Promise<{ handle: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ handle: string }>;
+}): Promise<Metadata> {
   const params = await props.params;
   const url = `${baseUrl}/products/${params.handle}`;
   const product = await getProduct(params.handle);

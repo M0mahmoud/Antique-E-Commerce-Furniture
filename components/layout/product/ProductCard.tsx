@@ -1,8 +1,8 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Link, useRouter } from "@/i18n/routing";
 import { ProductDocument } from "@/lib/definitions";
-import { Link, useRouter } from "@/navigation";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
