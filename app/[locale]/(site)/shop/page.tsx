@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/layout/product/ProductCard";
-import { Slider } from "@/components/ui/slider";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
-import { ProductDocument } from "@/lib/definitions";
 import Loading from "@/components/Loading";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
+import { ProductDocument } from "@/lib/definitions";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 const Sidebar = ({
   priceRange,
@@ -23,22 +23,25 @@ const Sidebar = ({
   priceRange: number[];
   setPriceRange: (priceRange: number[]) => void;
   selectedCategories: string[];
-  setSelectedCategories: (selectedCategories: string[]) => void;
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedBrands: React.Dispatch<React.SetStateAction<string[]>>;
   selectedBrands: string[];
-  setSelectedBrands: (selectedBrands: string[]) => void;
   uniqueCategories: string[];
   uniqueBrands: string[];
 }) => {
   const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prevCategories) =>
+    setSelectedCategories((prevCategories: string[]) =>
       prevCategories.includes(category)
-        ? prevCategories.filter((c) => c !== category)
+        ? prevCategories.filter((c: string) => c !== category)
         : [...prevCategories, category]
     );
   };
+
   const handleBrandChange = (brand: string) => {
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+    setSelectedBrands((prevBrands: string[]) =>
+      prevBrands.includes(brand)
+        ? prevBrands.filter((b: string) => b !== brand)
+        : [...prevBrands, brand]
     );
   };
 
