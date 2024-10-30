@@ -2,6 +2,7 @@ import { Link } from "@/i18n/routing";
 
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
+import ChangeLanguage from "./layout/ChangeLanguage";
 
 const Footer = async () => {
   const f = await getTranslations("footer");
@@ -31,9 +32,9 @@ const Footer = async () => {
   ];
   return (
     <footer className="pt-20 pb-6 bg-greeen" id="footer-section">
-      <div className="container mx-auto relative">
+      <div className="container relative mx-auto">
         <div className="flex flex-wrap">
-          <div className="w-full lg:w-1/3 mb-8 lg:mb-0">
+          <div className="w-full mb-8 lg:w-1/3 lg:mb-0">
             <div className="mb-4">
               <Link href="/" className="flex items-center justify-start">
                 <Image
@@ -45,14 +46,14 @@ const Footer = async () => {
                 />
               </Link>
             </div>
-            <p className="mb-4 text-gray-700 w-full sm:max-w-52">
+            <p className="w-full mb-4 text-gray-700 sm:max-w-52">
               {f("description")}
             </p>
 
             <ul className="flex space-x-6">
               <li>
                 <Link href="#" className="group">
-                  <span className="flex items-center justify-center w-10 h-10  text-primary rounded-full group-hover:bg-primary-foreground ">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-full text-primary group-hover:bg-primary-foreground ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
@@ -65,7 +66,7 @@ const Footer = async () => {
               </li>
               <li>
                 <Link href="#" className="group">
-                  <span className="flex items-center justify-center w-10 h-10  text-primary rounded-full group-hover:bg-primary-foreground ">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-full text-primary group-hover:bg-primary-foreground ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 512 512"
@@ -78,7 +79,7 @@ const Footer = async () => {
               </li>
               <li>
                 <Link href="#" className="group">
-                  <span className="flex items-center justify-center w-10 h-10  text-primary rounded-full group-hover:bg-primary-foreground ">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-full text-primary group-hover:bg-primary-foreground ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 448 512"
@@ -91,7 +92,7 @@ const Footer = async () => {
               </li>
               <li>
                 <Link href="#" className="group">
-                  <span className="flex items-center justify-center w-10 h-10  text-primary rounded-full group-hover:bg-primary-foreground ">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-full text-primary group-hover:bg-primary-foreground ">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 496 512"
@@ -105,9 +106,9 @@ const Footer = async () => {
             </ul>
           </div>
 
-          <div className="w-full lg:w-2/3 flex flex-wrap">
-            <div className="w-full md:w-1/3 mb-8 md:mb-0">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+          <div className="flex flex-wrap w-full lg:w-2/3">
+            <div className="w-full mb-8 md:w-1/3 md:mb-0">
+              <h3 className="mb-4 text-lg font-semibold text-gray-700">
                 {f("explore")}
               </h3>
               <ul className="space-y-3">
@@ -115,7 +116,7 @@ const Footer = async () => {
                   <li key={el.name}>
                     <Link
                       href={el.href}
-                      className="text-dark hover:text-primary transition-colors"
+                      className="transition-colors text-dark hover:text-primary"
                     >
                       {el.name}
                     </Link>
@@ -124,8 +125,8 @@ const Footer = async () => {
               </ul>
             </div>
 
-            <div className="w-full md:w-1/3 mb-8 md:mb-0">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            <div className="w-full mb-8 md:w-1/3 md:mb-0">
+              <h3 className="mb-4 text-lg font-semibold text-gray-700">
                 {f("visit")}
               </h3>
               <ul className="space-y-3">
@@ -142,7 +143,7 @@ const Footer = async () => {
             </div>
 
             <div className="w-full md:w-1/3">
-              <h3 className="text-lg font-semibold text-gray-700 mb-4">
+              <h3 className="mb-4 text-lg font-semibold text-gray-700">
                 {f("legal")}
               </h3>
               <ul className="space-y-3">
@@ -166,7 +167,10 @@ const Footer = async () => {
           </div>
         </div>
 
-        <div className="mt-6 pt-6 text-center">
+        <div className="pt-6 mt-6 text-center">
+          <ChangeLanguage />
+        </div>
+        <div className="pt-6 mt-6 text-center">
           <p className="text-gray-600">
             &copy; 2023 Furniture. All rights reserved.
           </p>

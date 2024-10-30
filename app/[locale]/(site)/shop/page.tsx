@@ -5,10 +5,12 @@ import ProductCard from "@/components/layout/product/ProductCard";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { ProductDocument } from "@/lib/definitions";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useState } from "react";
 
 const Sidebar = ({
   priceRange,
@@ -110,9 +112,21 @@ const Sidebar = ({
 };
 
 export default function ShopPage() {
+  const searchParams = useSearchParams();
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value);
+      setSearchTerm(value);
+      return params.toString();
+    },
+    [searchTerm, searchParams]
+  );
 
   const { data, error, isLoading } = useQuery<ProductDocument[]>({
     queryKey: ["products"],
@@ -130,7 +144,10 @@ export default function ShopPage() {
       (selectedBrands.length === 0 ||
         selectedBrands.includes(product?.brand || "")) &&
       product.price >= priceRange[0] &&
-      product.price <= priceRange[1]
+      product.price <= priceRange[1] &&
+      product.productName
+        .toLocaleLowerCase()
+        .includes(searchTerm.toLocaleLowerCase())
   );
 
   const uniqueCategories = Array.from(
@@ -146,6 +163,9 @@ export default function ShopPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row gap-8">
           <aside className="block w-full md:w-1/4">
+            <p className="px-2 text-primary">
+              Showing {filteredProducts?.length} Product{" "}
+            </p>
             <Sidebar
               priceRange={priceRange}
               setPriceRange={setPriceRange}
@@ -160,6 +180,26 @@ export default function ShopPage() {
             />
           </aside>
           <main className="w-full md:w-3/4">
+            <h3>Search for product</h3>
+            <div className="flex gap-2">
+              <Input
+                className="p-2 mb-4"
+                placeholder="Search for product"
+                value={searchTerm}
+                onChange={(e) => {
+                  window.history.pushState(
+                    null,
+                    "",
+                    `?${createQueryString("q", e.target.value)}`
+                  );
+                }}
+              />
+            </div>
+            {filteredProducts?.length === 0 && (
+              <p className="text-xl text-red-500">
+                There are no products that match
+              </p>
+            )}
             <section className="product-section" id="all-product-section">
               {isLoading ? (
                 <Loading />
@@ -168,23 +208,25 @@ export default function ShopPage() {
                   Error loading products: {error.message}
                 </p>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredProducts?.map((product: ProductDocument) => (
-                    <ProductCard
-                      key={product._id}
-                      _id={product._id}
-                      productName={product.productName}
-                      category={product.category}
-                      description={product.description}
-                      price={product.price}
-                      mainProductImage={product.mainProductImage}
-                      brand={product.brand}
-                      availabilityStatus={product.availabilityStatus}
-                      sku={""}
-                      stockQuantity={0}
-                    />
-                  ))}
-                </div>
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {filteredProducts?.map((product: ProductDocument) => (
+                      <ProductCard
+                        key={product._id}
+                        _id={product._id}
+                        productName={product.productName}
+                        category={product.category}
+                        description={product.description}
+                        price={product.price}
+                        mainProductImage={product.mainProductImage}
+                        brand={product.brand}
+                        availabilityStatus={product.availabilityStatus}
+                        sku={""}
+                        stockQuantity={0}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
             </section>
           </main>

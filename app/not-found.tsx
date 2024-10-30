@@ -11,7 +11,7 @@ export default function NotFound() {
   return (
     <html lang="en">
       <body>
-        <div className="grid place-content-center w-full min-h-dvh text-center text-dark py-12 m-auto">
+        <div className="grid place-content-center min-h-dvh text-center text-dark container m-auto">
           <Image
             src={img404}
             width={288}

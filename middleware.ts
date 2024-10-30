@@ -10,7 +10,7 @@ export default async function middleware(request: NextRequest) {
   if (locale != null && segments.join("/") === "admin") {
     const session = request.cookies.get("session")?.value;
     const user = await decrypt(session);
-    const isAdmin = user?.userId === "66e30b68e98dccf1512b3d62";
+    const isAdmin = user?.userId === "6722860d13cfd239013a35fa";
     if (!isAdmin) {
       request.nextUrl.pathname = `/${locale}/auth/signup`;
     }

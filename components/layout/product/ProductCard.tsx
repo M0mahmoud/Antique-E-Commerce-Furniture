@@ -32,26 +32,31 @@ const ProductCard: React.FC<ProductDocument> = ({
             className="mb-5 relative top-0 transition-all duration-300 ease-in-out mx-auto max-h-[216px] object-contain"
           />
         </Link>
+        <strong className="px-3 text-lg font-extrabold rounded-e-md text-dark bg-primary">
+          ${price}
+        </strong>
         <div className="px-3">
-          <span className="text-dark font-semibold text-sm text-start inline-flex w-full">
+          <span className="inline-flex w-full text-sm font-semibold text-dark text-start">
             {category}
           </span>
 
           <Link
             href={`/product/${_id}`}
             // href={`/product/${lnk}`}
-            className="font-semibold text-primary text-lg mb-1 leading-none"
+            className="mb-1 text-lg font-semibold leading-none text-primary"
           >
             {productName}
           </Link>
-          <p className="text-sm text-muted-foreground mb-2">
-            {description.slice(0, 100)}...
+          <p className="mb-2 text-sm text-muted-foreground line-clamp-2">
+            {description}
           </p>
-          <div className="flex justify-between items-center mt-4">
-            <strong className="font-extrabold text-dark text-lg">
-              ${price}
-            </strong>
+          <div className="flex items-center justify-between mt-4">
+            <Badge variant="secondary" className="rounded-md">
+              {brand}
+            </Badge>
             <Button
+              disabled={availabilityStatus !== "inStock"}
+              aria-disabled={availabilityStatus !== "inStock"}
               onClick={async () => {
                 const res = await fetch("/api/cart", {
                   method: "POST",
@@ -79,18 +84,8 @@ const ProductCard: React.FC<ProductDocument> = ({
               variant={"outline"}
               className="bg-transparent border-none outline-none hover:bg-transparent "
             >
-              <ShoppingCart className="w-5 h-5  fill-primary text-primary" />
+              <ShoppingCart className="w-5 h-5 fill-primary text-primary" />
             </Button>
-          </div>
-          <div className="flex justify-between items-center mt-4">
-            <Badge variant="secondary">{brand}</Badge>
-            <Badge
-              variant={
-                availabilityStatus === "inStock" ? "secondary" : "destructive"
-              }
-            >
-              {availabilityStatus}
-            </Badge>
           </div>
         </div>
       </div>

@@ -1,26 +1,24 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Link } from "@/i18n/routing";
-import { AlignJustify, Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+import {
+  AlignJustify,
+  Search,
+  ShoppingCart,
+  User,
+  UserPlus,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
-const MobileMenu = ({ isLogin }: { isLogin: boolean }) => {
+const MobileMenu = ({ isAuth }: { isAuth: boolean }) => {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const toggleMobileMenu = () => setIsOpen((prev) => !prev);
   const t = useTranslations("header");
+  const locale = useLocale();
 
   const LINKS = [
     {
@@ -39,46 +37,61 @@ const MobileMenu = ({ isLogin }: { isLogin: boolean }) => {
       name: t("nav.contact"),
       href: "/contact",
     },
-    {
-      name: t(`nav.${isLogin ? "isauth" : "noauth"}`),
-      href: isLogin ? "/user" : "/auth/signin",
-    },
   ];
   return (
     <>
-      <button
-        onClick={toggleMobileMenu}
-        aria-label="Open mobile menu"
-        className="flex h-9 w-9 items-center justify-center rounded-md border border-neutral-200 md:hidden"
-      >
-        <AlignJustify className="h-7 w-7 text-white" />
-      </button>
+      <div className="flex items-center gap-2">
+        {isAuth ? (
+          <>
+            <Link href={"/cart"} className="block text-nowrap md:hidden">
+              <ShoppingCart className="h-5 text-white" />
+              <span className="sr-only">Cart</span>
+            </Link>
+            <Link href="/user" className="block text-nowrap md:hidden">
+              <User className="h-5 text-white" />
+            </Link>
+          </>
+        ) : (
+          <Link href={"/auth/signup"} className="block text-nowrap md:hidden">
+            <UserPlus className="h-5 text-white" />
+          </Link>
+        )}
+        <button
+          onClick={toggleMobileMenu}
+          aria-label="Open mobile menu"
+          className="flex items-center justify-center w-8 h-8 border rounded-md border-neutral-200 md:hidden"
+        >
+          <AlignJustify className="w-6 h-6 text-white" />
+        </button>
+      </div>
       <Sheet open={isOpen} onOpenChange={() => toggleMobileMenu()}>
-        <SheetContent className="border-accent-foreground bg-accent-foreground py-2">
-          <div className="flex flex-col justify-center items-center h-full ">
-            <form action="/search" className="w-4/5 relative mx-auto mt-6">
+        <SheetContent className="py-2 border-accent-foreground bg-accent-foreground">
+          <div className="flex flex-col items-center justify-center h-full ">
+            <form
+              action={`${locale}/shop`}
+              className="relative w-4/5 mx-auto mt-6"
+            >
               <Input
-                key={searchParams?.get("q")}
                 type="text"
                 name="q"
-                placeholder={t("input")}
                 autoFocus={false}
+                placeholder={t("input")}
                 defaultValue={searchParams?.get("q") || ""}
-                className="leading-relaxed text-md w-full bg-transparent rounded-md border px-4 py-2 text-white placeholder:text-white md:text-sm  focus-visible:ring-0 focus-visible:ring-offset-0 items-center"
+                className="items-center w-full px-4 py-2 leading-relaxed text-white bg-transparent border rounded-md text-md placeholder:text-white md:text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
               />
               <div
-                className="absolute ltr:right-0 rtl:left-0 top-0 me-3 flex h-full items-center cursor-pointer"
+                className="absolute top-0 flex items-center h-full cursor-pointer ltr:right-0 rtl:left-0 me-3"
                 role="button"
               >
                 <Search className="h-4 text-white" />
               </div>
             </form>
-            <ul className="gap-4 text-lg flex items-center justify-center text-white flex-col py-6 mb-4">
+            <ul className="flex flex-col items-center justify-center gap-4 py-6 mb-4 text-lg text-white">
               {LINKS.map((el) => (
                 <li key={el.name}>
                   <Link
                     href={el.href}
-                    className="text-nowrap font-medium"
+                    className="font-medium text-nowrap"
                     onClick={toggleMobileMenu}
                   >
                     {el.name}
