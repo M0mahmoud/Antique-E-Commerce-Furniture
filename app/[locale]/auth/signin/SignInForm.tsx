@@ -3,61 +3,73 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "@/i18n/routing";
-import { loginAction } from "@/server/auth";
+import { useAuth } from "@/context/usercontext";
+import { Link, useRouter } from "@/i18n/routing";
+import { loginAction } from "@/lib/apiFun";
 import { useTranslations } from "next-intl";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useLayoutEffect } from "react";
 
 export function SignInForm() {
-  const t = useTranslations("Auth");
-  const router = useRouter();
-  const [state, action, isPending] = useActionState(loginAction, undefined);
+    const t = useTranslations("Auth");
+    const router = useRouter();
+    const { setAuth, isAuthenticated } = useAuth();
+    const [state, action, isPending] = useActionState(loginAction, undefined);
 
-  useEffect(() => {
-    if (state?.success === true) {
-      router.push("/user");
-    }
-  }, [state?.success, router]);
+    useLayoutEffect(() => {
+        if (isAuthenticated) {
+            router.push("/user");
+        }
+    }, [isAuthenticated, router]);
 
-  return (
-    <form action={action}>
-      <div className="flex flex-col gap-2">
-        <div>
-          <Label htmlFor="email">{t("email")}</Label>
-          <Input
-            id="email"
-            name="email"
-            placeholder="user@gmail.com"
-            type="email"
-            className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3 text-left placeholder:text-left"
-          />
-          {state?.errors?.email && (
-            <p className="text-sm text-red-500">{state.errors.email}</p>
-          )}
-        </div>
-        <div className="mt-4">
-          <Label htmlFor="password">{t("password")}</Label>
-          <Input
-            id="password"
-            type="password"
-            name="password"
-            className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3"
-          />
-          {state?.errors?.password && (
-            <p className="text-sm text-red-500">{state.errors.password}</p>
-          )}
-        </div>
-        {state?.message && (
-          <p className="text-sm text-red-500">{state.message}</p>
-        )}
-        <Button
-          aria-disabled={isPending}
-          type="submit"
-          className="mt-4 w-full text-white py-2 px-4"
-        >
-          {isPending ? t("submitting") : t("signIn")}
-        </Button>
-      </div>
-    </form>
-  );
+    useEffect(() => {
+        if (state?.status) {
+            setAuth(state.data.user, state.data.token);
+            router.push("/user");
+        }
+    }, [state?.status, router, setAuth]);
+
+    return (
+        <form action={action}>
+            <div className="flex flex-col gap-2">
+                <div>
+                    <Label htmlFor="email">{t("email")}</Label>
+                    <Input
+                        id="email"
+                        name="email"
+                        placeholder="user@gmail.com"
+                        type="email"
+                        className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3 text-left placeholder:text-left"
+                    />
+                </div>
+                <div className="mt-4">
+                    <Label htmlFor="password">{t("password")}</Label>
+                    <Input
+                        id="password"
+                        type="password"
+                        name="password"
+                        className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3"
+                    />
+                </div>
+                <Link href="/auth/forgot-password" className="py-2 underline">
+                    Forgot password?
+                </Link>
+                {state?.message && (
+                    <p
+                        className={`text-sm ${
+                            state.status ? "text-green-500" : "text-red-500"
+                        }`}
+                    >
+                        {state.message}
+                    </p>
+                )}
+                <Button
+                    aria-disabled={isPending}
+                    type="submit"
+                    className="mt-4 w-full text-white py-2 px-4"
+                >
+                    {isPending ? t("submitting") : t("signIn")}
+                </Button>
+            </div>
+        </form>
+    );
 }
