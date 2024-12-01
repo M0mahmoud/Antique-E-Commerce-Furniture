@@ -1,5 +1,6 @@
 "use client";
 
+import { StatusMessage } from "@/components/StatusMessage";
 import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,6 +35,7 @@ export function SignInForm() {
                 <div>
                     <Label htmlFor="email">{t("email")}</Label>
                     <Input
+                        required
                         id="email"
                         name="email"
                         placeholder="user@gmail.com"
@@ -44,6 +46,7 @@ export function SignInForm() {
                 <div className="mt-4">
                     <Label htmlFor="password">{t("password")}</Label>
                     <Input
+                        required
                         id="password"
                         type="password"
                         name="password"
@@ -53,15 +56,7 @@ export function SignInForm() {
                 <Link href="/auth/forgot-password" className="py-2 underline">
                     Forgot password?
                 </Link>
-                {state?.message && (
-                    <p
-                        className={`text-sm ${
-                            state.status ? "text-green-500" : "text-red-500"
-                        }`}
-                    >
-                        {state.message}
-                    </p>
-                )}
+                <StatusMessage status={state!} />
                 <SubmitButton
                     text={t("signIn")}
                     loadingText={t("submitting")}

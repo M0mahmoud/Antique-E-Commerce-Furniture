@@ -2,6 +2,7 @@
 
 import { ResetFormProps } from "@/types/authComponents";
 import { useState } from "react";
+import { StatusMessage } from "../StatusMessage";
 import SubmitButton from "../SubmitButton";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -54,9 +55,7 @@ export default function ResetForm({
                     </p>
                 )}
             </div>
-            {state?.message && (
-                <p className="text-sm text-red-500 mx-auto">{state.message}</p>
-            )}
+            <StatusMessage status={state!} />
             <SubmitButton
                 isLoading={isPending}
                 loadingText="Resetting..."

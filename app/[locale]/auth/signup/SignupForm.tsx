@@ -1,6 +1,7 @@
 "use client";
 
 import OTPForm from "@/components/auth/OTPForm";
+import { StatusMessage } from "@/components/StatusMessage";
 import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -67,6 +68,7 @@ const SignupForm = () => {
                             <div>
                                 <Label htmlFor="name">{t("name")}</Label>
                                 <Input
+                                    required
                                     id="name"
                                     name="username"
                                     placeholder="Ahmed Ali"
@@ -76,6 +78,7 @@ const SignupForm = () => {
                             <div>
                                 <Label htmlFor="email">{t("email")}</Label>
                                 <Input
+                                    required
                                     id="email"
                                     name="email"
                                     placeholder="john@example.com"
@@ -87,6 +90,7 @@ const SignupForm = () => {
                                     {t("password")}
                                 </Label>
                                 <Input
+                                    required
                                     id="password"
                                     name="password"
                                     type="password"
@@ -94,11 +98,7 @@ const SignupForm = () => {
                                 />
                             </div>
 
-                            {state?.message && (
-                                <p className="text-sm text-red-500">
-                                    {state.message}
-                                </p>
-                            )}
+                            <StatusMessage status={state!} />
                             <SubmitButton
                                 text={t("signUpHere")}
                                 loadingText={t("submitting")}

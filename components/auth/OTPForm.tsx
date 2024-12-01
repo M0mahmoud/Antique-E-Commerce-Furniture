@@ -9,6 +9,7 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 
 import ResendVerificationCode from "@/components/resendVerificationCode";
 import { OTPFormProps } from "@/types/authComponents";
+import { StatusMessage } from "../StatusMessage";
 import SubmitButton from "../SubmitButton";
 
 export default function OTPForm({
@@ -38,11 +39,7 @@ export default function OTPForm({
                         <InputOTPSlot index={5} />
                     </InputOTPGroup>
                 </InputOTP>
-                {state && state.message && (
-                    <p className="text-sm text-red-500 mx-auto">
-                        {state.message}
-                    </p>
-                )}
+                <StatusMessage status={state!} />
                 <SubmitButton
                     isLoading={isPending}
                     loadingText="Verifying..."

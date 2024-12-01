@@ -1,6 +1,7 @@
 "use client";
 
 import { EmailFormProps } from "@/types/authComponents";
+import { StatusMessage } from "../StatusMessage";
 import SubmitButton from "../SubmitButton";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -22,6 +23,7 @@ export default function EmailForm({
                 <div>
                     <Label htmlFor="email">Enter Email</Label>
                     <Input
+                        required
                         id="email"
                         name="email"
                         placeholder="user@gmail.com"
@@ -29,15 +31,7 @@ export default function EmailForm({
                         className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-main-3 text-left placeholder:text-left"
                     />
                 </div>
-                {state?.message && (
-                    <p
-                        className={`text-sm ${
-                            state.status ? "text-green-500" : "text-red-500"
-                        }`}
-                    >
-                        {state.message}
-                    </p>
-                )}
+                <StatusMessage status={state!} />
                 <SubmitButton
                     isLoading={isPending}
                     loadingText="Sending..."
