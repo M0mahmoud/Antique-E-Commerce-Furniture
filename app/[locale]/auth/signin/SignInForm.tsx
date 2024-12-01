@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/usercontext";
@@ -62,13 +62,11 @@ export function SignInForm() {
                         {state.message}
                     </p>
                 )}
-                <Button
-                    aria-disabled={isPending}
-                    type="submit"
-                    className="mt-4 w-full text-white py-2 px-4"
-                >
-                    {isPending ? t("submitting") : t("signIn")}
-                </Button>
+                <SubmitButton
+                    text={t("signIn")}
+                    loadingText={t("submitting")}
+                    isLoading={isPending}
+                />
             </div>
         </form>
     );

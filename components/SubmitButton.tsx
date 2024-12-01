@@ -25,8 +25,8 @@ export default function SubmitButton({
         >
             {isLoading ? (
                 <>
-                    <Loader className="size-5 me-2 animate-spin" />
-                    {" loadingText"}
+                    <Loader className="size-5 me-2 animate-spin" />{" "}
+                    {loadingText}
                 </>
             ) : (
                 text
