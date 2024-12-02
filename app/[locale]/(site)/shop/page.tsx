@@ -35,7 +35,7 @@ const Sidebar = ({
         setSelectedCategories((prevCategories: string[]) =>
             prevCategories.includes(category)
                 ? prevCategories.filter((c: string) => c !== category)
-                : [...prevCategories, category],
+                : [...prevCategories, category]
         );
     };
 
@@ -43,7 +43,7 @@ const Sidebar = ({
         setSelectedBrands((prevBrands: string[]) =>
             prevBrands.includes(brand)
                 ? prevBrands.filter((b: string) => b !== brand)
-                : [...prevBrands, brand],
+                : [...prevBrands, brand]
         );
     };
 
@@ -130,7 +130,7 @@ export default function ShopPage() {
             setSearchTerm(value);
             return params.toString();
         },
-        [searchParams],
+        [searchParams]
     );
 
     const { data, error, isLoading } = useQuery<ProductDocument[]>({
@@ -152,14 +152,14 @@ export default function ShopPage() {
             product.price <= priceRange[1] &&
             product.productName
                 .toLocaleLowerCase()
-                .includes(searchTerm.toLocaleLowerCase()),
+                .includes(searchTerm.toLocaleLowerCase())
     );
 
     const uniqueCategories = Array.from(
-        new Set(data?.map((product) => product.category) || []),
+        new Set(data?.map((product) => product.category) || [])
     );
     const uniqueBrands = Array.from(
-        new Set(data?.map((product) => product.brand) || []),
+        new Set(data?.map((product) => product.brand) || [])
     );
 
     return (
@@ -180,7 +180,7 @@ export default function ShopPage() {
                             setSelectedBrands={setSelectedBrands}
                             uniqueCategories={uniqueCategories}
                             uniqueBrands={uniqueBrands?.filter(
-                                (brand): brand is string => brand !== undefined,
+                                (brand): brand is string => brand !== undefined
                             )}
                         />
                     </aside>
@@ -197,8 +197,8 @@ export default function ShopPage() {
                                         "",
                                         `?${createQueryString(
                                             "q",
-                                            e.target.value,
-                                        )}`,
+                                            e.target.value
+                                        )}`
                                     );
                                 }}
                             />
@@ -223,28 +223,31 @@ export default function ShopPage() {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                         {filteredProducts?.map(
                                             (product: ProductDocument) => (
-                                                <ProductCard
-                                                    key={product._id}
-                                                    _id={product._id}
-                                                    productName={
-                                                        product.productName
-                                                    }
-                                                    category={product.category}
-                                                    description={
-                                                        product.description
-                                                    }
-                                                    price={product.price}
-                                                    mainProductImage={
-                                                        product.mainProductImage
-                                                    }
-                                                    brand={product.brand}
-                                                    availabilityStatus={
-                                                        product.availabilityStatus
-                                                    }
-                                                    sku={""}
-                                                    stockQuantity={0}
-                                                />
-                                            ),
+                                                <h1 key={product.productName}>
+                                                    TODO
+                                                </h1>
+                                                // <ProductCard
+                                                //     key={product._id}
+                                                //     _id={product._id}
+                                                //     productName={
+                                                //         product.productName
+                                                //     }
+                                                //     category={product.category}
+                                                //     description={
+                                                //         product.description
+                                                //     }
+                                                //     price={product.price}
+                                                //     mainProductImage={
+                                                //         product.mainProductImage
+                                                //     }
+                                                //     brand={product.brand}
+                                                //     availabilityStatus={
+                                                //         product.availabilityStatus
+                                                //     }
+                                                //     sku={""}
+                                                //     stockQuantity={0}
+                                                // />
+                                            )
                                         )}
                                     </div>
                                 </>

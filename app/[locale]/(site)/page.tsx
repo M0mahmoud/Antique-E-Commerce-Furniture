@@ -1,4 +1,5 @@
 import Benefits from "@/components/(HomeSections)/Benefits";
+import { TopCategories } from "@/components/(HomeSections)/Categories";
 import Gallery from "@/components/(HomeSections)/Gallery";
 import Offers from "@/components/(HomeSections)/OffersSection";
 import ProductsSection from "@/components/(HomeSections)/ProductsSection";
@@ -13,9 +14,10 @@ export default function HomePage() {
             <Hero langKey="Hero.Home" id="HeroSection" />
             <Benefits />
             <WhyUsSection />
-            <Testimonials />
-            {/* <ProductsSection /> */}
+            <TopCategories />
+            <ProductsSection />
             <Offers />
+            <Testimonials />
             <Gallery />
         </>
     );
