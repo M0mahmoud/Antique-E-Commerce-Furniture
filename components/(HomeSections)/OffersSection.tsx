@@ -2,215 +2,138 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import offer from "@/images/offer_img.webp";
-import { getStartOfNextWeek } from "@/lib/utils";
+import offer from "@/images/sofa.png";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
-const OffersSection = () => {
-  const t = useTranslations("offer");
-  const [timer, setTimer] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-  const minDate = getStartOfNextWeek();
+import { toast } from "sonner";
 
-  // Timer logic
-  useEffect(() => {
-    let countdown: any;
+interface TimeLeft {
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+}
 
-    async function getOffer() {
-      try {
-        const res = await fetch("/api/public/offers", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const result = await res.json();
-        return result.offer[result.offer.length - 1];
-      } catch (error) {
-        console.error("Error fetching offer:", error);
-        return null;
-      }
-    }
+export default function OffersSection() {
+    const t = useTranslations("offer");
+    const [email, setEmail] = useState("");
+    const [timeLeft, setTimeLeft] = useState<TimeLeft>({
+        days: 0,
+        hours: 0,
+        minutes: 0,
+        seconds: 0,
+    });
 
-    async function startCountdown() {
-      const target = await getOffer();
-      if (!target) return;
+    useEffect(() => {
+        // WAIT BACKEND
+        // Set end date to 7 days from now
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + 7);
 
-      const targetDate = new Date(target.date).getTime();
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = endDate.getTime() - now;
 
-      countdown = setInterval(() => {
-        const now = new Date().getTime();
-        const timeLeft = targetDate - now;
+            setTimeLeft({
+                days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                hours: Math.floor(
+                    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+                ),
+                minutes: Math.floor(
+                    (distance % (1000 * 60 * 60)) / (1000 * 60)
+                ),
+                seconds: Math.floor((distance % (1000 * 60)) / 1000),
+            });
+        }, 1000);
 
-        if (timeLeft < 0) {
-          clearInterval(countdown);
-          setTimer({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-          return;
-        }
+        return () => clearInterval(timer);
+    }, []);
 
-        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        // Here you would typically handle the email subscription
+        console.log("Email submitted:", email);
+        toast.success("Thank you for subscribing to our sale updates!");
+        setEmail("");
+    };
 
-        setTimer({ days, hours, minutes, seconds });
-      }, 1000);
-    }
+    return (
+        <section className="bg-gray-50" id="offers">
+            <div className="container mx-auto px-4">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
+                    <div className="relative aspect-square max-w-md mx-auto">
+                        <Image
+                            src={offer}
+                            alt="Luxury Tufted Ottoman"
+                            width={570}
+                            height={490}
+                            className="object-cover rounded-lg"
+                        />
+                        <div className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full font-bold">
+                            -60%
+                        </div>
+                    </div>
 
-    startCountdown();
+                    <div className="space-y-8">
+                        <div>
+                            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                                {t("weeklySale")}
+                            </h2>
+                            <p className="text-xl text-gray-600">
+                                Don&lsquo;t miss out on our biggest sale of the
+                                season. Limited time offer!
+                            </p>
+                        </div>
 
-    return () => clearInterval(countdown);
-  }, []);
+                        <div className="flex gap-2 sm:gap-4">
+                            <TimeBox value={timeLeft.days} label={t("days")} />
+                            <TimeBox
+                                value={timeLeft.hours}
+                                label={t("hours")}
+                            />
+                            <TimeBox
+                                value={timeLeft.minutes}
+                                label={t("minutes")}
+                            />
+                            <TimeBox
+                                value={timeLeft.seconds}
+                                label={t("seconds")}
+                            />
+                        </div>
 
-  return (
-    <section className="" id="our_offer">
-      <div className="container mx-aut">
-        <div className="flex items-center justify-between gap-5 flex-col md:flex-row">
-          <div className="w-full">
-            <div className="flex justify-center mb-8">
-              <Image
-                src={offer}
-                alt="Our Offer"
-                width={444}
-                height={470}
-                className="w-3/5 h-3/5 bg-cover animate-spinYYYYYY"
-              />
-            </div>
-          </div>
-          <div className="w-full">
-            <div className="offer_text">
-              <h2 className="mb-4 text-5xl font-extrabold">
-                {t("weeklySale")}
-              </h2>
-              <div className="my-9 md:me-14">
-                <div
-                  id="timer"
-                  className="flex justify-around items-center gap-2"
-                >
-                  <div
-                    id="days"
-                    className="text-2xl md:text-4xl text-dark font-black border-e-[1px] border-e-dark  pe-[9%] lg:pe-[4%] "
-                  >
-                    <span className="block text-sm uppercase">{t("days")}</span>
-                    {timer.days}
-                  </div>
-                  <div
-                    id="hours"
-                    className="text-2xl md:text-4xl text-dark font-black border-e-[1px] border-e-dark  pe-[9%] lg:pe-[4%] "
-                  >
-                    <span className="block text-sm uppercase">
-                      {t("hours")}
-                    </span>
-                    {timer.hours}
-                  </div>
-                  <div
-                    id="minutes"
-                    className="text-2xl md:text-4xl text-dark font-black border-e-[1px] border-e-dark  pe-[9%] lg:pe-[4%] "
-                  >
-                    <span className="block text-sm uppercase">
-                      {t("minutes")}
-                    </span>
-                    {timer.minutes}
-                  </div>
-                  <div
-                    id="seconds"
-                    className="text-2xl md:text-4xl text-dark font-black   pe-[9%] lg:pe-[4%] "
-                  >
-                    <span className="block text-sm uppercase">
-                      {t("seconds")}
-                    </span>
-                    {timer.seconds}
-                  </div>
+                        <form onSubmit={handleSubmit} className="space-y-2">
+                            <div className="flex flex-col sm:flex-row gap-4">
+                                <Input
+                                    type="email"
+                                    placeholder={t("emailPlaceholder")}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="flex-1"
+                                    required
+                                />
+                                <Button
+                                    type="submit"
+                                    size="lg"
+                                    className="bg-primary text-white"
+                                >
+                                    {t("bookNow")}
+                                </Button>
+                            </div>
+                            <p className="text-sm text-gray-500">
+                                *Subscribe to get updates about our exclusive
+                                offers and discounts
+                            </p>
+                        </form>
+                    </div>
                 </div>
-              </div>
-              <form className="flex">
-                <Input
-                  type="email"
-                  placeholder={t("emailPlaceholder")}
-                  aria-label="enter email"
-                  aria-describedby="basic"
-                  className="px-2 md:px-3 py-6 border-dark bg-transparent text-lg md:text-xl placeholder:capitalize w-full focus:outline-none rounded-e-none"
-                />
-                <Button
-                  variant="outline"
-                  className="px-2 md:px-4 py-6 text-lg md:text-xl uppercase rounded-s-none border-dark border-s-0"
-                >
-                  {t("bookNow")}
-                </Button>
-              </form>
             </div>
-          </div>
-        </div>
-      </div>
-      {/* TODO: Will Move to Dashboard */}
-      {/* TODO: Refactore Code */}
-      <div className="container mx-aut">
-        <form
-          id="offerForm"
-          className="my-6 border border-primary rounded-md p-2"
-          onSubmit={async (e: FormEvent<HTMLFormElement>) => {
-            e.preventDefault();
-            // Get form data
-            const formData = new FormData(e.currentTarget);
-
-            try {
-              const response = await fetch("/api/public/offers", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  discount: formData.get("discount"),
-                  date: formData.get("date"),
-                }),
-              });
-
-              const data = await response.json();
-              console.log("data:", data);
-              if (response.ok) {
-                console.log("Offer created successfully");
-              }
-            } catch (error) {
-              console.error("Network error:", error);
-            }
-          }}
-        >
-          <p className="text-lg text-destructive">Dev Mode</p>
-          <div className="flex gap-2 justify-between items-center">
-            <div className="mb-4 w-full">
-              <Label htmlFor="discount">Discount</Label>
-              <Input
-                type="number"
-                id="discount"
-                step={10}
-                min={10}
-                max={100}
-                name="discount"
-                placeholder="Enter Discount Percentage"
-                required
-              />
-            </div>
-
-            <div className="mb-4 w-full">
-              <Label htmlFor="date">Expiry Date</Label>
-              <Input type="date" id="date" name="date" min={minDate} required />
-            </div>
-          </div>
-
-          <Button type="submit" className="bg-primary text-white py-2 px-4">
-            Create Offer
-          </Button>
-        </form>
-      </div>
-    </section>
-  );
-};
-
-export default OffersSection;
+        </section>
+    );
+}
+const TimeBox = ({ value, label }: { value: number; label: string }) => (
+    <div className="flex flex-col items-center bg-white rounded-lg p-3 shadow-sm w-full">
+        <span className="text-3xl font-bold text-gray-900">{value}</span>
+        <span className="text-sm text-gray-600 uppercase">{label}</span>
+    </div>
+);
