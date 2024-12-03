@@ -1,19 +1,20 @@
 "use client";
 
-import UserSlider from "@/components/UserSlider";
+import UserSidebar from "@/components/UserSidebar";
 import { ReactNode } from "react";
 
 const UserLayout = ({ children }: { children: ReactNode }) => {
     return (
-        <main className="py-8 container mx-auto">
-            <h1 className="text-center w-full text-2xl md:text-4xl text-primary font-bold mb-8">
-                My Account
-            </h1>
-            <div className="flex flex-col sm:flex-row gap-4 sm:gap-10">
-                <UserSlider />
-                <div className="w-full md:w-3/4 mt-8 md:mt-0">{children}</div>
-            </div>
-        </main>
+        <div className="min-h-screen sm:py-12">
+            <main className="container mx-auto py-8 px-4">
+                <div className="max-w-4xl mx-auto">
+                    <div className="flex flex-row gap-4 sm:gap-8">
+                        <UserSidebar />
+                        <div className="w-full sm:flex-1">{children}</div>
+                    </div>
+                </div>
+            </main>
+        </div>
     );
 };
 
