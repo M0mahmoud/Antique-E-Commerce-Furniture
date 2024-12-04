@@ -3,6 +3,7 @@
 import EmailForm from "@/components/auth/EmailForm";
 import OTPForm from "@/components/auth/OTPForm";
 import ResetForm from "@/components/auth/ResetForm";
+import { useRouter } from "@/i18n/routing";
 import {
     forgetPasswordAction,
     resetPasswordAction,
@@ -14,33 +15,42 @@ export default function ForgotPassword() {
     const [step, setStep] = useState<"email" | "otp" | "reset">("email");
     const [email, setEmail] = useState("");
     const [resetData, setResetData] = useState({ resetToken: "", userID: "" });
+    const router = useRouter();
 
     const [emailState, emailAction, isEmailPending] = useActionState(
         forgetPasswordAction,
-        null,
+        null
     );
     const [otpState, otpAction, isOTPPending] = useActionState(
         verifyOTPAction,
-        null,
+        null
     );
     const [resetState, resetAction, isResetPending] = useActionState(
         resetPasswordAction,
-        null,
+        null
     );
 
     useEffect(() => {
-        if (emailState?.status) setStep("otp");
+        if (emailState?.status) {
+            setStep("otp");
+            setResetData({
+                resetToken: emailState.data.resetToken,
+                userID: emailState.data.userID,
+            });
+        }
     }, [emailState]);
 
     useEffect(() => {
         if (otpState?.status) {
-            setResetData({
-                resetToken: otpState.data.token,
-                userID: otpState.data.user._id,
-            });
             setStep("reset");
         }
     }, [otpState]);
+
+    useEffect(() => {
+        if (resetState?.status) {
+            router.replace("/auth/signin");
+        }
+    }, [resetState]);
 
     return (
         <>
