@@ -22,7 +22,7 @@ export async function signupAction(_: any, formData: FormData) {
 }
 
 export async function resendVerificationCodeAction(email: string) {
-    return await apiClient("/api/auth/signup/resend-code", {
+    return await apiClient("/api/auth/resend-code", {
         method: "POST",
         body: {
             email,
@@ -54,13 +54,13 @@ export async function resetPasswordAction(_: any, form: FormData) {
     console.log("🚀 ~ resetPasswordAction ~ form:", form.get("resetToken"));
     return await apiClient(
         `/api/auth/reset-password/${form.get("userID")}/${form.get(
-            "resetToken",
+            "resetToken"
         )}`,
         {
             method: "POST",
             body: {
                 newPassword: form.get("newPassword"),
             },
-        },
+        }
     );
 }
