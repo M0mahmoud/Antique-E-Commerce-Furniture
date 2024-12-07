@@ -1,16 +1,26 @@
+type Location = {
+    longitude?: number;
+    latitude?: number;
+    city?: string;
+    state?: string;
+    country?: string;
+    fullAddress?: string;
+};
+
 export interface UserAvatar {
     url: string;
     public_id: string;
 }
 
 export interface User {
-    avatar: UserAvatar;
     _id: string;
     username: string;
     email: string;
-    role: string;
+    avatar: UserAvatar;
+    gender?: "male" | "female" | "Male" | "Female";
+    location?: Location;
     verified: boolean;
     active: boolean;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 }

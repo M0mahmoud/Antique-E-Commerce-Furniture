@@ -50,8 +50,6 @@ export async function forgetPasswordAction(_: any, formData: FormData) {
 }
 
 export async function resetPasswordAction(_: any, form: FormData) {
-    console.log("🚀 ~ resetPasswordAction ~ form:", form.get("userID"));
-    console.log("🚀 ~ resetPasswordAction ~ form:", form.get("resetToken"));
     return await apiClient(
         `/api/auth/reset-password/${form.get("userID")}/${form.get(
             "resetToken"
@@ -63,4 +61,34 @@ export async function resetPasswordAction(_: any, form: FormData) {
             },
         }
     );
+}
+
+export async function GetUser() {
+    return await apiClient("/api/user/profile", {
+        method: "GET",
+    });
+}
+export async function updateUserAction(_: any, form: FormData) {
+    return await apiClient("/api/user/profile", {
+        method: "PUT",
+        body: {
+            username: form.get("username"),
+            gender: form.get("gender"),
+            location: {
+                fullAddress: form.get("fullAddress"),
+                state: form.get("state"),
+                city: form.get("city"),
+                country: form.get("country"),
+            },
+        },
+    });
+}
+
+export async function updateEmailAction(_: any, formData: FormData) {
+    return await apiClient("/api/user/change-email", {
+        method: "PUT",
+        body: {
+            newEmail: formData.get("email"),
+        },
+    });
 }

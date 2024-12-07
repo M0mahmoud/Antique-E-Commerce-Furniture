@@ -8,6 +8,14 @@ export type EmailFormProps = {
     setEmail: Dispatch<SetStateAction<string>>;
 };
 
+export type UpdateEmailFormProps = {
+    setEmail: Dispatch<SetStateAction<string>>;
+    emailAction: (form: FormData) => void;
+    isEmailPending: boolean;
+    emailState: ApiResponse | null;
+    email: string;
+};
+
 export type OTPFormProps = {
     action: (formData: FormData) => void;
     isPending: boolean;

@@ -6,7 +6,6 @@ import {
     Heart,
     LayoutDashboard,
     LogOut,
-    MapPin,
     ShoppingBag,
     Truck,
     User,
@@ -16,7 +15,7 @@ import { useAuth } from "@/context/usercontext";
 
 const navigation = [
     {
-        name: "Dashboard",
+        name: "Profile",
         href: "/user",
         icon: LayoutDashboard,
     },
@@ -34,11 +33,6 @@ const navigation = [
         name: "Track Your Order",
         href: "/user/track",
         icon: Truck,
-    },
-    {
-        name: "My Address",
-        href: "/user/address",
-        icon: MapPin,
     },
     {
         name: "Account details",

@@ -1,9 +1,11 @@
 import { ApiResponse, RequestOptions } from "@/types/api";
+import cookies from "js-cookie";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API;
 
 async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
     const data = await response.json();
+    console.log("🚀 ~ data:", data);
 
     if (!response.ok) {
         return {
@@ -26,12 +28,13 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 
 export async function apiClient<T = any>(
     endpoint: string,
-    options: RequestOptions = {},
+    options: RequestOptions = {}
 ): Promise<ApiResponse<T>> {
     const { method = "GET", body, headers = {} } = options;
 
     const requestHeaders: HeadersInit = {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${cookies.get("token") || ""}`,
         ...headers,
     };
 
