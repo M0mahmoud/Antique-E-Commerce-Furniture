@@ -1,12 +1,13 @@
 "use client";
 
 import Loading from "@/components/Loading";
-import { useRouter } from "@/i18n/routing";
 import { GetUser } from "@/lib/apiFun";
 import { User } from "@/types/user";
 import Cookies from "js-cookie";
-import {
+import { useRouter } from "next/navigation";
+import React, {
     createContext,
+    Suspense,
     useCallback,
     useContext,
     useEffect,
@@ -27,10 +28,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     const fetchUser = useCallback(async () => {
+        if (user) return; // Skip if user is already loaded
         try {
             const savedToken = Cookies.get("token");
             if (savedToken) {
@@ -43,44 +44,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch (error) {
             console.error("Error fetching user:", error);
             clearAuth();
-        } finally {
-            setLoading(false);
         }
     }, []);
 
     useEffect(() => {
         fetchUser();
-    }, []);
+    }, [fetchUser]);
 
     const isAuthenticated = useMemo(() => !!user && !!token, [user, token]);
-    const setAuth = (newUser: User, newToken: string) => {
+
+    const setAuth = useCallback((newUser: User, newToken: string) => {
         setUser(newUser);
         setToken(newToken);
         Cookies.set("token", newToken);
-    };
+    }, []);
 
-    const clearAuth = () => {
+    const clearAuth = useCallback(() => {
         setUser(null);
         setToken(null);
         Cookies.remove("token");
         router.replace("/auth/signin");
-    };
+    }, [router]);
 
-    if (loading) {
-        return <Loading />;
-    }
+    const contextValue = useMemo(
+        () => ({
+            user,
+            token,
+            setAuth,
+            clearAuth,
+            isAuthenticated,
+        }),
+        [user, token, setAuth, clearAuth, isAuthenticated]
+    );
 
     return (
-        <AuthContext
-            value={{
-                user,
-                token,
-                setAuth,
-                clearAuth,
-                isAuthenticated,
-            }}
-        >
-            {children}
+        <AuthContext value={contextValue}>
+            <Suspense fallback={<Loading />}>{children}</Suspense>
         </AuthContext>
     );
 }

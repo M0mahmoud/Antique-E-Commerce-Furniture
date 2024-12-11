@@ -46,7 +46,9 @@ export default function UserPage() {
             <form action={userAction} className="space-y-6">
                 <div className="flex gap-4 justify-start mb-2">
                     <Image
-                        src={user?.avatar?.url || `/person_1.jpg`}
+                        // src={user?.avatar?.url || `/person_1.jpg`}
+                        // Backend Error
+                        src={`/person_1.jpg`}
                         alt={user?.username || "User Image"}
                         width={64}
                         height={64}
