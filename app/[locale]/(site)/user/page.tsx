@@ -9,9 +9,11 @@ import { useAuth } from "@/context/usercontext";
 import { useRouter } from "@/i18n/routing";
 import { updateUserAction } from "@/lib/apiFun";
 import { revalidate } from "@/server/revalidate";
+import Cookies from "js-cookie";
 import { ShieldCheck } from "lucide-react";
 import Image from "next/image";
-import { useActionState, useEffect } from "react";
+import { ChangeEvent, useActionState, useEffect } from "react";
+import { toast } from "sonner";
 
 export default function UserPage() {
     const { user, isAuthenticated } = useAuth();
@@ -25,11 +27,37 @@ export default function UserPage() {
     useEffect(() => {
         if (userState?.status) revalidate(`user`);
         router.refresh();
+        toast.success(userState?.message);
     }, [userState]);
 
     if (!isAuthenticated) {
         return router.push("/auth/signin");
     }
+    // Handle image file selection
+    const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const maxSize = 5 * 1024 * 1024; // 5MB
+            if (file.size > maxSize) {
+                toast.error("Image size should be less than 5MB");
+                return;
+            }
+            const formData = new FormData();
+            formData.append("image", file);
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API}/api/user/avatar`,
+                {
+                    method: "PUT",
+                    body: formData,
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("token") || ""}`,
+                    },
+                }
+            );
+            let result = await res.json();
+            toast.success(result?.message);
+        }
+    };
 
     return (
         <div className="w-full p-2">
@@ -43,28 +71,44 @@ export default function UserPage() {
             <h2 className="text-xl sm:text-2xl font-semibold mb-4">
                 Edit Your Personal Details
             </h2>
-            <form action={userAction} className="space-y-6">
-                <div className="flex gap-4 justify-start mb-2">
+            <div className="flex gap-4 justify-start mb-4 relative">
+                <div className="relative">
                     <Image
-                        // src={user?.avatar?.url || `/person_1.jpg`}
+                        src={user?.avatar?.url || `/person_1.jpg`}
                         // Backend Error
-                        src={`/person_1.jpg`}
+                        // src={`/person_1.jpg`}
                         alt={user?.username || "User Image"}
                         width={64}
                         height={64}
                         className="rounded-full w-16 h-16 object-cover"
                     />
-                    <div className="flex items-start justify-center flex-col">
-                        <h2 className="text-xl sm:text-2xl font-semibold text-secondary-foreground mb-2">
-                            {user?.username}
-                        </h2>
-                        <span>
-                            {user?.verified && (
-                                <ShieldCheck className="text-primary inline-block w-5 h-5 sm:w-6 sm:h-6" />
-                            )}
-                        </span>
-                    </div>
+                    <input
+                        type="file"
+                        id="avatarUpload"
+                        name="image"
+                        accept="image/jpeg,image/png,image/gif"
+                        onChange={handleImageChange}
+                        className="hidden"
+                    />
+                    <label
+                        htmlFor="avatarUpload"
+                        className="absolute bottom-0 start-0 p-1 cursor-pointer bg-primary/80 rounded-full"
+                    >
+                        ✏️
+                    </label>
                 </div>
+                <div className="flex items-start justify-center flex-col">
+                    <h2 className="text-xl sm:text-2xl font-semibold text-secondary-foreground mb-2">
+                        {user?.username}
+                    </h2>
+                    <span>
+                        {user?.verified && (
+                            <ShieldCheck className="text-primary inline-block w-5 h-5 sm:w-6 sm:h-6" />
+                        )}
+                    </span>
+                </div>
+            </div>
+            <form action={userAction} className="space-y-6">
                 <div>
                     <Label htmlFor="name" className="block mb-2">
                         Your Name
