@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { apiClient } from "@/lib/apiClient";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 
