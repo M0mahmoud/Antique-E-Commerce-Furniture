@@ -1,6 +1,6 @@
 import { Link } from "@/i18n/routing";
 import { verifySession } from "@/lib/session";
-import { ShoppingCart, User } from "lucide-react";
+import { Bell, ShoppingCart, User } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import MobileMenu from "./MobileMenu";
@@ -68,6 +68,9 @@ const Navbar = async () => {
                             <User className="h-5 text-white" />
                             <span className="sr-only">User</span>
                         </Link>
+                        <div  className="block text-nowrap">
+                            <Bell  className="h-5 text-white" />
+                        </div>
                     </div>
                 </div>
 

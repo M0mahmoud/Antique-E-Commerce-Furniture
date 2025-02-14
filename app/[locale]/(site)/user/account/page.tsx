@@ -6,34 +6,42 @@ import OTPForm from "@/components/auth/OTPForm";
 import UpdateEmail from "@/components/auth/UpdateEmail";
 
 import { useAuth } from "@/context/usercontext";
-import { updateEmailAction, verifyOTPAction } from "@/lib/apiFun";
-import React, { useActionState, useEffect, useState } from "react";
+import { useVerifyOTP } from "@/hooks/auth";
+import { useUpdateEmail } from "@/hooks/user";
+import React, { useEffect, useState } from "react";
 
 export default function AccountPage() {
     const [step, setStep] = useState<"email" | "otp">("email");
-    const { user } = useAuth();
+    const { user, setAuth } = useAuth();
     const [email, setEmail] = useState(user?.email || "");
 
-    const [emailState, emailAction, isEmailPending] = useActionState(
-        updateEmailAction,
-        null
-    );
-    const [otpState, otpAction, isOTPPending] = useActionState(
-        verifyOTPAction,
-        null
-    );
+    const updateEmail = useUpdateEmail();
+    const verifyOTP = useVerifyOTP();
 
     useEffect(() => {
-        if (emailState?.status) {
+        if (updateEmail.isSuccess && updateEmail.data?.status) {
             setStep("otp");
         }
-    }, [emailState]);
+    }, [updateEmail.isSuccess, updateEmail.data]);
 
     useEffect(() => {
-        if (otpState?.status) {
+        if (verifyOTP.isSuccess && verifyOTP.data?.status) {
             setStep("email");
         }
-    }, [otpState]);
+    }, [verifyOTP.isSuccess, verifyOTP.data]);
+
+    const handleEmailUpdate = async (formData: FormData) => {
+        setEmail(formData.get("email") as string);
+        await updateEmail.mutateAsync(formData);
+    };
+
+    const handleOTPVerification = async (formData: FormData) => {
+        await verifyOTP.mutateAsync(formData, {
+            onSuccess: (data) => {
+                setAuth(data.data.user, data.data.token);
+            },
+        });
+    };
 
     return (
         <div className="w-full p-2">
@@ -43,17 +51,17 @@ export default function AccountPage() {
                     {step === "email" && (
                         <UpdateEmail
                             email={email}
-                            emailAction={emailAction}
-                            emailState={emailState}
-                            isEmailPending={isEmailPending}
+                            emailAction={handleEmailUpdate}
+                            emailState={updateEmail.data!}
+                            isEmailPending={updateEmail.isPending}
                             setEmail={setEmail}
                         />
                     )}
                     {step === "otp" && (
                         <OTPForm
-                            action={otpAction}
-                            isPending={isOTPPending}
-                            state={otpState}
+                            action={handleOTPVerification}
+                            isPending={verifyOTP.isPending}
+                            state={verifyOTP.data!}
                             email={email}
                         />
                     )}

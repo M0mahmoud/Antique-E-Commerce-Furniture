@@ -5,32 +5,34 @@ import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/usercontext";
+import { useLogin } from "@/hooks/auth";
 import { Link, useRouter } from "@/i18n/routing";
-import { loginAction } from "@/lib/apiFun";
 import { useTranslations } from "next-intl";
-import { useActionState, useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 
 export function SignInForm() {
     const t = useTranslations("Auth");
     const router = useRouter();
     const { setAuth, isAuthenticated } = useAuth();
-    const [state, action, isPending] = useActionState(loginAction, undefined);
+    const LoginFun = useLogin();
 
     useLayoutEffect(() => {
         if (isAuthenticated) {
             router.push("/user");
         }
     }, [isAuthenticated, router]);
-
-    useEffect(() => {
-        if (state?.status) {
-            setAuth(state.data.user, state.data.token);
-            router.push("/user");
-        }
-    }, [state?.status, router, setAuth]);
+    const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        LoginFun.mutate(formData, {
+            onSuccess: (data) => {
+                setAuth(data.data.user, data.data.token);
+            },
+        });
+    };
 
     return (
-        <form action={action}>
+        <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-2">
                 <div>
                     <Label htmlFor="email">{t("email")}</Label>
@@ -56,11 +58,11 @@ export function SignInForm() {
                 <Link href="/auth/forgot-password" className="py-2 underline">
                     Forgot password?
                 </Link>
-                <StatusMessage status={state!} />
+                <StatusMessage status={LoginFun.data!} />
                 <SubmitButton
                     text={t("signIn")}
                     loadingText={t("submitting")}
-                    isLoading={isPending}
+                    isLoading={LoginFun.isPending}
                 />
             </div>
         </form>

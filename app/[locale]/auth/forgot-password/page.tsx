@@ -3,13 +3,13 @@
 import EmailForm from "@/components/auth/EmailForm";
 import OTPForm from "@/components/auth/OTPForm";
 import ResetForm from "@/components/auth/ResetForm";
-import { useRouter } from "@/i18n/routing";
 import {
-    forgetPasswordAction,
-    resetPasswordAction,
-    verifyOTPAction,
-} from "@/lib/apiFun";
-import { useActionState, useEffect, useState } from "react";
+    useForgetPassword,
+    useResetPassword,
+    useVerifyOTP,
+} from "@/hooks/auth";
+import { useRouter } from "@/i18n/routing";
+import { useEffect, useState } from "react";
 
 export default function ForgotPassword() {
     const [step, setStep] = useState<"email" | "otp" | "reset">("email");
@@ -17,40 +17,46 @@ export default function ForgotPassword() {
     const [resetData, setResetData] = useState({ resetToken: "", userID: "" });
     const router = useRouter();
 
-    const [emailState, emailAction, isEmailPending] = useActionState(
-        forgetPasswordAction,
-        null
-    );
-    const [otpState, otpAction, isOTPPending] = useActionState(
-        verifyOTPAction,
-        null
-    );
-    const [resetState, resetAction, isResetPending] = useActionState(
-        resetPasswordAction,
-        null
-    );
+    const forgetPassword = useForgetPassword();
+    const verifyOTP = useVerifyOTP();
+    const resetPassword = useResetPassword();
 
     useEffect(() => {
-        if (emailState?.status) {
+        if (forgetPassword.isSuccess && forgetPassword.data?.status) {
             setStep("otp");
             setResetData({
-                resetToken: emailState.data.resetToken,
-                userID: emailState.data.userID,
+                resetToken: forgetPassword.data.data.resetToken,
+                userID: forgetPassword.data.data.userID,
             });
         }
-    }, [emailState]);
+    }, [forgetPassword.isSuccess, forgetPassword.data]);
 
     useEffect(() => {
-        if (otpState?.status) {
+        if (verifyOTP.isSuccess && verifyOTP.data?.status) {
             setStep("reset");
         }
-    }, [otpState]);
+    }, [verifyOTP.isSuccess, verifyOTP.data]);
 
     useEffect(() => {
-        if (resetState?.status) {
+        if (resetPassword.isSuccess && resetPassword.data?.status) {
             router.replace("/auth/signin");
         }
-    }, [resetState]);
+    }, [resetPassword.isSuccess, resetPassword.data, router]);
+
+    const handleEmailSubmit = async (formData: FormData) => {
+        setEmail(formData.get("email") as string);
+        await forgetPassword.mutateAsync(formData);
+    };
+
+    const handleOTPSubmit = async (formData: FormData) => {
+        await verifyOTP.mutateAsync(formData);
+    };
+
+    const handleResetSubmit = async (formData: FormData) => {
+        formData.append("userID", resetData.userID);
+        formData.append("resetToken", resetData.resetToken);
+        await resetPassword.mutateAsync(formData);
+    };
 
     return (
         <>
@@ -65,25 +71,25 @@ export default function ForgotPassword() {
             <div className="mt-6">
                 {step === "email" && (
                     <EmailForm
-                        action={emailAction}
-                        isPending={isEmailPending}
-                        state={emailState}
+                        action={handleEmailSubmit}
+                        isPending={forgetPassword.isPending}
+                        state={forgetPassword.data!}
                         setEmail={setEmail}
                     />
                 )}
                 {step === "otp" && (
                     <OTPForm
-                        action={otpAction}
-                        isPending={isOTPPending}
-                        state={otpState}
+                        action={handleOTPSubmit}
+                        isPending={verifyOTP.isPending}
+                        state={verifyOTP.data!}
                         email={email}
                     />
                 )}
                 {step === "reset" && (
                     <ResetForm
-                        action={resetAction}
-                        isPending={isResetPending}
-                        state={resetState}
+                        action={handleResetSubmit}
+                        isPending={resetPassword.isPending}
+                        state={resetPassword.data!}
                         resetData={resetData}
                     />
                 )}

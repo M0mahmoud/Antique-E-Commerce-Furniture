@@ -6,117 +6,115 @@ import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/context/usercontext";
+import { useSignup, useVerifyOTP } from "@/hooks/auth";
 import { useRouter } from "@/i18n/routing";
-import { signupAction, verifyOTPAction } from "@/lib/apiFun";
 import { useTranslations } from "next-intl";
-import { useActionState, useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 const SignupForm = () => {
-    const router = useRouter();
-    const t = useTranslations("Auth");
-    const { setAuth, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const t = useTranslations("Auth");
+  const { setAuth, isAuthenticated } = useAuth();
 
-    const [email, setEmail] = useState("");
-    const [isOTPStep, setIsOtpStep] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isOTPStep, setIsOtpStep] = useState(false);
 
-    const [state, action, isPending] = useActionState(signupAction, undefined);
-    const [otpState, otpAction, isOTPPending] = useActionState(
-        verifyOTPAction,
-        undefined,
-    );
+  const signup = useSignup();
+  const verifyOTP = useVerifyOTP();
 
-    useLayoutEffect(() => {
-        if (isAuthenticated) {
-            router.push("/user");
-        }
-    }, [isAuthenticated, router]);
+  useLayoutEffect(() => {
+    if (isAuthenticated) {
+      router.push("/user");
+    }
+  }, [isAuthenticated, router]);
 
-    useEffect(() => {
-        if (otpState?.status) {
-            setAuth(otpState.data.user, otpState.data.token);
-            router.push("/user");
-        }
-    }, [otpState?.status, setAuth]);
+  useEffect(() => {
+    if (verifyOTP.isSuccess && verifyOTP.data?.status) {
+      setAuth(verifyOTP.data.data.user, verifyOTP.data.data.token);
+      router.push("/user");
+    }
+  }, [verifyOTP.isSuccess, verifyOTP.data, setAuth, router]);
 
-    useEffect(() => {
-        if (state?.status) {
-            setIsOtpStep(true);
-        }
-    }, [state?.status]);
+  useEffect(() => {
+    if (signup.isSuccess && signup.data?.status) {
+      setIsOtpStep(true);
+    }
+  }, [signup.isSuccess, signup.data]);
 
-    return (
-        <>
-            <div className="text-center">
-                <h1 className="text-3xl font-bold">
-                    {isOTPStep ? `Enter OTP Code` : t("createAccount")}
-                </h1>
-                <p className="text-gray-500">
-                    {isOTPStep
-                        ? `OTP Code sended to ${email}`
-                        : t("enterYourInfo")}
-                </p>
+  const handleSignup = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    setEmail(formData.get("email") as string);
+    await signup.mutateAsync(formData);
+  };
+
+  const handleOTPVerification = async (formData: FormData) => {
+    await verifyOTP.mutateAsync(formData);
+  };
+  return (
+    <>
+      <div className="text-center">
+        <h1 className="text-3xl font-bold">
+          {isOTPStep ? `Enter OTP Code` : t("createAccount")}
+        </h1>
+        <p className="text-gray-500">
+          {isOTPStep ? `OTP Code sended to ${email}` : t("enterYourInfo")}
+        </p>
+      </div>
+      <div className="mt-6">
+        {!isOTPStep ? (
+          <form onSubmit={handleSignup}>
+            <div className="flex flex-col gap-2">
+              <div>
+                <Label htmlFor="name">{t("name")}</Label>
+                <Input
+                  required
+                  id="name"
+                  name="username"
+                  placeholder="Ahmed Ali"
+                  className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3"
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">{t("email")}</Label>
+                <Input
+                  required
+                  id="email"
+                  name="email"
+                  placeholder="john@example.com"
+                  className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3 text-left placeholder:text-left"
+                />
+              </div>
+              <div>
+                <Label htmlFor="password">{t("password")}</Label>
+                <Input
+                  required
+                  id="password"
+                  name="password"
+                  type="password"
+                  className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3"
+                />
+              </div>
+
+              <StatusMessage status={signup.data!} />
+              <SubmitButton
+                text={t("signUpHere")}
+                loadingText={t("submitting")}
+                isLoading={signup.isPending}
+              />
             </div>
-            <div className="mt-6">
-                {!isOTPStep ? (
-                    <form
-                        action={(form) => {
-                            action(form);
-                            setEmail(form.get("email") as string);
-                        }}
-                    >
-                        <div className="flex flex-col gap-2">
-                            <div>
-                                <Label htmlFor="name">{t("name")}</Label>
-                                <Input
-                                    required
-                                    id="name"
-                                    name="username"
-                                    placeholder="Ahmed Ali"
-                                    className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3"
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="email">{t("email")}</Label>
-                                <Input
-                                    required
-                                    id="email"
-                                    name="email"
-                                    placeholder="john@example.com"
-                                    className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3 text-left placeholder:text-left"
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="password">
-                                    {t("password")}
-                                </Label>
-                                <Input
-                                    required
-                                    id="password"
-                                    name="password"
-                                    type="password"
-                                    className="p-2 text-main-1 focus-visible:ring-0 focus-visible:ring-offset-0  focus:border-main-3"
-                                />
-                            </div>
-
-                            <StatusMessage status={state!} />
-                            <SubmitButton
-                                text={t("signUpHere")}
-                                loadingText={t("submitting")}
-                                isLoading={isPending}
-                            />
-                        </div>
-                    </form>
-                ) : (
-                    <OTPForm
-                        action={otpAction}
-                        email={email}
-                        isPending={isOTPPending}
-                        state={otpState!}
-                    />
-                )}
-            </div>
-        </>
-    );
+          </form>
+        ) : (
+          <OTPForm
+            action={handleOTPVerification}
+            email={email}
+            isPending={verifyOTP.isPending}
+            state={verifyOTP.data!}
+          />
+        )}
+      </div>
+    </>
+  );
 };
 
 export default SignupForm;

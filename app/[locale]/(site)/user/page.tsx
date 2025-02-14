@@ -6,34 +6,33 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useAuth } from "@/context/usercontext";
+import { useUpdateAvatar, useUpdateUser } from "@/hooks/user";
 import { useRouter } from "@/i18n/routing";
-import { updateUserAction } from "@/lib/apiFun";
 import { revalidate } from "@/server/revalidate";
-import Cookies from "js-cookie";
 import { ShieldCheck } from "lucide-react";
 import Image from "next/image";
-import { ChangeEvent, useActionState, useEffect } from "react";
+import { ChangeEvent, useEffect } from "react";
 import { toast } from "sonner";
 
 export default function UserPage() {
     const { user, isAuthenticated } = useAuth();
     const router = useRouter();
 
-    const [userState, userAction, isUserPending] = useActionState(
-        updateUserAction,
-        null
-    );
+    const updateAvatar = useUpdateAvatar();
+    const updateUserProfile = useUpdateUser();
 
     useEffect(() => {
-        if (userState?.status) revalidate(`user`);
-        router.refresh();
-        toast.success(userState?.message);
-    }, [userState]);
+        if (updateAvatar.isSuccess) {
+            revalidate(`user`);
+            router.refresh();
+            toast.success(updateAvatar?.data?.message || "Updated");
+        }
+    }, [updateAvatar.isSuccess, router]);
 
     if (!isAuthenticated) {
         return router.push("/auth/signin");
     }
-    // Handle image file selection
+
     const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -42,21 +41,62 @@ export default function UserPage() {
                 toast.error("Image size should be less than 5MB");
                 return;
             }
+
             const formData = new FormData();
-            formData.append("image", file);
-            const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API}/api/user/avatar`,
-                {
-                    method: "PUT",
-                    body: formData,
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get("token") || ""}`,
-                    },
-                }
-            );
-            let result = await res.json();
-            toast.success(result?.message);
+            formData.append("image", file); // Ensure the key matches what the backend expects
+
+            // Debugging: Log the FormData content
+            for (const [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            updateAvatar.mutate(formData, {
+                onSuccess: (data) => {
+                    toast.success(data?.message);
+                },
+                onError: (error) => {
+                    toast.error("Failed to upload image. Please try again.");
+                    console.error("Error uploading image:", error);
+                },
+            });
         }
+    };
+
+    const handleUpdateUser = async (
+        event: React.FormEvent<HTMLFormElement>
+    ) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+
+        // Client-side validation
+        const username = formData.get("username") as string;
+        const gender = formData.get("gender") as string;
+        const city = formData.get("city") as string;
+        const state = formData.get("state") as string;
+        const country = formData.get("country") as string;
+        const fullAddress = formData.get("fullAddress") as string;
+
+        if (
+            !username ||
+            !gender ||
+            !city ||
+            !state ||
+            !country ||
+            !fullAddress
+        ) {
+            toast.error("All fields are required.");
+            return;
+        }
+
+        if (username.length < 8) {
+            toast.error("Username must be at least 8 characters long.");
+            return;
+        }
+        updateUserProfile.mutate(formData, {
+            onSuccess: (data) => {
+                toast.success(data?.message);
+            },
+        });
     };
 
     return (
@@ -75,8 +115,6 @@ export default function UserPage() {
                 <div className="relative">
                     <Image
                         src={user?.avatar?.url || `/person_1.jpg`}
-                        // Backend Error
-                        // src={`/person_1.jpg`}
                         alt={user?.username || "User Image"}
                         width={64}
                         height={64}
@@ -108,7 +146,7 @@ export default function UserPage() {
                     </span>
                 </div>
             </div>
-            <form action={userAction} className="space-y-6">
+            <form onSubmit={handleUpdateUser} className="space-y-6">
                 <div>
                     <Label htmlFor="name" className="block mb-2">
                         Your Name
@@ -119,6 +157,7 @@ export default function UserPage() {
                         id="name"
                         name="username"
                         className="w-full"
+                        minLength={8}
                     />
                 </div>
                 <div>
@@ -187,9 +226,9 @@ export default function UserPage() {
                         className="w-full"
                     />
                 </div>
-                <StatusMessage status={userState!} />
+                <StatusMessage status={updateUserProfile.data!} />
                 <SubmitButton
-                    isLoading={isUserPending}
+                    isLoading={updateUserProfile.isPending}
                     loadingText="Updating..."
                     text="Update Info"
                 />

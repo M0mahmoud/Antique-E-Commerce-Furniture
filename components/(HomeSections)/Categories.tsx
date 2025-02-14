@@ -2,54 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
-import { apiClient } from "@/lib/apiClient";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+
+import { useAllCategories } from "@/hooks/categories";
+import { Category } from "@/types/categories";
 import { Skeleton } from "../ui/skeleton";
 
-interface Category {
-  _id: string;
-  name: string;
-  image: {
-    url: string;
-  };
-  parent: {
-    name: string;
-  } | null;
-}
-interface CategoriesResponse {
-  categories: Category[];
-  total_categories: number;
-  current_page: number;
-  total_pages: number;
-}
-
 export function TopCategories() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await apiClient<CategoriesResponse>("/api/category", {
-          method: "GET",
-        });
-        if (response.status) {
-          setCategories(response.data?.categories!);
-        } else {
-          setError(response.message || "Failed to fetch categories");
-        }
-      } catch (err) {
-        setError("An error occurred while fetching categories");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const { data: categories, isLoading, error } = useAllCategories();
 
   const scrollContainer = (direction: "left" | "right") => {
     const container = document.getElementById("categories-container");
@@ -62,7 +23,11 @@ export function TopCategories() {
 
   if (error) {
     return (
-      <div className="container mx-auto px-4 py-12 text-red-500">{error}</div>
+      <div className="container mx-auto px-4 py-12 text-red-500">
+        {error instanceof Error
+          ? error.message
+          : "An error occurred while fetching categories"}
+      </div>
     );
   }
   return (
@@ -109,7 +74,7 @@ export function TopCategories() {
           ) : (
             categories &&
             !error &&
-            categories.map((category: Category) => (
+            categories.categories.map((category: Category) => (
               <Link
                 key={category._id}
                 href={`/categories/${category.name
