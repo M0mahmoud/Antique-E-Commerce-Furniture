@@ -7,6 +7,7 @@ import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { routing } from "@/i18n/routing";
 import { baseUrl } from "@/lib/definitions";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { notFound } from "next/navigation";
 import "./globals.css";
 
@@ -40,7 +41,11 @@ export default async function RootLayout({
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
       <body suppressHydrationWarning className={tajawal.className}>
         <NextIntlClientProvider messages={messages}>
-          <ClientProvider>{children}</ClientProvider>
+          <ClientProvider>
+            {children}
+
+            <ReactQueryDevtools initialIsOpen={false} />
+          </ClientProvider>
           <Toaster position="top-right" />
         </NextIntlClientProvider>
       </body>
