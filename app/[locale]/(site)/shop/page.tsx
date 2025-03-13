@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { useAllProducts } from "@/hooks/products";
 import { ProductDocument } from "@/lib/definitions";
+import { Product } from "@/types/products";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -128,16 +130,9 @@ export default function ShopPage() {
     [searchParams]
   );
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/product/all`);
-      let result = await res.json();
-      return result;
-    },
-  });
+  const { data, error, isLoading } = useAllProducts();
 
-  const filteredProducts = data?.data.products.filter(
+  const filteredProducts = data?.products.filter(
     (product: any) =>
       (selectedCategories.length === 0 ||
         selectedCategories.includes(product.category)) &&
@@ -151,10 +146,10 @@ export default function ShopPage() {
   );
 
   const uniqueCategories: string[] = Array.from(
-    new Set(data?.data?.products.map((product: any) => product.category) || [])
+    new Set(data?.products.map((product: any) => product.category) || [])
   );
   const uniqueBrands = Array.from(
-    new Set(data?.data?.products.map((product: any) => product.brand) || [])
+    new Set(data?.products.map((product: any) => product.brand) || [])
   );
 
   return (
@@ -210,30 +205,10 @@ export default function ShopPage() {
               ) : (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {data?.data.products.map((product: ProductDocument) => (
-                      <h1 key={product.productName}>TODO</h1>
-                      // <ProductCard
-                      //     key={product._id}
-                      //     _id={product._id}
-                      //     productName={
-                      //         product.productName
-                      //     }
-                      //     category={product.category}
-                      //     description={
-                      //         product.description
-                      //     }
-                      //     price={product.price}
-                      //     mainProductImage={
-                      //         product.mainProductImage
-                      //     }
-                      //     brand={product.brand}
-                      //     availabilityStatus={
-                      //         product.availabilityStatus
-                      //     }
-                      //     sku={""}
-                      //     stockQuantity={0}
-                      // />
-                    ))}
+                    {data?.products &&
+                      data?.products.map((product: Product, index) => (
+                        <ProductCard key={product._id} product={product} />
+                      ))}
                   </div>
                 </>
               )}

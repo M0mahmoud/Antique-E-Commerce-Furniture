@@ -1,44 +1,36 @@
 import { baseUrl } from "@/lib/definitions";
 
-import CarouselImages from "@/components/layout/product/CarouselImages";
-import ProductDetails from "@/components/layout/product/ProductDetails";
-import ProductsTags from "@/components/layout/product/ProductTags";
-import Loading from "@/components/Loading";
-import { Link } from "@/i18n/routing";
-import { ArrowLeft } from "lucide-react";
+import { getProduct } from "@/app/api/products";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { use } from "react";
+import ProductClient from "./ProductClient";
 
-async function getProduct(handle: string) {
-  const res = await fetch(`${baseUrl}/api/products/${handle}`);
-  if (!res.ok) {
-    throw new Error("Failed to fetch product");
-  }
-  return res.json();
-}
-export async function generateMetadata(props: {
+// Fix the params type to match what Next.js provides
+export async function generateMetadata({
+  params,
+}: {
   params: Promise<{ handle: string }>;
 }): Promise<Metadata> {
-  const params = await props.params;
-  const url = `${baseUrl}/products/${params.handle}`;
-  const product = await getProduct(params.handle);
+  const { handle } = await params;
+  const url = `${baseUrl}/products/${handle}`;
+  const product = await getProduct(handle);
 
   if (!product) return notFound();
 
   return {
-    title: product.productName,
-    description: product.description,
+    title: product.product.name,
+    description: product.product.description,
     openGraph: url
       ? {
           url,
-          title: product?.productName,
+          title: product.product.name,
           images: [
             {
               width: 500,
               height: 320,
-              alt: product?.productName,
-              url: product?.mainProductImage,
+              alt: product.product.name,
+              url: product.product.main_image.url,
             },
           ],
         }
@@ -46,29 +38,12 @@ export async function generateMetadata(props: {
   };
 }
 
-const ProductPage = async (props: { params: Promise<{ handle: string }> }) => {
-  const params = await props.params;
-  const handle = params.handle;
-  const product = await getProduct(handle);
+export default function ProductPage({
+  params,
+}: {
+  params: Promise<{ handle: string }>;
+}) {
+  const { handle } = use(params);
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <Suspense fallback={<Loading />}>
-        <Link
-          className="mb-4 flex items-center bg-secondary w-fit py-2 px-3 rounded-lg"
-          href="/"
-        >
-          <ArrowLeft className="me-2 h-4 w-4" />
-          <span>Back to Products</span>
-        </Link>
-        <div className="grid md:grid-cols-2 gap-8">
-          <CarouselImages product={product} />
-          <ProductDetails product={product} />
-        </div>
-        <ProductsTags tags={product?.tags} />
-      </Suspense>
-    </div>
-  );
-};
-
-export default ProductPage;
+  return <ProductClient handle={handle} />;
+}

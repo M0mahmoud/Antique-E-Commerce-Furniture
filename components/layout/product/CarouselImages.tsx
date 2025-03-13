@@ -7,19 +7,22 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { ProductDocument } from "@/lib/definitions";
+import { Product } from "@/types/products";
 import Image from "next/image";
 import { useState } from "react";
 
-const CarouselImages = ({ product }: { product: ProductDocument }) => {
-  const [selectedImage, setSelectedImage] = useState(product?.mainProductImage);
+const CarouselImages = ({ product }: { product: Product | undefined }) => {
+  console.log("🚀 ~ CarouselImages ~ product:", product);
+  const [selectedImage, setSelectedImage] = useState(
+    product && product?.main_image?.url
+  );
 
   return (
     <div className="p-4">
       <div className="relative aspect-square mb-4 p-4">
         <Image
-          src={selectedImage || "/placeholder.svg"}
-          alt={product?.productName}
+          src={selectedImage || "/products/product_1.png"}
+          alt={product?.name || "Product"}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className="rounded-lg object-cover"
@@ -43,7 +46,7 @@ const CarouselImages = ({ product }: { product: ProductDocument }) => {
                 >
                   <Image
                     src={image}
-                    alt={`${product?.productName} view ${index + 1}`}
+                    alt={`${product?.name} view ${index + 1}`}
                     fill
                     sizes="(max-width: 768px) 33vw, (max-width: 1200px) 25vw, 20vw"
                     className="rounded object-cover"

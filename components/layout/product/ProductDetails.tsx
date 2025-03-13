@@ -1,14 +1,14 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ProductDocument } from "@/lib/definitions";
+import { Product } from "@/types/products";
 import { Heart, Loader, Minus, Plus, ShoppingCart, Truck } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 export default function ProductDetails({
   product,
 }: {
-  product: ProductDocument;
+  product: Product | undefined;
 }) {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
@@ -76,43 +76,47 @@ export default function ProductDetails({
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">{product.productName}</h1>
-      <p className="text-gray-600 mb-4">{product.category}</p>
+      <h1 className="text-3xl font-bold mb-2">{product?.name}</h1>
+      <p className="text-gray-600 mb-4">{product?.category}</p>
       <div className="flex items-center mb-4">
-        <span className="text-2xl font-bold mr-2">${product.price}</span>
-        {product.discountPrice && (
+        <span className="text-2xl font-bold mr-2">
+          ${product?.original_price}
+        </span>
+        {/* {product?.discountPrice && (
           <span className="text-lg text-gray-500 line-through">
-            ${product.discountPrice}
+            ${product?.discountPrice}
           </span>
-        )}
+        )} */}
       </div>
       <Badge
         className="mb-4"
         variant={
-          product.availabilityStatus === "inStock"
+          product?.stock_num && product?.stock_num > 0
             ? "default"
-            : product.availabilityStatus === "outOfStock"
-            ? "destructive"
-            : "secondary"
+            : "destructive"
         }
       >
-        {product.availabilityStatus}
+        {"New"}
       </Badge>
-      <p className="text-gray-700 mb-4">{product.description}</p>
+      <p className="text-gray-700 mb-4">{product?.description}</p>
       <div className="grid gap-4 mb-6">
         <div>
-          <strong>SKU:</strong> {product.sku}
+          <strong>SKU:</strong> {product?._id}
         </div>
         <div>
-          <strong>Brand:</strong> {product.brand}
+          <strong>Brand:</strong> {product?.brand}
         </div>
         <div>
-          <strong>Collection:</strong> {product.collectionName}
+          <strong>Collection:</strong> {"product?.collectionName"}
         </div>
         <div>
-          <strong>Dimensions:</strong> {product?.dimensions?.height}&quot; H x{" "}
-          {product?.dimensions?.width}&quot; W x {product?.dimensions?.depth}
-          &quot; D
+          Color: {product?.variations[0]?.color?.hexadecimal || "Green"}
+          <br />
+          Plus Price: {product?.variations[0]?.color?.plus_price || "120"}
+          <br />
+          In Stock{product?.variations[0]?.color?.stock_num || "45"}
+          <br />
+          Size: {product?.variations[0]?.size || "54"}
         </div>
       </div>
       <strong className="mb-2">Quantity:</strong>
@@ -131,7 +135,7 @@ export default function ProductDetails({
           variant="outline"
           size="icon"
           onClick={() =>
-            setQuantity(Math.min(product.stockQuantity, quantity + 1))
+            setQuantity(Math.min(product?.stock_num || 0, quantity + 1))
           }
           aria-label="Increase quantity"
         >
@@ -163,9 +167,10 @@ export default function ProductDetails({
       </div>
       <div className="flex items-center text-sm text-gray-600">
         <Truck className="mr-2 h-4 w-4" />
-        {product.deliveryTime
-          ? `Delivery Time: ${product.deliveryTime}`
-          : "Contact us for delivery information"}
+        {/* {product?.deliveryTime
+          ? `Delivery Time: ${product?.deliveryTime}`
+          : "Contact us for delivery information"} */}
+        Delivery Time: 2 Days
       </div>
     </div>
   );
