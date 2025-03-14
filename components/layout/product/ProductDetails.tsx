@@ -1,76 +1,108 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  useAddToCart,
+  useRemoveFromCart,
+  useUserCart,
+} from "@/hooks/user/cart";
+import {
+  useAddToWishlist,
+  useRemoveFromWishlist,
+  useUserWishlist,
+} from "@/hooks/user/wishlist";
 import { Product } from "@/types/products";
 import { Heart, Loader, Minus, Plus, ShoppingCart, Truck } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+
 export default function ProductDetails({
   product,
 }: {
   product: Product | undefined;
 }) {
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [isInWishlist, setIsInWishlist] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
-  useEffect(() => {
-    // Check if the product is in the wishlist when the component mounts
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    setIsInWishlist(wishlist.some((item: any) => item === product?._id));
-  }, [product?._id]);
+  // Wishlit
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const { data: wishlist } = useUserWishlist();
+  const { mutate: addToWishlist, isPending: isAddingToWishlist } =
+    useAddToWishlist();
+  const { mutate: removeFromWishlist, isPending: isRemovingFromWishlist } =
+    useRemoveFromWishlist();
 
-  //  TODO: if (isError)
+  // Cart
+  const [isInCart, setIsInCart] = useState(false);
+  const { data: cart } = useUserCart();
+  const { mutate: addToCart, isPending: isAddingToCart } = useAddToCart();
+  const { mutate: removeFromCart, isPending: isRemovingFromCart } =
+    useRemoveFromCart();
+
+  useEffect(() => {
+    if (wishlist?.data?.wishlist?.some((item: any) => item === product?._id)) {
+      setIsInWishlist(true);
+    }
+    if (
+      cart?.data?.cart?.products.some(
+        (item: any) => item.product._id === product?._id
+      )
+    ) {
+      setIsInCart(true);
+    }
+  }, [product?._id, wishlist?.data?.wishlist, cart?.data?.cart?.products]);
 
   const handleAddToCart = async () => {
-    setIsAddingToCart(true);
-    try {
-      const res = await fetch("/api/cart", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    if (isInCart) {
+      removeFromCart(product?.slug || "", {
+        onSuccess: () => {
+          setIsInCart(false);
+          toast.success("Removed from cart");
         },
-        body: JSON.stringify({
-          quantity,
-          productId: product?._id,
-        }),
+        onError: () => {
+          setIsInCart(true);
+          toast.error("Failed to remove from cart");
+        },
       });
-      const result = await res.json();
-      if (res.status === 201) {
-        toast.success(result.msg);
-      } else {
-        toast.warning(result.msg);
-      }
-      console.log(`result:`, result);
-    } catch (error) {
-      toast.error("Failed to add to cart. Please try again.");
-    } finally {
-      setIsAddingToCart(false);
+    } else {
+      addToCart(
+        { slug: product?.slug || "", quantity },
+        {
+          onSuccess: () => {
+            setIsInCart(true);
+            toast.success("Added to cart");
+          },
+          onError: () => {
+            setIsInCart(false);
+            toast.error("Failed to add to cart");
+          },
+        }
+      );
     }
   };
 
   const handleAddToWishlist = async () => {
-    try {
-      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      const isAlreadyInWishlist = wishlist.includes(product?._id);
-
-      if (isAlreadyInWishlist) {
-        const updatedWishlist = wishlist.filter(
-          (id: string) => id !== product?._id
-        );
-        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-        setIsInWishlist(false);
-        toast.success("Removed from wishlist");
-      } else {
-        wishlist.push(product?._id);
-        localStorage.setItem("wishlist", JSON.stringify(wishlist));
-        setIsInWishlist(true);
-        toast.success("Added to wishlist");
-      }
-    } catch (error) {
-      console.error("Error updating wishlist:", error);
-      toast.error("Failed to update wishlist. Please try again.");
-      setIsInWishlist(!isInWishlist);
+    if (isInWishlist) {
+      removeFromWishlist(product?.slug || "", {
+        onSuccess: () => {
+          setIsInWishlist(false);
+          toast.success("Removed from wishlist");
+        },
+        onError: () => {
+          setIsInWishlist(true);
+          toast.error("Failed to remove from wishlist");
+        },
+      });
+    } else {
+      addToWishlist(product?.slug || "", {
+        onSuccess: () => {
+          setIsInWishlist(true);
+          toast.success("Added to wishlist");
+        },
+        onError: () => {
+          setIsInWishlist(false);
+          toast.error("Failed to add to wishlist");
+        },
+      });
     }
   };
 
@@ -144,25 +176,33 @@ export default function ProductDetails({
       </div>
       <div className="flex items-center gap-4 mb-4 ">
         <Button onClick={handleAddToCart} className="flex-1">
-          {isAddingToCart ? (
+          {isAddingToCart || isRemovingFromCart ? (
             <Loader className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <ShoppingCart className="mr-2 h-4 w-4" />
           )}
-          Add to Cart
+          {isAddingToCart || isRemovingFromCart
+            ? "Loading..."
+            : isInCart
+            ? "Remove from cart"
+            : "Add to cart"}
         </Button>
         <Button
           variant={isInWishlist ? "secondary" : "outline"}
           onClick={handleAddToWishlist}
           className="flex items-center"
         >
-          <Heart
-            className={`h-4 w-4 ${
-              isInWishlist
-                ? "fill-red-500 text-red-500"
-                : "text-dark fill-transparent"
-            }`}
-          />
+          {isAddingToWishlist || isRemovingFromWishlist ? (
+            <Loader className="h-4 w-4 animate-spin" />
+          ) : (
+            <Heart
+              className={`h-4 w-4 ${
+                isInWishlist
+                  ? "fill-red-500 text-red-500"
+                  : "text-dark fill-transparent"
+              }`}
+            />
+          )}
         </Button>
       </div>
       <div className="flex items-center text-sm text-gray-600">

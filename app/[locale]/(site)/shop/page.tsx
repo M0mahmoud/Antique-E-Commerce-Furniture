@@ -190,11 +190,11 @@ export default function ShopPage() {
                 }}
               />
             </div>
-            {filteredProducts?.length === 0 && (
+            {/* {filteredProducts?.length === 0 && (
               <p className="text-xl text-red-500">
                 There are no products that match
               </p>
-            )}
+            )} */}
             <section className="product-section" id="all-product-section">
               {isLoading ? (
                 <Loading />
@@ -206,7 +206,7 @@ export default function ShopPage() {
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {data?.products &&
-                      data?.products.map((product: Product, index) => (
+                      data?.products.map((product: Product) => (
                         <ProductCard key={product._id} product={product} />
                       ))}
                   </div>
