@@ -11,40 +11,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Upload from "@/components/Upload";
-import { FormState } from "@/lib/definitions";
-import { addProductAction } from "@/server/products";
-import { useActionState, useState } from "react";
 
 export default function AddProduct() {
-  const [state, action, isPending] = useActionState<FormState, FormData>(
-    addProductAction,
-    {
-      success: false,
-    }
-  );
-  const [mainImageUrl, setMainImageUrl] = useState<string>("");
-
-  const onSuccess = (result: { url: string }) => {
-    setMainImageUrl(result.url);
-  };
-
-  const extractErrors = () => {
-    if (state?.errors) {
-      return Object.values(state.errors).flat();
-    }
-    return [];
-  };
-  const errors = extractErrors();
-
   return (
-    <form
-      action={async (form) => {
-        // TODO: More Control
-        form.append("mainProductImage", mainImageUrl);
-        action(form);
-      }}
-      className="space-y-4 p-2"
-    >
+    <form className="space-y-4 p-2">
       <h2 className="text-2xl font-bold text-primary">Add New Product</h2>
       <h3 className="text-lg font-semibold text-secondary-foreground">
         Basic Product Information
@@ -92,7 +62,7 @@ export default function AddProduct() {
       </h3>
       <div>
         <Label>Main Product Image:</Label>
-        <Upload buttonText="Upload Product" onSuccess={onSuccess} />
+        <Upload buttonText="Upload Product" />
       </div>
       <div>
         <Label>Other Product Images:</Label>
@@ -192,29 +162,14 @@ export default function AddProduct() {
         <Label>Delivery Time:</Label>
         <Input type="text" name="deliveryTime" className="mt-1 p-2" />
       </div>
-      <div>
-        {errors.length > 0 && (
-          <ul>
-            {errors.map((error) => (
-              <li className="text-sm text-red-500" key={error}>
-                - {error}
-              </li>
-            ))}
-          </ul>
-        )}
-        {state?.message && (
-          <p className="bg-primary font-medium rounded-md text-white p-2 mt-2">
-            {state.message}
-          </p>
-        )}
-      </div>
+      <div></div>
       <div>
         <Button
           type="submit"
-          disabled={isPending}
+          disabled={false}
           className="bg-primary text-white p-3 rounded-lg"
         >
-          {isPending ? "Adding Product..." : "Add Product"}
+          {false ? "Adding Product..." : "Add Product"}
         </Button>
       </div>
     </form>

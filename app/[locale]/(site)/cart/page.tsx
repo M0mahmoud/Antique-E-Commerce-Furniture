@@ -10,77 +10,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ProductDocument } from "@/lib/definitions";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useAddToCart,
+  useRemoveFromCart,
+  useUserCart,
+} from "@/hooks/user/cart";
+import { Cart, CartProduct } from "@/types/cart";
 import { AlertCircle, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { Suspense } from "react";
-import { toast } from "sonner";
 
-// TODO: Fix Type Errors
-type CartItem = {
-  _id: string;
-  product: ProductDocument;
-  quantity: number;
-  priceAtAddition: number;
-  discountPriceAtAddition?: number;
-  totalPrice: number;
-};
-
-type CartDocument = {
-  userId: string;
-  items: CartItem[];
-  subTotal: number;
-  discountTotal: number;
-  grandTotal: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-};
-
-const fetchCart = async (): Promise<CartDocument> => {
-  const response = await fetch(`/api/cart`);
-  if (!response.ok) throw new Error("Failed to fetch cart");
-  return response.json();
-};
-
-const updateCartItem = async ({
-  itemId,
-  quantity,
-}: {
-  itemId: string;
-  quantity: number;
-}) => {
-  const response = await fetch(`/api/cart`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ itemId, quantity }),
-  });
-  if (!response.ok) throw new Error("Failed to update item");
-  return response.json();
-};
-
-const removeCartItem = async (itemId: string) => {
-  const response = await fetch(`/api/cart`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ itemId }),
-  });
-  if (!response.ok) throw new Error("Failed to remove item");
-  return response.json();
-};
-
-const CartItemComponent: React.FC<{
-  item: CartItem;
-  onUpdate: (id: string, quantity: number) => void;
-  onRemove: (id: string) => void;
-}> = ({ item, onUpdate, onRemove }) => (
+const CartComponent: React.FC<{
+  product: CartProduct;
+  onUpdate: (slug: string, quantity: number) => void;
+  onRemove: (slug: string) => void;
+}> = ({ product, onUpdate, onRemove }) => (
   <Card className="overflow-hidden">
     <CardContent className="p-4">
       <div className="flex flex-col sm:flex-row items-center">
         <div className="w-full sm:w-1/4 mb-4 sm:mb-0">
           <Image
-            src={item.product.mainProductImage}
-            alt={item.product.productName}
+            src={product.product.main_image.url}
+            alt={product.product.name}
             width={96}
             height={96}
             className="rounded-md bg-cover w-24 h-24 sm:h-36 sm:w-36 mx-auto"
@@ -90,25 +41,29 @@ const CartItemComponent: React.FC<{
           <div className="text-center sm:text-left mb-4 sm:mb-0">
             <h3
               // TODO: Fix segments
-              // href={`${baseUrl}/{LANGUAGE}/product/${item.product._id}`}
+              // href={`${baseUrl}/{LANGUAGE}/product/${product.product._id}`}
               className="font-semibold text-xl"
             >
-              {item.product.productName}
+              {product.product.name}
             </h3>
-            <p className="text-dark mb-0">Price: ${item.priceAtAddition}</p>
-            <p className="">Discount: ${item.discountPriceAtAddition}</p>
+            <p className="text-dark mb-0">
+              Price: ${product.product.original_price}
+            </p>
+            <p className="">Discount: ${product.product.original_price}</p>
           </div>
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="icon"
-              onClick={() => onUpdate(item._id, item.quantity - 1)}
+              onClick={() =>
+                onUpdate(product.product.slug, product.quantity - 1)
+              }
             >
               <Minus className="h-4 w-4" />
             </Button>
             <Input
               type="text"
-              value={item.quantity}
+              value={product.quantity}
               min={1}
               disabled
               className="w-12 text-center"
@@ -116,14 +71,16 @@ const CartItemComponent: React.FC<{
             <Button
               variant="outline"
               size="icon"
-              onClick={() => onUpdate(item._id, item.quantity + 1)}
+              onClick={() =>
+                onUpdate(product.product.slug, product.quantity + 1)
+              }
             >
               <Plus className="h-4 w-4" />
             </Button>
             <Button
               variant="destructive"
               size="icon"
-              onClick={() => onRemove(item._id)}
+              onClick={() => onRemove(product._id)}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -134,33 +91,35 @@ const CartItemComponent: React.FC<{
   </Card>
 );
 
-const OrderSummary: React.FC<{ cart: CartDocument }> = ({ cart }) => (
+const OrderSummary: React.FC<{ cart: Cart }> = ({ cart }) => (
   <Card>
     <CardHeader>
       <CardTitle>Order Summary</CardTitle>
     </CardHeader>
     <CardContent>
       <div className="space-y-2 border-b pb-4 mb-4">
-        {cart.items.map((item) => (
+        {cart.products.map((item) => (
           <div key={item._id} className="flex justify-between text-sm">
             <span>
-              {item.product.productName} (X{item.quantity})
+              {item.product.name} (X{item.quantity})
             </span>
-            <span>${(item.priceAtAddition * item.quantity).toFixed(2)}</span>
+            <span>
+              ${(item.product.original_price * item.quantity).toFixed(2)}
+            </span>
           </div>
         ))}
       </div>
       <div className="flex justify-between mb-2">
         <span>Subtotal</span>
-        <span>${cart.subTotal.toFixed(2)}</span>
+        <span>${cart.total_price.toFixed(2)}</span>
       </div>
       <div className="flex justify-between mb-2">
-        <span>Discount</span>
-        <span>-${cart.discountTotal.toFixed(2)}</span>
+        <span>Total Quantity</span>
+        <span>-{cart.total_quantity}</span>
       </div>
       <div className="flex justify-between font-bold">
         <span>Grand Total</span>
-        <span>${cart.grandTotal.toFixed(2)}</span>
+        <span>${cart.total_price.toFixed(2)}</span>
       </div>
     </CardContent>
     <CardFooter>
@@ -170,32 +129,14 @@ const OrderSummary: React.FC<{ cart: CartDocument }> = ({ cart }) => (
 );
 
 const CartPage: React.FC = () => {
-  const queryClient = useQueryClient();
-  const {
-    data: cart,
-    error,
-    isLoading,
-  } = useQuery<CartDocument>({ queryKey: ["cart"], queryFn: fetchCart });
+  const { data: cart, error, isPending } = useUserCart();
+  console.log(cart);
 
-  const updateQuantity = useMutation({
-    mutationFn: updateCartItem,
-    onSuccess: () => {
-      toast.success("Product Updated");
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-    onError: () => toast.error("Error updating item"),
-  });
+  const addToCart = useAddToCart();
+  const removeFromCart = useRemoveFromCart();
 
-  const removeItem = useMutation({
-    mutationFn: removeCartItem,
-    onSuccess: () => {
-      toast.success("Product removed from cart");
-      queryClient.invalidateQueries({ queryKey: ["cart"] });
-    },
-    onError: () => toast.error("Error removing item"),
-  });
+  if (isPending) return <Loading />;
 
-  if (isLoading) return <Loading />;
   if (error)
     return (
       <div className="w-full h-dvh grid place-content-center">
@@ -215,18 +156,22 @@ const CartPage: React.FC = () => {
       <Suspense fallback={<Loading />}>
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2 space-y-4">
-            {cart.items.map((item) => (
-              <CartItemComponent
-                key={item._id}
-                item={item}
-                onUpdate={(id, quantity) =>
-                  updateQuantity.mutate({ itemId: id, quantity })
-                }
-                onRemove={(id) => removeItem.mutate(id)}
-              />
-            ))}
+            {!isPending &&
+              cart.data &&
+              cart.data.cart.products.map((product) => (
+                <CartComponent
+                  key={product._id}
+                  product={product}
+                  onUpdate={(slug, quantity) =>
+                    addToCart.mutate({ quantity, slug })
+                  }
+                  onRemove={(slug) => removeFromCart.mutate(slug)}
+                />
+              ))}
           </div>
-          <OrderSummary cart={cart} />
+          {cart?.data && cart?.data.cart && (
+            <OrderSummary cart={cart?.data.cart} />
+          )}
         </div>
       </Suspense>
     </div>

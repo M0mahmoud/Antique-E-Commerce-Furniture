@@ -1,29 +1,47 @@
 import { apiClient } from "@/lib/apiClient";
 
 export async function GetUserCart() {
-  return await apiClient("/api/cart", {
+  const response = await apiClient("/api/cart", {
     method: "GET",
   });
+  if (!response.status) {
+    throw new Error(response.message || "Failed to fetch cart");
+  }
+  return response;
 }
 
 export async function AddToCart(slug: string, quantity: number) {
-  return await apiClient(`/api/cart`, {
+  const response = await apiClient("/api/cart", {
     method: "POST",
     body: {
       slug,
       quantity,
     },
   });
+  if (!response.status) {
+    throw new Error(response.message || "Failed to add to cart");
+  }
+  return response;
 }
 
 export async function RemoveFromCart(slug: string) {
-  return await apiClient(`/api/cart/remove/${slug}`, {
+  const response = await apiClient(`/api/cart/remove/${slug}`, {
     method: "DELETE",
   });
+
+  if (!response.status) {
+    throw new Error(response.message || "Failed to add to cart");
+  }
+  return response;
 }
 
 export async function ClearCart() {
-  return await apiClient("/api/cart/clear", {
+  const response = await apiClient(`/api/cart/clear`, {
     method: "DELETE",
   });
+
+  if (!response.status) {
+    throw new Error(response.message || "Failed to add to cart");
+  }
+  return response;
 }

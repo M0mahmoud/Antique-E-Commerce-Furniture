@@ -5,16 +5,17 @@ import { StatusMessage } from "@/components/StatusMessage";
 import SubmitButton from "@/components/SubmitButton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAuth } from "@/context/usercontext";
+import Cookies from "js-cookie";
+
 import { useSignup, useVerifyOTP } from "@/hooks/auth";
 import { useRouter } from "@/i18n/routing";
+import { isAuthenticated } from "@/lib/isAuthenticated";
 import { useTranslations } from "next-intl";
 import { useEffect, useLayoutEffect, useState } from "react";
 
 const SignupForm = () => {
   const router = useRouter();
   const t = useTranslations("Auth");
-  const { setAuth, isAuthenticated } = useAuth();
 
   const [email, setEmail] = useState("");
   const [isOTPStep, setIsOtpStep] = useState(false);
@@ -30,10 +31,10 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (verifyOTP.isSuccess && verifyOTP.data?.status) {
-      setAuth(verifyOTP.data.data.user, verifyOTP.data.data.token);
+      Cookies.set("token", verifyOTP.data.data.token);
       router.push("/user");
     }
-  }, [verifyOTP.isSuccess, verifyOTP.data, setAuth, router]);
+  }, [verifyOTP.isSuccess, verifyOTP.data, router]);
 
   useEffect(() => {
     if (signup.isSuccess && signup.data?.status) {

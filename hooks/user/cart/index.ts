@@ -4,11 +4,19 @@ import {
   GetUserCart,
   RemoveFromCart,
 } from "@/app/api/user/cart";
+import { ApiError } from "@/types/api";
+
+import {
+  AddToCartResponse,
+  ClearCartResponse,
+  GetCartResponse,
+  RemoveFromCartResponse,
+} from "@/types/cart";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useUserCart() {
-  return useQuery({
+  return useQuery<GetCartResponse, ApiError>({
     queryKey: ["user-cart"],
     queryFn: GetUserCart,
   });
@@ -16,7 +24,11 @@ export function useUserCart() {
 
 export function useAddToCart() {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<
+    AddToCartResponse,
+    ApiError,
+    { slug: string; quantity: number }
+  >({
     mutationFn: ({ slug, quantity }: { slug: string; quantity: number }) =>
       AddToCart(slug, quantity),
     onSuccess: () => {
@@ -27,7 +39,7 @@ export function useAddToCart() {
 
 export function useRemoveFromCart() {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<RemoveFromCartResponse, ApiError, string>({
     mutationFn: (slug: string) => RemoveFromCart(slug),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-cart"] });
@@ -37,7 +49,7 @@ export function useRemoveFromCart() {
 
 export function useClearCart() {
   const queryClient = useQueryClient();
-  return useMutation({
+  return useMutation<ClearCartResponse, ApiError>({
     mutationFn: () => ClearCart(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-cart"] });

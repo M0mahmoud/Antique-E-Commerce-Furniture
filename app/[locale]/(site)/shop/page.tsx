@@ -8,9 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { useAllProducts } from "@/hooks/products";
-import { ProductDocument } from "@/lib/definitions";
 import { Product } from "@/types/products";
-import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 
