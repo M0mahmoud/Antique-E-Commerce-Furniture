@@ -5,6 +5,7 @@ import { Tajawal } from "next/font/google";
 
 import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
+
 import { routing } from "@/i18n/routing";
 import { baseUrl } from "@/lib/definitions";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -46,7 +47,7 @@ export default async function RootLayout({
 
             <ReactQueryDevtools initialIsOpen={false} />
           </ClientProvider>
-          <Toaster position="top-right" />
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>

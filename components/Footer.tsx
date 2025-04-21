@@ -171,9 +171,7 @@ const Footer = async () => {
           <ChangeLanguage />
         </div>
         <div className="pt-6 mt-6 text-center">
-          <p className="text-gray-600">
-            &copy; 2023 Furniture. All rights reserved.
-          </p>
+          <p className="text-gray-600">{f("footerText")}</p>
         </div>
       </div>
     </footer>
