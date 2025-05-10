@@ -30,8 +30,8 @@ const CartComponent: React.FC<{
       <div className="flex flex-col sm:flex-row items-center">
         <div className="w-full sm:w-1/4 mb-4 sm:mb-0">
           <Image
-            src={product.product.main_image.url}
-            alt={product.product.name}
+            src={product?.product?.main_image?.url || ""}
+            alt={product?.product?.name}
             width={96}
             height={96}
             className="rounded-md bg-cover w-24 h-24 sm:h-36 sm:w-36 mx-auto"
@@ -41,29 +41,29 @@ const CartComponent: React.FC<{
           <div className="text-center sm:text-left mb-4 sm:mb-0">
             <h3
               // TODO: Fix segments
-              // href={`${baseUrl}/{LANGUAGE}/product/${product.product._id}`}
+              // href={`${baseUrl}/{LANGUAGE}/product/${product?.product?._id}`}
               className="font-semibold text-xl"
             >
-              {product.product.name}
+              {product?.product?.name}
             </h3>
             <p className="text-dark mb-0">
-              Price: ${product.product.original_price}
+              Price: ${product?.product?.original_price}
             </p>
-            <p className="">Discount: ${product.product.original_price}</p>
+            <p className="">Discount: ${product?.product?.original_price}</p>
           </div>
           <div className="flex items-center space-x-2">
             <Button
               variant="outline"
               size="icon"
               onClick={() =>
-                onUpdate(product.product.slug, product.quantity - 1)
+                onUpdate(product?.product?.slug, product?.quantity - 1)
               }
             >
               <Minus className="h-4 w-4" />
             </Button>
             <Input
               type="text"
-              value={product.quantity}
+              value={product?.quantity}
               min={1}
               disabled
               className="w-12 text-center"
@@ -72,7 +72,7 @@ const CartComponent: React.FC<{
               variant="outline"
               size="icon"
               onClick={() =>
-                onUpdate(product.product.slug, product.quantity + 1)
+                onUpdate(product?.product?.slug, product?.quantity + 1)
               }
             >
               <Plus className="h-4 w-4" />
@@ -80,7 +80,7 @@ const CartComponent: React.FC<{
             <Button
               variant="destructive"
               size="icon"
-              onClick={() => onRemove(product._id)}
+              onClick={() => onRemove(product?._id)}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
@@ -101,10 +101,10 @@ const OrderSummary: React.FC<{ cart: Cart }> = ({ cart }) => (
         {cart.products.map((item) => (
           <div key={item._id} className="flex justify-between text-sm">
             <span>
-              {item.product.name} (X{item.quantity})
+              {item.product?.name} (X{item.quantity})
             </span>
             <span>
-              ${(item.product.original_price * item.quantity).toFixed(2)}
+              ${(item.product?.original_price * item.quantity).toFixed(2)}
             </span>
           </div>
         ))}
@@ -160,7 +160,7 @@ const CartPage: React.FC = () => {
               cart.data &&
               cart.data.cart.products.map((product) => (
                 <CartComponent
-                  key={product._id}
+                  key={product?._id}
                   product={product}
                   onUpdate={(slug, quantity) =>
                     addToCart.mutate({ quantity, slug })

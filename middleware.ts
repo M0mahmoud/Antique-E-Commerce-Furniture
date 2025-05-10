@@ -5,8 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 const protectedRoutes = ["/user"];
 
 export default async function middleware(request: NextRequest) {
-  const [, locale, ...segments] = request.nextUrl.pathname.split("/");
-  console.log("SEGMENTS:", segments);
+  const [, locale] = request.nextUrl.pathname.split("/");
   const { pathname } = request.nextUrl;
 
   // Exclude static files and assets
@@ -30,17 +29,19 @@ export default async function middleware(request: NextRequest) {
   // Get the response from the i18n middleware
   const response = handleI18nRouting(request);
 
-  // Get the localized path (with locale prefix)
-  const path = request.nextUrl.pathname;
-
   // Check if the current route is protected (considering locale prefixes)
   const isProtectedRoute = protectedRoutes.some(
     (route) =>
-      path === `/${locale}${route}` || path.startsWith(`/${locale}${route}/`)
+      pathname === `/${locale}${route}` ||
+      pathname.startsWith(`/${locale}${route}/`)
   );
 
   // Get the token from the request cookies
   const token = request.cookies.get("AntiqueToken")?.value;
+
+  if (pathname.startsWith(`/${locale}/auth`) && token) {
+    return NextResponse.redirect(new URL(`/${locale}/user`, request.url));
+  }
 
   // If trying to access a protected route without a token, redirect to login with the correct locale
   if (isProtectedRoute && !token) {
