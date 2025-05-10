@@ -87,7 +87,9 @@
     "enterEmailToSignIn": "أدخل بريدك الإلكتروني لتسجيل الدخول إلى حسابك",
     "dontHaveAccount": "لا تملك حسابًا؟",
     "signUpHere": "سجل هنا",
-    "submitting": "جاري التسجيل..."
+    "submitting": "جاري التسجيل...",
+    "loginErrorDescription": "يرجى التحقق من بريدك الإلكتروني وكلمة المرور والمحاولة مرة أخرى.",
+    "loginError": "خطأ في تسجيل الدخول"
   },
   "footer": {
     "companyName": "الأثاث.",

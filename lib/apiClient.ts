@@ -9,6 +9,7 @@ async function handleResponse<T>(
 ): Promise<ApiResponse<T>> {
   const data = response.data;
 
+  // Check if the response status code indicates an error
   if (response.status >= 400) {
     return {
       status: false,
@@ -17,6 +18,18 @@ async function handleResponse<T>(
       error: {
         status: response.status,
         message: data.message || "An error occurred",
+      },
+    };
+  }
+
+  if (data.status === false || data.error || !data.data) {
+    return {
+      status: false,
+      message: data.message || "Operation failed",
+      data: null,
+      error: {
+        status: response.status,
+        message: data.message || "Operation failed",
       },
     };
   }

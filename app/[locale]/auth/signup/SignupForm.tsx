@@ -9,9 +9,8 @@ import Cookies from "js-cookie";
 
 import { useSignup, useVerifyOTP } from "@/hooks/auth";
 import { useRouter } from "@/i18n/routing";
-import { isAuthenticated } from "@/lib/isAuthenticated";
 import { useTranslations } from "next-intl";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const SignupForm = () => {
   const router = useRouter();
@@ -22,12 +21,6 @@ const SignupForm = () => {
 
   const signup = useSignup();
   const verifyOTP = useVerifyOTP();
-
-  useLayoutEffect(() => {
-    if (isAuthenticated) {
-      router.push("/user");
-    }
-  }, [isAuthenticated, router]);
 
   useEffect(() => {
     if (verifyOTP.isSuccess && verifyOTP.data?.status) {

@@ -86,7 +86,9 @@
     "enterEmailToSignIn": "Enter your email below to SignIn to your account",
     "dontHaveAccount": "Don't have an account?",
     "signUpHere": "Sign up",
-    "submitting": "Submitting..."
+    "submitting": "Submitting...",
+    "loginErrorDescription": "Please check your email and password and try again.",
+    "loginError": "Login failed"
   },
   "footer": {
     "companyName": "Furniture.",

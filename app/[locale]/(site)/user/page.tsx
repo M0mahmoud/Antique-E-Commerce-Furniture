@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useUpdateAvatar, useUpdateUser, useUser } from "@/hooks/user";
 import { useRouter } from "@/i18n/routing";
-import { isAuthenticated } from "@/lib/isAuthenticated";
 import { Loader2, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, Suspense, useEffect } from "react";
@@ -29,10 +28,6 @@ export default function UserPage() {
       toast.success(updateAvatar?.data?.message || "Updated");
     }
   }, [updateAvatar.isSuccess, router]);
-
-  if (!isAuthenticated) {
-    return router.push("/auth/signin");
-  }
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

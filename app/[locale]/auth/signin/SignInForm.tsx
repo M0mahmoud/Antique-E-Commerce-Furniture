@@ -6,28 +6,33 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLogin } from "@/hooks/auth";
 import { Link, useRouter } from "@/i18n/routing";
-import { isAuthenticated } from "@/lib/isAuthenticated";
 import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
-import { useLayoutEffect } from "react";
+
+import { toast } from "sonner";
+
 export default function SignInForm() {
   const t = useTranslations("Auth");
   const router = useRouter();
 
   const LoginFun = useLogin();
 
-  useLayoutEffect(() => {
-    if (isAuthenticated) {
-      router.push("/user");
-    }
-  }, [isAuthenticated, router]);
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     LoginFun.mutate(formData, {
       onSuccess: (data) => {
-        Cookies.set("AntiqueToken", data.data.token);
-        router.push("/user");
+        if (data?.data?.token) {
+          console.log("🚀 ~ handleLogin ~ data:", data);
+          Cookies.set("AntiqueToken", data?.data?.token);
+          router.push("/user");
+        }
+      },
+      onError: (error) => {
+        console.error("Login error:", error.message);
+        toast.error(t("loginError"), {
+          description: t("loginErrorDescription"),
+        });
       },
     });
   };

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Tajawal } from "next/font/google";
+import { Poppins } from "next/font/google";
 
 import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   description: "Modern Interior Design Studio",
 };
 
-const tajawal = Tajawal({
-  subsets: ["arabic", "latin"],
+const poppins = Poppins({
+  subsets: ["latin"],
   weight: ["200", "300", "400", "500", "700", "800", "900"],
 });
 
@@ -40,11 +40,10 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
-      <body suppressHydrationWarning className={tajawal.className}>
+      <body suppressHydrationWarning className={poppins.className}>
         <NextIntlClientProvider messages={messages}>
           <ClientProvider>
             {children}
-
             <ReactQueryDevtools initialIsOpen={false} />
           </ClientProvider>
           <Toaster />
