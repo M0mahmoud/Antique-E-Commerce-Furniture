@@ -1,15 +1,23 @@
 import { apiClient } from "@/lib/apiClient";
 
 export async function GetUserWishlist() {
-  return await apiClient("/api/product/wishlist/get", {
+  const response = await apiClient(`/api/product/wishlist/get`, {
     method: "GET",
   });
+  if (!response.status) {
+    throw new Error(response.message || "Failed to add to wishlist");
+  }
+  return response;
 }
 
 export async function AddToWishlist(slug: string) {
-  return await apiClient(`/api/product/wishlist/${slug}`, {
+  const response = await apiClient(`/api/product/wishlist/${slug}`, {
     method: "POST",
   });
+  if (!response.status) {
+    throw new Error(response.message || "Failed to add to wishlist");
+  }
+  return response;
 }
 
 export async function RemoveFromWishlist(slug: string) {

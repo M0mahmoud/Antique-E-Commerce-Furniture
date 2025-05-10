@@ -23,7 +23,7 @@ export default function DeleteAccount() {
     await apiClient(`/api/user/profile`, {
       method: "DELETE",
     });
-    Cookies.remove("token");
+    Cookies.remove("AntiqueToken");
     setIsDeleteDialogOpen(false);
   }
 

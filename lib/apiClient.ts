@@ -36,7 +36,7 @@ export async function apiClient<T = any>(
 
   const requestHeaders: Record<string, string> = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${cookies.get("token") || ""}`,
+    Authorization: `Bearer ${cookies.get("AntiqueToken") || ""}`,
   };
 
   // Safely merge additional headers

@@ -5,7 +5,7 @@ const privateKey = process.env.PRIVATE_KEY as string;
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const token = searchParams.get("token") || crypto.randomUUID();
+  const token = searchParams.get("AntiqueToken") || crypto.randomUUID();
   const expire =
     searchParams.get("expire") ||
     (Math.floor(Date.now() / 1000) + 2400).toString();

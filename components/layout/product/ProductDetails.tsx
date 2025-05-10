@@ -11,6 +11,7 @@ import {
   useRemoveFromWishlist,
   useUserWishlist,
 } from "@/hooks/user/wishlist";
+import { CartProduct } from "@/types/cart";
 import { Product } from "@/types/products";
 import { Heart, Loader, Minus, Plus, ShoppingCart, Truck } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -39,12 +40,16 @@ export default function ProductDetails({
     useRemoveFromCart();
 
   useEffect(() => {
-    if (wishlist?.data?.wishlist?.some((item: any) => item === product?._id)) {
+    if (
+      wishlist?.data?.wishlist?.some(
+        (item: Product) => item._id === product?._id
+      )
+    ) {
       setIsInWishlist(true);
     }
     if (
       cart?.data?.cart?.products.some(
-        (item: any) => item.product._id === product?._id
+        (item: CartProduct) => item.product?._id === product?._id
       )
     ) {
       setIsInCart(true);
@@ -109,7 +114,7 @@ export default function ProductDetails({
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2">{product?.name}</h1>
-      <p className="text-gray-600 mb-4">{product?.category}</p>
+      <p className="text-gray-600 mb-4">{product?.category.name}</p>
       <div className="flex items-center mb-4">
         <span className="text-2xl font-bold mr-2">
           ${product?.original_price}

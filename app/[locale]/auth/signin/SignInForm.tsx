@@ -10,7 +10,7 @@ import { isAuthenticated } from "@/lib/isAuthenticated";
 import Cookies from "js-cookie";
 import { useTranslations } from "next-intl";
 import { useLayoutEffect } from "react";
-export function SignInForm() {
+export default function SignInForm() {
   const t = useTranslations("Auth");
   const router = useRouter();
 
@@ -26,7 +26,7 @@ export function SignInForm() {
     const formData = new FormData(event.currentTarget);
     LoginFun.mutate(formData, {
       onSuccess: (data) => {
-        Cookies.set("token", data.data.token);
+        Cookies.set("AntiqueToken", data.data.token);
         router.push("/user");
       },
     });

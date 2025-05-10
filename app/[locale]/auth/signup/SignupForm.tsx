@@ -31,7 +31,7 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (verifyOTP.isSuccess && verifyOTP.data?.status) {
-      Cookies.set("token", verifyOTP.data.data.token);
+      Cookies.set("AntiqueToken", verifyOTP.data.data.token);
       router.push("/user");
     }
   }, [verifyOTP.isSuccess, verifyOTP.data, router]);

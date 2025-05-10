@@ -12,6 +12,8 @@ import { Product } from "@/types/products";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
 
+// imports stay the same...
+
 const Sidebar = ({
   priceRange,
   setPriceRange,
@@ -26,23 +28,23 @@ const Sidebar = ({
   setPriceRange: (priceRange: number[]) => void;
   selectedCategories: string[];
   setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
-  setSelectedBrands: React.Dispatch<React.SetStateAction<string[]>>;
   selectedBrands: string[];
+  setSelectedBrands: React.Dispatch<React.SetStateAction<string[]>>;
   uniqueCategories: string[];
   uniqueBrands: string[];
 }) => {
   const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prevCategories: string[]) =>
+    setSelectedCategories((prevCategories) =>
       prevCategories.includes(category)
-        ? prevCategories.filter((c: string) => c !== category)
+        ? prevCategories.filter((c) => c !== category)
         : [...prevCategories, category]
     );
   };
 
   const handleBrandChange = (brand: string) => {
-    setSelectedBrands((prevBrands: string[]) =>
+    setSelectedBrands((prevBrands) =>
       prevBrands.includes(brand)
-        ? prevBrands.filter((b: string) => b !== brand)
+        ? prevBrands.filter((b) => b !== brand)
         : [...prevBrands, brand]
     );
   };
@@ -54,7 +56,7 @@ const Sidebar = ({
         <h3 className="font-semibold mb-2">Price Range</h3>
         <Slider
           min={0}
-          max={1000}
+          max={10000}
           step={10}
           value={priceRange}
           onValueChange={setPriceRange}
@@ -66,7 +68,7 @@ const Sidebar = ({
       </div>
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Categories</h3>
-        {uniqueCategories.map((category: string) => (
+        {uniqueCategories.map((category) => (
           <div key={category} className="flex items-center mb-2">
             <Checkbox
               id={`category-${category}`}
@@ -84,7 +86,7 @@ const Sidebar = ({
       </div>
       <div className="mb-4">
         <h3 className="font-semibold mb-2">Brands</h3>
-        {uniqueBrands?.map((brand: string) => (
+        {uniqueBrands.map((brand) => (
           <div key={brand} className="flex items-center mb-2">
             <Checkbox
               id={`brand-${brand}`}
@@ -100,7 +102,7 @@ const Sidebar = ({
       <Button
         className="w-full mt-4"
         onClick={() => {
-          setPriceRange([0, 1000]);
+          setPriceRange([0, 10000]);
           setSelectedCategories([]);
           setSelectedBrands([]);
         }}
@@ -113,7 +115,7 @@ const Sidebar = ({
 
 export default function ShopPage() {
   const searchParams = useSearchParams();
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, 10000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
@@ -131,23 +133,21 @@ export default function ShopPage() {
   const { data, error, isLoading } = useAllProducts();
 
   const filteredProducts = data?.products.filter(
-    (product: any) =>
+    (product: Product) =>
       (selectedCategories.length === 0 ||
-        selectedCategories.includes(product.category)) &&
-      (selectedBrands.length === 0 ||
-        selectedBrands.includes(product?.brand || "")) &&
-      product.price >= priceRange[0] &&
-      product.price <= priceRange[1] &&
-      product.productName
-        .toLocaleLowerCase()
-        .includes(searchTerm.toLocaleLowerCase())
+        selectedCategories.includes(product.category.name)) && // <-- FIXED
+      (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
+      product.original_price >= priceRange[0] && // <-- FIXED
+      product.original_price <= priceRange[1] && // <-- FIXED
+      product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()) // <-- FIXED
   );
 
-  const uniqueCategories: string[] = Array.from(
-    new Set(data?.products.map((product: any) => product.category) || [])
+  const uniqueCategories = Array.from(
+    new Set((data?.products ?? []).map((product) => product.category.name))
   );
+
   const uniqueBrands = Array.from(
-    new Set(data?.products.map((product: any) => product.brand) || [])
+    new Set((data?.products ?? []).map((product) => product.brand))
   );
 
   return (
@@ -157,7 +157,7 @@ export default function ShopPage() {
         <div className="flex flex-col md:flex-row gap-8">
           <aside className="block w-full md:w-1/4">
             <p className="px-2 text-primary">
-              Showing {filteredProducts?.length} Product{" "}
+              Showing {filteredProducts?.length || 0} Products
             </p>
             <Sidebar
               priceRange={priceRange}
@@ -167,9 +167,7 @@ export default function ShopPage() {
               selectedBrands={selectedBrands}
               setSelectedBrands={setSelectedBrands}
               uniqueCategories={uniqueCategories}
-              uniqueBrands={uniqueBrands?.filter(
-                (brand): brand is string => brand !== undefined
-              )}
+              uniqueBrands={uniqueBrands}
             />
           </aside>
           <main className="w-full md:w-3/4">
@@ -188,11 +186,6 @@ export default function ShopPage() {
                 }}
               />
             </div>
-            {/* {filteredProducts?.length === 0 && (
-              <p className="text-xl text-red-500">
-                There are no products that match
-              </p>
-            )} */}
             <section className="product-section" id="all-product-section">
               {isLoading ? (
                 <Loading />
@@ -201,14 +194,11 @@ export default function ShopPage() {
                   Error loading products: {error.message}
                 </p>
               ) : (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {data?.products &&
-                      data?.products.map((product: Product) => (
-                        <ProductCard key={product._id} product={product} />
-                      ))}
-                  </div>
-                </>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filteredProducts?.map((product) => (
+                    <ProductCard key={product._id} product={product} />
+                  ))}
+                </div>
               )}
             </section>
           </main>

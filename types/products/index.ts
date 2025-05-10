@@ -18,10 +18,16 @@ export interface Product {
   stock_num: number;
   available: boolean;
   variations: Variation[];
-  category: string;
+  category: Category;
   images: Image[];
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
+}
+
+export interface Category {
+  image: Image;
+  _id: string;
+  name: string;
 }
 
 type Variation = {
