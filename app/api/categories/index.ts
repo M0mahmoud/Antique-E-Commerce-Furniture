@@ -2,7 +2,7 @@ import { apiClient } from "@/lib/apiClient";
 import { CategoriesResponse } from "@/types/categories";
 
 export async function getAllCategories() {
-  const response = await apiClient<CategoriesResponse>("/api/category", {
+  const response = await apiClient<CategoriesResponse>("/category", {
     method: "GET",
   });
   if (!response.status) {
@@ -13,7 +13,7 @@ export async function getAllCategories() {
 
 export async function getCategorie(categoryID: string) {
   const response = await apiClient<CategoriesResponse>(
-    `/api/category/${categoryID}`,
+    `/category/${categoryID}`,
     {
       method: "GET",
     }

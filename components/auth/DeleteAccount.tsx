@@ -20,7 +20,7 @@ export default function DeleteAccount() {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   async function handleDeleteAccount() {
-    await apiClient(`/api/user/profile`, {
+    await apiClient(`/user/profile`, {
       method: "DELETE",
     });
     Cookies.remove("AntiqueToken");

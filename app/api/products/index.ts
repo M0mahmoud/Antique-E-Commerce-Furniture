@@ -3,7 +3,7 @@ import { Product, ProductsResponse } from "@/types/products/index";
 
 export async function getAllProducts() {
   const response = await apiClient<ProductsResponse>(
-    "/api/product/all?page=&brand=&name=&categoryName=&min=&max=",
+    "/product/all?page=&brand=&name=&categoryName=&min=&max=",
     {
       method: "GET",
     }
@@ -18,7 +18,7 @@ export async function getProduct(slug: string) {
   const response = await apiClient<{
     product: Product;
     message: string;
-  }>(`/api/product/${slug}`, {
+  }>(`/product/${slug}`, {
     method: "GET",
   });
   if (!response.status) {

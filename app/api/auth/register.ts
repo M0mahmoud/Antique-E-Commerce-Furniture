@@ -1,7 +1,7 @@
 import { apiClient } from "@/lib/apiClient";
 
 export async function loginAction(formData: FormData) {
-  return await apiClient("/api/auth/login", {
+  return await apiClient("/auth/login", {
     method: "POST",
     body: {
       email: formData.get("email"),
@@ -11,7 +11,7 @@ export async function loginAction(formData: FormData) {
 }
 
 export async function signupAction(formData: FormData) {
-  return await apiClient("/api/auth/signup", {
+  return await apiClient("/auth/signup", {
     method: "POST",
     body: {
       email: formData.get("email"),
@@ -22,14 +22,14 @@ export async function signupAction(formData: FormData) {
 }
 
 export async function resendVerificationCodeAction(email: string) {
-  return await apiClient("/api/auth/resend-code", {
+  return await apiClient("/auth/resend-code", {
     method: "POST",
     body: { email },
   });
 }
 
 export async function verifyOTPAction(formData: FormData) {
-  return await apiClient("/api/auth/verify-email", {
+  return await apiClient("/auth/verify-email", {
     method: "POST",
     body: {
       email: formData.get("email"),
@@ -39,7 +39,7 @@ export async function verifyOTPAction(formData: FormData) {
 }
 
 export async function forgetPasswordAction(formData: FormData) {
-  return await apiClient("/api/auth/forgot-password", {
+  return await apiClient("/auth/forgot-password", {
     method: "POST",
     body: {
       email: formData.get("email"),
@@ -49,7 +49,7 @@ export async function forgetPasswordAction(formData: FormData) {
 
 export async function resetPasswordAction(form: FormData) {
   return await apiClient(
-    `/api/auth/reset-password/${form.get("userID")}/${form.get("resetToken")}`,
+    `/auth/reset-password/${form.get("userID")}/${form.get("resetToken")}`,
     {
       method: "POST",
       body: {

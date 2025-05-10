@@ -1,17 +1,17 @@
 import { apiClient } from "@/lib/apiClient";
 
 export async function GetUserWishlist() {
-  const response = await apiClient(`/api/product/wishlist/get`, {
+  const response = await apiClient("/product/wishlist/get", {
     method: "GET",
   });
   if (!response.status) {
-    throw new Error(response.message || "Failed to add to wishlist");
+    throw new Error(response.message || "Failed to fetch cart");
   }
   return response;
 }
 
 export async function AddToWishlist(slug: string) {
-  const response = await apiClient(`/api/product/wishlist/${slug}`, {
+  const response = await apiClient(`/product/wishlist/${slug}`, {
     method: "POST",
   });
   if (!response.status) {
@@ -21,13 +21,13 @@ export async function AddToWishlist(slug: string) {
 }
 
 export async function RemoveFromWishlist(slug: string) {
-  return await apiClient(`/api/product/wishlist/remove/${slug}`, {
+  return await apiClient(`/product/wishlist/remove/${slug}`, {
     method: "DELETE",
   });
 }
 
 export async function ClearWishlist() {
-  return await apiClient("/api/product/wishlist/clear", {
+  return await apiClient("/product/wishlist/clear", {
     method: "DELETE",
   });
 }

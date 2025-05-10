@@ -1,7 +1,7 @@
 import { apiClient } from "@/lib/apiClient";
 
 export async function GetUserCart() {
-  const response = await apiClient("/api/cart", {
+  const response = await apiClient("/cart", {
     method: "GET",
   });
   if (!response.status) {
@@ -11,7 +11,7 @@ export async function GetUserCart() {
 }
 
 export async function AddToCart(slug: string, quantity: number) {
-  const response = await apiClient("/api/cart", {
+  const response = await apiClient("/cart", {
     method: "POST",
     body: {
       slug,
@@ -25,7 +25,7 @@ export async function AddToCart(slug: string, quantity: number) {
 }
 
 export async function RemoveFromCart(slug: string) {
-  const response = await apiClient(`/api/cart/remove/${slug}`, {
+  const response = await apiClient(`/cart/remove/${slug}`, {
     method: "DELETE",
   });
 
@@ -36,7 +36,7 @@ export async function RemoveFromCart(slug: string) {
 }
 
 export async function ClearCart() {
-  const response = await apiClient(`/api/cart/clear`, {
+  const response = await apiClient(`/cart/clear`, {
     method: "DELETE",
   });
 
