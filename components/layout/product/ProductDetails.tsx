@@ -48,7 +48,7 @@ export default function ProductDetails({
       setIsInWishlist(true);
     }
     if (
-      cart?.data?.cart?.products.some(
+      cart?.data?.cart?.products?.some(
         (item: CartProduct) => item.product?._id === product?._id
       )
     ) {

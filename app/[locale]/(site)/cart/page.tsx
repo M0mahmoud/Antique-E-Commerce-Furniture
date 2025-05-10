@@ -98,7 +98,7 @@ const OrderSummary: React.FC<{ cart: Cart }> = ({ cart }) => (
     </CardHeader>
     <CardContent>
       <div className="space-y-2 border-b pb-4 mb-4">
-        {cart.products.map((item) => (
+        {cart?.products?.map((item) => (
           <div key={item._id} className="flex justify-between text-sm">
             <span>
               {item.product?.name} (X{item.quantity})
@@ -111,15 +111,15 @@ const OrderSummary: React.FC<{ cart: Cart }> = ({ cart }) => (
       </div>
       <div className="flex justify-between mb-2">
         <span>Subtotal</span>
-        <span>${cart.total_price.toFixed(2)}</span>
+        <span>${cart.total_price?.toFixed(2)}</span>
       </div>
       <div className="flex justify-between mb-2">
         <span>Total Quantity</span>
-        <span>-{cart.total_quantity}</span>
+        <span>{cart.total_quantity}</span>
       </div>
       <div className="flex justify-between font-bold">
         <span>Grand Total</span>
-        <span>${cart.total_price.toFixed(2)}</span>
+        <span>${cart.total_price?.toFixed(2)}</span>
       </div>
     </CardContent>
     <CardFooter>
@@ -157,17 +157,32 @@ const CartPage: React.FC = () => {
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-2 space-y-4">
             {!isPending &&
-              cart.data &&
-              cart.data.cart.products.map((product) => (
-                <CartComponent
-                  key={product?._id}
-                  product={product}
-                  onUpdate={(slug, quantity) =>
-                    addToCart.mutate({ quantity, slug })
-                  }
-                  onRemove={(slug) => removeFromCart.mutate(slug)}
-                />
-              ))}
+            cart?.data &&
+            cart.data.cart?.products?.length > 0 ? (
+              <>
+                {cart.data.cart?.products?.map((product) => (
+                  <CartComponent
+                    key={product?._id}
+                    product={product}
+                    onUpdate={(slug, quantity) =>
+                      addToCart.mutate({ quantity, slug })
+                    }
+                    onRemove={(slug) => removeFromCart.mutate(slug)}
+                  />
+                ))}
+              </>
+            ) : (
+              !isPending && (
+                <div className="text-center">
+                  <p className="text-lg font-semibold text-gray-800">
+                    Your cart is empty.
+                  </p>
+                  <p className="text-gray-600">
+                    Browse our products and add some to your cart!
+                  </p>
+                </div>
+              )
+            )}
           </div>
           {cart?.data && cart?.data.cart && (
             <OrderSummary cart={cart?.data.cart} />
