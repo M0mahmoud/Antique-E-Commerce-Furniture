@@ -5,14 +5,17 @@ import { NextRequest, NextResponse } from "next/server";
 const protectedRoutes = ["/user"];
 
 export default async function middleware(request: NextRequest) {
-  const [, locale] = request.nextUrl.pathname.split("/");
   const { pathname } = request.nextUrl;
 
-  // Exclude static files and assets
+  // Exclude static files and assets - FIXED: More comprehensive exclusion
   const isStaticAsset =
     pathname.startsWith("/_next") ||
     pathname.startsWith("/public") ||
-    /\.(svg|png|jpg|jpeg|gif|webp|ico|js|css|woff|woff2|ttf|eot|otf)$/.test(
+    pathname.startsWith("/static") ||
+    pathname.startsWith("/images") ||
+    pathname.startsWith("/favicon") ||
+    pathname.includes("/api/") ||
+    /\.(svg|png|jpg|jpeg|gif|webp|avif|ico|js|css|woff|woff2|ttf|eot|otf|pdf|txt|xml|json)$/i.test(
       pathname
     );
 
@@ -28,6 +31,9 @@ export default async function middleware(request: NextRequest) {
 
   // Get the response from the i18n middleware
   const response = handleI18nRouting(request);
+
+  // Extract locale from pathname after i18n middleware processing
+  const [, locale] = request.nextUrl.pathname.split("/");
 
   // Check if the current route is protected (considering locale prefixes)
   const isProtectedRoute = protectedRoutes.some(
@@ -56,11 +62,11 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Match all paths that start with supported locales
+    // Skip all internal paths (_next, _static, etc.)
+    "/((?!_next|_static|_vercel|public|favicon.ico|sitemap.xml|robots.txt).*)",
+    // Match internationalized pathnames
     "/(ar|en)/:path*",
     // Match the root path
     "/",
-    // Exclude static files and API routes
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };
