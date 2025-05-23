@@ -10,6 +10,8 @@ import { routing } from "@/i18n/routing";
 import { baseUrl } from "@/lib/definitions";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { notFound } from "next/navigation";
+import NextTopLoader from "nextjs-toploader";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -44,6 +46,7 @@ export default async function RootLayout({
         <NextIntlClientProvider messages={messages}>
           <ClientProvider>
             {children}
+            <NextTopLoader color="#16a356" height={4} />
             <ReactQueryDevtools initialIsOpen={false} />
           </ClientProvider>
           <Toaster />
