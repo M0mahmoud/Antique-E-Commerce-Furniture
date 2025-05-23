@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Poppins } from "next/font/google";
+import { Poppins , Tajawal } from "next/font/google";
 
 import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   title: "Furniture",
   description: "Modern Interior Design Studio",
 };
+
+const tajawal = Tajawal({
+  subsets: ["arabic"],
+  weight: ["200", "300", "400", "500", "700", "800", "900"],
+})
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -42,7 +47,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
-      <body suppressHydrationWarning className={poppins.className}>
+      <body suppressHydrationWarning className={`${locale === "en" ? poppins.className : tajawal.className}`}>
         <NextIntlClientProvider messages={messages}>
           <ClientProvider>
             {children}
