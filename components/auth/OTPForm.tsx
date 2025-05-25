@@ -16,6 +16,7 @@ export default function OTPForm({
     action,
     isPending,
     state,
+    withoutSendAgain,
     email,
 }: OTPFormProps) {
     return (
@@ -46,7 +47,7 @@ export default function OTPForm({
                     text="Verify"
                 />
             </form>
-            <ResendVerificationCode email={email} />
+            {!withoutSendAgain && <ResendVerificationCode email={email} />}
         </>
     );
 }

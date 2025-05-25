@@ -135,5 +135,19 @@
   "gallery": {
     "title": "Our Gallery",
     "desc": "Explore our collection of stunning images showcasing our work and inspiration."
+  },
+  "2fa":{
+    "title": "Two-Factor Authentication",
+    "verifyTitle": "Enable Two-Factor Authentication",
+    "description": "If you are unable to scan the QR Code , Please enter this code manually into the app",
+    "verifyDescription": "Please enter the 6-digit code from your Google Authenticator app to complete setup.",
+    "codePlaceholder": "Enter verification code",
+    "submitButton": "Verify",
+    "submitting": "Verifing...",
+    "resendCode": "Resend Code",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "continue": "Continue"
+
   }
 }

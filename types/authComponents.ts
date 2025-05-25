@@ -19,6 +19,7 @@ export type UpdateEmailFormProps = {
 export type OTPFormProps = {
     action: (formData: FormData) => void;
     isPending: boolean;
+    withoutSendAgain?: boolean;
     state: ApiResponse | null;
     email: string;
 };
