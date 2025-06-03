@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
-import { Poppins , Tajawal } from "next/font/google";
+import { Poppins, Cairo } from "next/font/google";
 
 import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
 
 import { routing } from "@/i18n/routing";
 import { baseUrl } from "@/lib/definitions";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { notFound } from "next/navigation";
 import NextTopLoader from "nextjs-toploader";
 
@@ -20,10 +19,10 @@ export const metadata: Metadata = {
   description: "Modern Interior Design Studio",
 };
 
-const tajawal = Tajawal({
+const cairo = Cairo({
   subsets: ["arabic"],
-  weight: ["200", "300", "400", "500", "700", "800", "900"],
-})
+  weight: ["200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -47,12 +46,14 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={locale === "en" ? "ltr" : "rtl"}>
-      <body suppressHydrationWarning className={`${locale === "en" ? poppins.className : tajawal.className}`}>
+      <body
+        suppressHydrationWarning
+        className={`${locale === "en" ? poppins.className : cairo.className}`}
+      >
         <NextIntlClientProvider messages={messages}>
           <ClientProvider>
             {children}
             <NextTopLoader color="#16a356" height={4} />
-            <ReactQueryDevtools initialIsOpen={false} />
           </ClientProvider>
           <Toaster />
         </NextIntlClientProvider>

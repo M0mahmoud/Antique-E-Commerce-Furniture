@@ -27,7 +27,7 @@ export default function UserPage() {
       router.refresh();
       toast.success(updateAvatar?.data?.message || "Updated");
     }
-  }, [updateAvatar.isSuccess, router]);
+  }, [updateAvatar.isSuccess, router, updateAvatar?.data?.message]);
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -117,6 +117,8 @@ export default function UserPage() {
                 width={64}
                 height={64}
                 className="rounded-full w-16 h-16 object-cover"
+                unoptimized
+                loading="lazy"
               />
             )}
             <input

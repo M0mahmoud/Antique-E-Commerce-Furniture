@@ -15,6 +15,7 @@ import {
   useRemoveFromCart,
   useUserCart,
 } from "@/hooks/user/cart";
+import { Link } from "@/i18n/routing";
 import { Cart, CartProduct } from "@/types/cart";
 import { AlertCircle, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -26,26 +27,31 @@ const CartComponent: React.FC<{
   onRemove: (slug: string) => void;
 }> = ({ product, onUpdate, onRemove }) => (
   <Card className="overflow-hidden">
-    <CardContent className="p-4">
+    <CardContent className="p-0">
       <div className="flex flex-col sm:flex-row items-center">
-        <div className="w-full sm:w-1/4 mb-4 sm:mb-0">
-          <Image
-            src={product?.product?.main_image?.url || ""}
-            alt={product?.product?.name}
-            width={96}
-            height={96}
-            className="rounded-md bg-cover w-24 h-24 sm:h-36 sm:w-36 mx-auto"
-          />
+        <div className="mb-4 sm:mb-0 w-24 h-24 sm:h-36 sm:w-36">
+          <Link
+            href={`/product/${product?.product?.slug}`}
+            className="block w-full h-full"
+            title={product?.product?.name}
+          >
+            <Image
+              src={product?.product?.main_image?.url || ""}
+              alt={product?.product?.name}
+              width={96}
+              height={96}
+              className="rounded-s-md bg-cover w-24 h-24 sm:h-36 sm:w-36"
+            />
+          </Link>
         </div>
-        <div className="w-full sm:w-3/4 sm:pl-4 flex flex-col sm:flex-row items-center justify-between">
+        <div className="w-full sm:w-3/4 sm:pl-4 flex flex-col sm:flex-row items-center justify-between pe-4">
           <div className="text-center sm:text-left mb-4 sm:mb-0">
-            <h3
-              // TODO: Fix segments
-              // href={`${baseUrl}/{LANGUAGE}/product/${product?.product?._id}`}
-              className="font-semibold text-xl"
+            <Link
+              href={`/product/${product?.product?.slug}`}
+              className="font-semibold text-xl block`"
             >
               {product?.product?.name}
-            </h3>
+            </Link>
             <p className="text-dark mb-0">
               Price: ${product?.product?.original_price}
             </p>
@@ -57,6 +63,11 @@ const CartComponent: React.FC<{
               size="icon"
               onClick={() =>
                 onUpdate(product?.product?.slug, product?.quantity - 1)
+              }
+              disabled={
+                !product?.product?.slug ||
+                product?.quantity <= 1 ||
+                product.quantity === product?.product?.stock_num
               }
             >
               <Minus className="h-4 w-4" />
@@ -73,6 +84,11 @@ const CartComponent: React.FC<{
               size="icon"
               onClick={() =>
                 onUpdate(product?.product?.slug, product?.quantity + 1)
+              }
+              disabled={
+                !product?.product?.slug ||
+                product?.quantity >= 99 ||
+                product.quantity === product?.product?.stock_num
               }
             >
               <Plus className="h-4 w-4" />

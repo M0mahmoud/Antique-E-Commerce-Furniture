@@ -1,8 +1,6 @@
-import Hero from "@/components/Hero";
 import ServicesCard from "@/components/layout/services/ServicesCard";
 import { Link } from "@/i18n/routing";
 import bag from "@/images/bag.svg";
-import couch from "@/images/couch.png";
 import returnImg from "@/images/return.svg";
 import support from "@/images/support.svg";
 import truck from "@/images/truck.svg";
@@ -55,8 +53,7 @@ const ServicesPage = async () => {
   ];
   return (
     <>
-      <Hero langKey="Hero.Services" img={couch.src} id="HeroSection" />
-      <section className="">
+      <section className="py-24">
         <div className="container mx-auto">
           <div className="mx-auto w-full pb-8 text-center">
             <h2 className="capitalize">Welcome Services Page</h2>
