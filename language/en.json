@@ -215,5 +215,34 @@
     "deliveryTime": "Delivery Time: {days} Days",
     "decreaseQuantity": "Decrease quantity",
     "increaseQuantity": "Increase quantity"
+  },
+  "testimonials": {
+    "title": "What Our Customers Say",
+    "customers": [
+      {
+        "name": "Sarah Johnson",
+        "quote": "The quality of furniture from this store is unmatched. My clients are always impressed with the pieces I source from here."
+      },
+      {
+        "name": "Michael Chen",
+        "quote": "I furnished my entire living room with their products. The customer service and delivery experience were exceptional."
+      },
+      {
+        "name": "Emily Rodriguez",
+        "quote": "As an architect, I appreciate the attention to detail in their furniture. It's both functional and aesthetically pleasing."
+      },
+      {
+        "name": "David Wilson",
+        "quote": "The unique designs and high quality made me a loyal customer. I recommend this store to everyone."
+      },
+      {
+        "name": "Lisa Thompson",
+        "quote": "Reasonable prices and excellent service. I got amazing furniture pieces for my new home."
+      },
+      {
+        "name": "James Parker",
+        "quote": "Fast delivery and professional service. I will definitely shop here again."
+      }
+    ]
   }
 }
