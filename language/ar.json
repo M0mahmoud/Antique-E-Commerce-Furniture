@@ -110,13 +110,18 @@
     "footerText": "2023 جميع الحقوق محفوظة."
   },
   "offer": {
-    "weeklySale": "تخفيض أسبوعي بنسبة 60% على جميع المنتجات",
+    "weeklySale": "تخفيضات الأسبوع",
+    "saleDescription": "لا تفوت أكبر تخفيضاتنا هذا الموسم. عرض لفترة محدودة!",
     "days": "أيام",
     "hours": "ساعات",
     "minutes": "دقائق",
     "seconds": "ثواني",
-    "emailPlaceholder": "أدخل البريد الإلكتروني",
-    "bookNow": "احجز الآن"
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "bookNow": "احجز الآن",
+    "subscribeText": "*اشترك للحصول على تحديثات حول عروضنا الحصرية والخصومات",
+    "subscriptionSuccess": "شكراً لك على الاشتراك في تحديثات التخفيضات!",
+    "discount": "خصم",
+    "luxuryOttoman": "عثمان فاخر مبطن"
   },
   "Benefits": {
     "ecoFriendly": {

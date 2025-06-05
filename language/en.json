@@ -109,13 +109,18 @@
     "footerText": "© 2023 All rights reserved."
   },
   "offer": {
-    "weeklySale": "Weekly Sale on 60% Off All Products",
+    "weeklySale": "Weekly Sale",
+    "saleDescription": "Don't miss out on our biggest sale of the season. Limited time offer!",
     "days": "Days",
     "hours": "Hours",
     "minutes": "Minutes",
     "seconds": "Seconds",
-    "emailPlaceholder": "Enter email",
-    "bookNow": "Book Now"
+    "emailPlaceholder": "Enter your email",
+    "bookNow": "Book Now",
+    "subscribeText": "*Subscribe to get updates about our exclusive offers and discounts",
+    "subscriptionSuccess": "Thank you for subscribing to our sale updates!",
+    "discount": "-60%",
+    "luxuryOttoman": "Luxury Tufted Ottoman"
   },
   "Benefits": {
     "ecoFriendly": {

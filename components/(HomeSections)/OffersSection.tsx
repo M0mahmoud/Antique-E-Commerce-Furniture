@@ -54,7 +54,7 @@ export default function OffersSection() {
         e.preventDefault();
         // Here you would typically handle the email subscription
         console.log("Email submitted:", email);
-        toast.success("Thank you for subscribing to our sale updates!");
+        toast.success(t("subscriptionSuccess"));
         setEmail("");
     };
 
@@ -65,13 +65,13 @@ export default function OffersSection() {
                     <div className="relative aspect-square max-w-md mx-auto">
                         <Image
                             src={offer}
-                            alt="Luxury Tufted Ottoman"
+                            alt={t("luxuryOttoman")}
                             width={570}
                             height={490}
                             className="object-cover rounded-lg"
                         />
                         <div className="absolute top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-full font-bold">
-                            -60%
+                            {t("discount")}
                         </div>
                     </div>
 
@@ -81,8 +81,7 @@ export default function OffersSection() {
                                 {t("weeklySale")}
                             </h2>
                             <p className="text-xl text-gray-600">
-                                Don&lsquo;t miss out on our biggest sale of the
-                                season. Limited time offer!
+                                {t("saleDescription")}
                             </p>
                         </div>
 
@@ -121,8 +120,7 @@ export default function OffersSection() {
                                 </Button>
                             </div>
                             <p className="text-sm text-gray-500">
-                                *Subscribe to get updates about our exclusive
-                                offers and discounts
+                                {t("subscribeText")}
                             </p>
                         </form>
                     </div>
@@ -131,6 +129,7 @@ export default function OffersSection() {
         </section>
     );
 }
+
 const TimeBox = ({ value, label }: { value: number; label: string }) => (
     <div className="flex flex-col items-center bg-white rounded-lg p-3 shadow-sm w-full">
         <span className="text-3xl font-bold text-gray-900">{value}</span>
