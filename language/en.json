@@ -178,5 +178,37 @@
     "searchPlaceholder": "Search for product",
     "searchLabel": "Search for product", 
     "errorLoading": "Error loading products: {error}"
+  },
+  "productPage": {
+    "backToProducts": "Back to Products",
+    "loading": "Loading...",
+    "productNotFound": "Product not found",
+    "errorLoadingProduct": "Error loading product"
+  },
+  "productDetails": {
+    "new": "New",
+    "outOfStock": "Out of Stock",
+    "sku": "SKU:",
+    "brand": "Brand:",
+    "collection": "Collection:",
+    "color": "Color:",
+    "plusPrice": "Plus Price:",
+    "inStock": "In Stock:",
+    "size": "Size:",
+    "quantity": "Quantity:",
+    "loading": "Loading...",
+    "addToCart": "Add to cart",
+    "removeFromCart": "Remove from cart",
+    "addedToCart": "Added to cart",
+    "removedFromCart": "Removed from cart",
+    "failedToAddToCart": "Failed to add to cart",
+    "failedToRemoveFromCart": "Failed to remove from cart",
+    "addedToWishlist": "Added to wishlist",
+    "removedFromWishlist": "Removed from wishlist",
+    "failedToAddToWishlist": "Failed to add to wishlist",
+    "failedToRemoveFromWishlist": "Failed to remove from wishlist",
+    "deliveryTime": "Delivery Time: {days} Days",
+    "decreaseQuantity": "Decrease quantity",
+    "increaseQuantity": "Increase quantity"
   }
 }

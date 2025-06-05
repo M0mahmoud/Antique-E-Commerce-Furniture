@@ -16,15 +16,17 @@ import { Product } from "@/types/products";
 import { Heart, Loader, Minus, Plus, ShoppingCart, Truck } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function ProductDetails({
   product,
 }: {
   product: Product | undefined;
 }) {
+  const t = useTranslations("productDetails");
   const [quantity, setQuantity] = useState(1);
 
-  // Wishlit
+  // Wishlist
   const [isInWishlist, setIsInWishlist] = useState(false);
   const { data: wishlist } = useUserWishlist();
   const { mutate: addToWishlist, isPending: isAddingToWishlist } =
@@ -61,11 +63,11 @@ export default function ProductDetails({
       removeFromCart(product?.slug || "", {
         onSuccess: () => {
           setIsInCart(false);
-          toast.success("Removed from cart");
+          toast.success(t("removedFromCart"));
         },
         onError: () => {
           setIsInCart(true);
-          toast.error("Failed to remove from cart");
+          toast.error(t("failedToRemoveFromCart"));
         },
       });
     } else {
@@ -74,11 +76,11 @@ export default function ProductDetails({
         {
           onSuccess: () => {
             setIsInCart(true);
-            toast.success("Added to cart");
+            toast.success(t("addedToCart"));
           },
           onError: () => {
             setIsInCart(false);
-            toast.error("Failed to add to cart");
+            toast.error(t("failedToAddToCart"));
           },
         }
       );
@@ -90,22 +92,22 @@ export default function ProductDetails({
       removeFromWishlist(product?.slug || "", {
         onSuccess: () => {
           setIsInWishlist(false);
-          toast.success("Removed from wishlist");
+          toast.success(t("removedFromWishlist"));
         },
         onError: () => {
           setIsInWishlist(true);
-          toast.error("Failed to remove from wishlist");
+          toast.error(t("failedToRemoveFromWishlist"));
         },
       });
     } else {
       addToWishlist(product?.slug || "", {
         onSuccess: () => {
           setIsInWishlist(true);
-          toast.success("Added to wishlist");
+          toast.success(t("addedToWishlist"));
         },
         onError: () => {
           setIsInWishlist(false);
-          toast.error("Failed to add to wishlist");
+          toast.error(t("failedToAddToWishlist"));
         },
       });
     }
@@ -133,36 +135,38 @@ export default function ProductDetails({
             : "destructive"
         }
       >
-        {"New"}
+        {product?.stock_num && product?.stock_num > 0
+          ? t("new")
+          : t("outOfStock")}
       </Badge>
       <p className="text-gray-700 mb-4">{product?.description}</p>
       <div className="grid gap-4 mb-6">
         <div>
-          <strong>SKU:</strong> {product?._id}
+          <strong>{t("sku")}</strong> {product?._id}
         </div>
         <div>
-          <strong>Brand:</strong> {product?.brand}
+          <strong>{t("brand")}</strong> {product?.brand}
         </div>
         <div>
-          <strong>Collection:</strong> {"product?.collectionName"}
+          <strong>{t("collection")}</strong> {product?.category.name}
         </div>
         <div>
-          Color: {product?.variations[0]?.color?.hexadecimal || "Green"}
+          {/* {t("color")} {product?.variations[0]?.color?.hexadecimal || "Green"}
+          <br /> */}
+          {t("plusPrice")} {product?.variations[0]?.color?.plus_price || "120"}
           <br />
-          Plus Price: {product?.variations[0]?.color?.plus_price || "120"}
+          {t("inStock")} {product?.variations[0]?.color?.stock_num || "45"}
           <br />
-          In Stock{product?.variations[0]?.color?.stock_num || "45"}
-          <br />
-          Size: {product?.variations[0]?.size || "54"}
+          {t("size")} {product?.variations[0]?.size || "54"}
         </div>
       </div>
-      <strong className="mb-2">Quantity:</strong>
+      <strong className="mb-2">{t("quantity")}:</strong>
       <div className="flex items-center gap-4 mb-4">
         <Button
           variant="outline"
           size="icon"
           onClick={() => setQuantity(Math.max(1, quantity - 1))}
-          aria-label="Decrease quantity"
+          aria-label={t("decreaseQuantity")}
           disabled={quantity <= 1}
         >
           <Minus className="h-4 w-4" />
@@ -174,23 +178,24 @@ export default function ProductDetails({
           onClick={() =>
             setQuantity(Math.min(product?.stock_num || 0, quantity + 1))
           }
-          aria-label="Increase quantity"
+          aria-label={t("increaseQuantity")}
+          disabled={quantity >= (product?.stock_num || 99)}
         >
           <Plus className="h-4 w-4" />
         </Button>
       </div>
-      <div className="flex items-center gap-4 mb-4 ">
-        <Button onClick={handleAddToCart} className="flex-1">
+      <div className="flex items-center gap-4 mb-4">
+        <Button onClick={handleAddToCart} className="flex-1" dir="ltr">
           {isAddingToCart || isRemovingFromCart ? (
             <Loader className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <ShoppingCart className="mr-2 h-4 w-4" />
           )}
           {isAddingToCart || isRemovingFromCart
-            ? "Loading..."
+            ? t("loading")
             : isInCart
-            ? "Remove from cart"
-            : "Add to cart"}
+            ? t("removeFromCart")
+            : t("addToCart")}
         </Button>
         <Button
           variant={isInWishlist ? "secondary" : "outline"}
@@ -212,10 +217,7 @@ export default function ProductDetails({
       </div>
       <div className="flex items-center text-sm text-gray-600">
         <Truck className="mr-2 h-4 w-4" />
-        {/* {product?.deliveryTime
-          ? `Delivery Time: ${product?.deliveryTime}`
-          : "Contact us for delivery information"} */}
-        Delivery Time: 2 Days
+        {t("deliveryTime", { days: 2 })}
       </div>
     </div>
   );

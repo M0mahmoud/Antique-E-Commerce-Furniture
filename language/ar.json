@@ -142,17 +142,17 @@
     "desc": "استكشف مجموعتنا من الصور الرائعة التي تعرض أعمالنا وإلهامنا."
   },
   "2fa": {
-  "title": "التحقق بخطوتين",
-  "verifyTitle": "تفعيل التحقق بخطوتين",
-  "description": "إذا لم تتمكن من مسح رمز QR، يرجى إدخال هذا الرمز يدويًا في التطبيق",
-  "verifyDescription": "يرجى إدخال الرمز المكون من 6 أرقام من تطبيق Google Authenticator لإكمال الإعداد.",
-  "codePlaceholder": "أدخل رمز التحقق",
-  "submitButton": "تحقق",
-  "submitting": "جارٍ التحقق...",
-  "resendCode": "إعادة إرسال الرمز",
-  "copy": "نسخ",
-  "copied": "تم النسخ بنجاح",
-  "continue": "متابعة"
+    "title": "التحقق بخطوتين",
+    "verifyTitle": "تفعيل التحقق بخطوتين",
+    "description": "إذا لم تتمكن من مسح رمز QR، يرجى إدخال هذا الرمز يدويًا في التطبيق",
+    "verifyDescription": "يرجى إدخال الرمز المكون من 6 أرقام من تطبيق Google Authenticator لإكمال الإعداد.",
+    "codePlaceholder": "أدخل رمز التحقق",
+    "submitButton": "تحقق",
+    "submitting": "جارٍ التحقق...",
+    "resendCode": "إعادة إرسال الرمز",
+    "copy": "نسخ",
+    "copied": "تم النسخ بنجاح",
+    "continue": "متابعة"
   },
   "cart": {
     "title": "سلة التسوق",
@@ -178,5 +178,37 @@
     "searchPlaceholder": "البحث عن منتج",
     "searchLabel": "البحث عن منتج",
     "errorLoading": "خطأ في تحميل المنتجات: {error}"
+  },
+  "productPage": {
+    "backToProducts": "العودة إلى المنتجات",
+    "loading": "جاري التحميل...",
+    "productNotFound": "المنتج غير موجود",
+    "errorLoadingProduct": "خطأ في تحميل المنتج"
+  },
+  "productDetails": {
+    "new": "جديد",
+    "outOfStock": "نفد من المخزن",
+    "sku": "رقم المنتج:",
+    "brand": "العلامة التجارية:",
+    "collection": "المجموعة:",
+    "color": "اللون:",
+    "plusPrice": "السعر الإضافي:",
+    "inStock": "متوفر في المخزن:",
+    "size": "الحجم:",
+    "quantity": "الكمية:",
+    "loading": "جاري التحميل...",
+    "addToCart": "أضف إلى السلة",
+    "removeFromCart": "إزالة من السلة",
+    "addedToCart": "تمت الإضافة إلى السلة",
+    "removedFromCart": "تمت الإزالة من السلة",
+    "failedToAddToCart": "فشل في إضافة المنتج إلى السلة",
+    "failedToRemoveFromCart": "فشل في إزالة المنتج من السلة",
+    "addedToWishlist": "تمت الإضافة إلى قائمة الأمنيات",
+    "removedFromWishlist": "تمت الإزالة من قائمة الأمنيات",
+    "failedToAddToWishlist": "فشل في إضافة المنتج إلى قائمة الأمنيات",
+    "failedToRemoveFromWishlist": "فشل في إزالة المنتج من قائمة الأمنيات",
+    "deliveryTime": "وقت التوصيل: {days} أيام",
+    "decreaseQuantity": "تقليل الكمية",
+    "increaseQuantity": "زيادة الكمية"
   }
 }
