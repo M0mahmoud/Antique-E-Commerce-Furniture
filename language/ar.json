@@ -167,5 +167,16 @@
     "emptyCartMessage": "تصفح منتجاتنا وأضف بعضها إلى سلة التسوق!",
     "errorMessage": "حدث خطأ. يرجى المحاولة مرة أخرى.",
     "loading": "جاري التحميل..."
+  },
+  "shopPage": {
+    "filters": "المرشحات",
+    "priceRange": "نطاق الأسعار",
+    "categories": "الفئات",
+    "brands": "العلامات التجارية",
+    "resetFilters": "إعادة تعيين المرشحات",
+    "showingProducts": "عرض {count} منتج",
+    "searchPlaceholder": "البحث عن منتج",
+    "searchLabel": "البحث عن منتج",
+    "errorLoading": "خطأ في تحميل المنتجات: {error}"
   }
 }

@@ -11,8 +11,7 @@ import { useAllProducts } from "@/hooks/products";
 import { Product } from "@/types/products";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useState } from "react";
-
-// imports stay the same...
+import { useTranslations } from "next-intl";
 
 const Sidebar = ({
   priceRange,
@@ -33,6 +32,8 @@ const Sidebar = ({
   uniqueCategories: string[];
   uniqueBrands: string[];
 }) => {
+  const t = useTranslations("shopPage");
+
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prevCategories) =>
       prevCategories.includes(category)
@@ -51,9 +52,9 @@ const Sidebar = ({
 
   return (
     <div className="bg-background p-4 rounded-lg shadow">
-      <h2 className="text-xl font-bold mb-4">Filters</h2>
+      <h2 className="text-xl font-bold mb-4">{t("filters")}</h2>
       <div className="mb-4">
-        <h3 className="font-semibold mb-2">Price Range</h3>
+        <h3 className="font-semibold mb-2">{t("priceRange")}</h3>
         <Slider
           min={0}
           max={10000}
@@ -67,7 +68,7 @@ const Sidebar = ({
         </div>
       </div>
       <div className="mb-4">
-        <h3 className="font-semibold mb-2">Categories</h3>
+        <h3 className="font-semibold mb-2">{t("categories")}</h3>
         {uniqueCategories.map((category) => (
           <div key={category} className="flex items-center mb-2">
             <Checkbox
@@ -85,7 +86,7 @@ const Sidebar = ({
         ))}
       </div>
       <div className="mb-4">
-        <h3 className="font-semibold mb-2">Brands</h3>
+        <h3 className="font-semibold mb-2">{t("brands")}</h3>
         {uniqueBrands.map((brand) => (
           <div key={brand} className="flex items-center mb-2">
             <Checkbox
@@ -107,13 +108,14 @@ const Sidebar = ({
           setSelectedBrands([]);
         }}
       >
-        Reset Filters
+        {t("resetFilters")}
       </Button>
     </div>
   );
 };
 
 export default function ShopPage() {
+  const t = useTranslations("shopPage");
   const searchParams = useSearchParams();
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -135,11 +137,11 @@ export default function ShopPage() {
   const filteredProducts = data?.products.filter(
     (product: Product) =>
       (selectedCategories.length === 0 ||
-        selectedCategories.includes(product.category.name)) && // <-- FIXED
+        selectedCategories.includes(product.category.name)) &&
       (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
-      product.original_price >= priceRange[0] && // <-- FIXED
-      product.original_price <= priceRange[1] && // <-- FIXED
-      product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase()) // <-- FIXED
+      product.original_price >= priceRange[0] &&
+      product.original_price <= priceRange[1] &&
+      product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
   );
 
   const uniqueCategories = Array.from(
@@ -157,7 +159,7 @@ export default function ShopPage() {
         <div className="flex flex-col md:flex-row gap-8">
           <aside className="block w-full md:w-1/4">
             <p className="px-2 text-primary">
-              Showing {filteredProducts?.length || 0} Products
+              {t("showingProducts", { count: filteredProducts?.length || 0 })}
             </p>
             <Sidebar
               priceRange={priceRange}
@@ -171,11 +173,11 @@ export default function ShopPage() {
             />
           </aside>
           <main className="w-full md:w-3/4">
-            <h3>Search for product</h3>
+            <h3>{t("searchLabel")}</h3>
             <div className="flex gap-2">
               <Input
                 className="p-2 mb-4"
-                placeholder="Search for product"
+                placeholder={t("searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => {
                   window.history.pushState(
@@ -191,7 +193,7 @@ export default function ShopPage() {
                 <Loading />
               ) : error ? (
                 <p className="text-xl text-destructive font-light">
-                  Error loading products: {error.message}
+                  {t("errorLoading", { error: error.message })}
                 </p>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -167,5 +167,16 @@
     "emptyCartMessage": "Browse our products and add some to your cart!",
     "errorMessage": "An error occurred. Please try again.",
     "loading": "Loading..."
+  },
+  "shopPage": {
+    "filters": "Filters",
+    "priceRange": "Price Range",
+    "categories": "Categories",
+    "brands": "Brands",
+    "resetFilters": "Reset Filters",
+    "showingProducts": "Showing {count} Products",
+    "searchPlaceholder": "Search for product",
+    "searchLabel": "Search for product", 
+    "errorLoading": "Error loading products: {error}"
   }
 }
