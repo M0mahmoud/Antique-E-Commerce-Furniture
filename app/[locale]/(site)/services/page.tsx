@@ -9,6 +9,8 @@ import { getTranslations } from "next-intl/server";
 const ServicesPage = async () => {
   const t = await getTranslations("whyChooseSection");
   const s = await getTranslations("SupportSection");
+  const p = await getTranslations("servicesPage");
+
   const features = [
     {
       imgSrc: support,
@@ -51,16 +53,14 @@ const ServicesPage = async () => {
       descriptionKey: t("hassleFreeReturns.description"),
     },
   ];
+
   return (
     <>
       <section className="py-24">
         <div className="container mx-auto">
           <div className="mx-auto w-full pb-8 text-center">
-            <h2 className="capitalize">Welcome Services Page</h2>
-            <p>
-              Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio
-              quis nisl dapibus malesuada. Nullam ac aliquet velit.
-            </p>
+            <h2 className="capitalize">{p("title")}</h2>
+            <p>{p("description")}</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center my-5 gap-3">
             {features.map((el, index) => (

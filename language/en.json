@@ -41,24 +41,28 @@
     "user": "User",
     "cart": "Cart"
   },
+  "servicesPage": {
+    "title": "Welcome to Services Page",
+    "description": "We make it easy for you to get the best services. We provide you with a distinctive shopping experience with excellent customer service."
+  },
   "whyChooseSection": {
     "title": "Why Choose Us",
     "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.",
     "fastFreeShipping": {
-      "title": "Fast Shipping",
-      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+      "title": "Fast Free Shipping",
+      "description": "Fast delivery for all orders"
     },
     "easyToShop": {
       "title": "Easy to Shop",
-      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+      "description": "Simple and secure shopping experience"
     },
     "support247": {
       "title": "24/7 Support",
-      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+      "description": "Support team available 24/7 to help you"
     },
     "hassleFreeReturns": {
-      "title": "Free Returns",
-      "description": "Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate."
+      "title": "Hassle-Free Returns",
+      "description": "Easy and flexible return policy"
     }
   },
   "Auth": {
@@ -128,8 +132,8 @@
     }
   },
   "SupportSection": {
-    "heading": "Looking for support?",
-    "description": "We might already have what you’re looking for. See our FAQs or head to our dedicated Help Center.",
+    "heading": "Need Help?",
+    "description": "Our team is ready to help you at any time. Contact us for the best services.",
     "contactButton": "Contact Us"
   },
   "gallery": {
