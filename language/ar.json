@@ -149,5 +149,19 @@
   "copy": "نسخ",
   "copied": "تم النسخ بنجاح",
   "continue": "متابعة"
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "orderSummary": "ملخص الطلب",
+    "price": "السعر",
+    "discount": "الخصم",
+    "subtotal": "المجموع الفرعي",
+    "totalQuantity": "إجمالي الكمية",
+    "grandTotal": "المجموع الإجمالي",
+    "proceedToCheckout": "متابعة إلى الدفع",
+    "emptyCart": "سلة التسوق فارغة",
+    "emptyCartMessage": "تصفح منتجاتنا وأضف بعضها إلى سلة التسوق!",
+    "errorMessage": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "loading": "جاري التحميل..."
   }
 }

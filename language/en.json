@@ -149,5 +149,19 @@
     "copied": "Copied!",
     "continue": "Continue"
 
+  },
+  "cart": {
+    "title": "Your Cart",
+    "orderSummary": "Order Summary",
+    "price": "Price",
+    "discount": "Discount",
+    "subtotal": "Subtotal",
+    "totalQuantity": "Total Quantity",
+    "grandTotal": "Grand Total",
+    "proceedToCheckout": "Proceed to Checkout",
+    "emptyCart": "Your cart is empty.",
+    "emptyCartMessage": "Browse our products and add some to your cart!",
+    "errorMessage": "An error occurred. Please try again.",
+    "loading": "Loading..."
   }
 }
