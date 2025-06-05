@@ -145,7 +145,7 @@
     "title": "Our Gallery",
     "desc": "Explore our collection of stunning images showcasing our work and inspiration."
   },
-  "2fa":{
+  "2fa": {
     "title": "Two-Factor Authentication",
     "verifyTitle": "Enable Two-Factor Authentication",
     "description": "If you are unable to scan the QR Code , Please enter this code manually into the app",
@@ -157,7 +157,6 @@
     "copy": "Copy",
     "copied": "Copied!",
     "continue": "Continue"
-
   },
   "cart": {
     "title": "Your Cart",
@@ -181,7 +180,7 @@
     "resetFilters": "Reset Filters",
     "showingProducts": "Showing {count} Products",
     "searchPlaceholder": "Search for product",
-    "searchLabel": "Search for product", 
+    "searchLabel": "Search for product",
     "errorLoading": "Error loading products: {error}"
   },
   "productPage": {
@@ -244,5 +243,90 @@
         "quote": "Fast delivery and professional service. I will definitely shop here again."
       }
     ]
+  },
+  "userProfile": {
+    "title": "Edit Your Personal Details",
+    "emailVerificationMessage": "Please confirm your email address by clicking the link we've sent to your inbox. If you didn't receive the email, be sure to check your spam or junk folder.",
+    "yourName": "Your Name",
+    "required": "*",
+    "nameMinLength": "Must be at least 8 characters",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "city": "City",
+    "state": "State",
+    "country": "Country",
+    "fullAddress": "Full Address",
+    "updateInfo": "Update Info",
+    "updating": "Updating...",
+    "imageSizeError": "Image size should be less than 5MB",
+    "allFieldsRequired": "All fields are required.",
+    "usernameMinLength": "Username must be at least 8 characters long.",
+    "failedToUploadImage": "Failed to upload image. Please try again.",
+    "updated": "Updated"
+  },
+  "userSidebar": {
+    "profile": "Profile",
+    "wishlist": "Wishlist",
+    "orders": "Orders",
+    "trackOrder": "Track Your Order",
+    "accountDetails": "Account details",
+    "logout": "Logout"
+  },
+  "wishlistPage": {
+    "title": "Your Wishlist",
+    "loading": "Loading...",
+    "errorMessage": "An error occurred while fetching your wishlist. Please try again later.",
+    "emptyWishlist": "Your wishlist is empty.",
+    "emptyMessage": "You haven't added any products to your wishlist yet. Browse our products and add your favorites!",
+    "browseProducts": "Browse Products"
+  },
+  "ordersPage": {
+    "title": "Your Orders",
+    "searchPlaceholder": "Search by order number",
+    "filterByStatus": "Filter by status",
+    "allStatuses": "All Statuses",
+    "processing": "Processing",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "noOrdersFound": "No orders found.",
+    "orderNumber": "Order #",
+    "viewDetails": "View Details",
+    "trackOrder": "Track Order",
+    "item": "item",
+    "items": "items"
+  },
+  "changePassword": {
+    "currentPassword": "Current Password",
+    "currentPasswordPlaceholder": "Enter current password",
+    "newPassword": "New Password",
+    "newPasswordPlaceholder": "Enter new password",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Enter password again",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "changePasswordButton": "Change Password",
+    "passwordUpdated": "Password updated successfully",
+    "passwordUpdateFailed": "Failed to update password"
+  },
+  "deleteAccount": {
+    "title": "Delete Account",
+    "warning": "Once you delete your account, there is no going back. Please be certain.",
+    "deleteButton": "Delete Account",
+    "confirmTitle": "Are you absolutely sure?",
+    "confirmDescription": "This action cannot be undone. This will permanently delete your account and remove your data from our servers.",
+    "cancel": "Cancel",
+    "confirmDelete": "Yes, delete my account"
+  },
+  "updateEmail": {
+    "email": "Email",
+    "emailPlaceholder": "Enter your email",
+    "updating": "Updating...",
+    "updateEmail": "Update Email"
+  },
+  "accountPage": {
+    "title": "Account Settings",
+    "changeEmail": "Change Email",
+    "changePassword": "Change Password",
+    "deleteAccount": "Delete Account"
   }
 }

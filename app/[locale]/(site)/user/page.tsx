@@ -12,8 +12,10 @@ import { Loader2, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { ChangeEvent, Suspense, useEffect } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 export default function UserPage() {
+  const t = useTranslations("userProfile");
   const { data, isPending } = useUser();
   const user = data?.data;
 
@@ -25,16 +27,16 @@ export default function UserPage() {
   useEffect(() => {
     if (updateAvatar.isSuccess) {
       router.refresh();
-      toast.success(updateAvatar?.data?.message || "Updated");
+      toast.success(updateAvatar?.data?.message || t("updated"));
     }
-  }, [updateAvatar.isSuccess, router, updateAvatar?.data?.message]);
+  }, [updateAvatar.isSuccess, router, updateAvatar?.data?.message, t]);
 
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
-        toast.error("Image size should be less than 5MB");
+        toast.error(t("imageSizeError"));
         return;
       }
 
@@ -51,7 +53,7 @@ export default function UserPage() {
           toast.success(data?.message);
         },
         onError: (error) => {
-          toast.error("Failed to upload image. Please try again.");
+          toast.error(t("failedToUploadImage"));
           console.error("Error uploading image:", error);
         },
       });
@@ -71,12 +73,12 @@ export default function UserPage() {
     const fullAddress = formData.get("fullAddress") as string;
 
     if (!username || !gender || !city || !state || !country || !fullAddress) {
-      toast.error("All fields are required.");
+      toast.error(t("allFieldsRequired"));
       return;
     }
 
     if (username.length < 8) {
-      toast.error("Username must be at least 8 characters long.");
+      toast.error(t("usernameMinLength"));
       return;
     }
     updateUserProfile.mutate(formData, {
@@ -91,18 +93,16 @@ export default function UserPage() {
   }
   return (
     <Suspense
-      fallback={<Loader2 className="animate-spin w-8 h-8 text-primary" />}
+      fallback={<Loader2 className="animate-spin w-8" />}
     >
       <div className="w-full p-2">
         {!user?.verified && (
           <p className="bg-destructive text-white border-destructive/50 p-3 rounded-md mb-6 text-sm md:text-base">
-            Please confirm your email address by clicking the link we&apos;ve
-            sent to your inbox. If you didn&apos;t receive the email, be sure to
-            check your spam or junk folder.
+            {t("emailVerificationMessage")}
           </p>
         )}
         <h2 className="text-xl sm:text-2xl font-semibold mb-4">
-          Edit Your Personal Details
+          {t("title")}
         </h2>
         <div className="flex gap-4 justify-start mb-4 relative">
           <div className="relative">
@@ -153,7 +153,7 @@ export default function UserPage() {
         <form onSubmit={handleUpdateUser} className="space-y-6">
           <div>
             <Label htmlFor="name" className="block mb-2">
-              Your Name <span className="text-destructive">*</span>
+              {t("yourName")} <span className="text-destructive">{t("required")}</span>
             </Label>
             <Input
               defaultValue={user?.username}
@@ -165,11 +165,11 @@ export default function UserPage() {
               required
             />
             <p className="text-xs text-muted-foreground mt-1">
-              Must be at least 8 characters
+              {t("nameMinLength")}
             </p>
           </div>
           <div>
-            <Label className="block mb-2">Gender</Label>
+            <Label className="block mb-2">{t("gender")}</Label>
             <RadioGroup
               defaultValue={user?.gender}
               name="gender"
@@ -177,18 +177,18 @@ export default function UserPage() {
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="male" id="male" />
-                <Label htmlFor="male">Male</Label>
+                <Label htmlFor="male">{t("male")}</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="female" id="female" />
-                <Label htmlFor="female">Female</Label>
+                <Label htmlFor="female">{t("female")}</Label>
               </div>
             </RadioGroup>
           </div>
 
           <div>
             <Label htmlFor="city" className="block mb-2">
-              City
+              {t("city")}
             </Label>
             <Input
               defaultValue={user?.location?.city || ""}
@@ -200,7 +200,7 @@ export default function UserPage() {
           </div>
           <div>
             <Label htmlFor="state" className="block mb-2">
-              State
+              {t("state")}
             </Label>
             <Input
               defaultValue={user?.location?.state || ""}
@@ -212,7 +212,7 @@ export default function UserPage() {
           </div>
           <div>
             <Label htmlFor="country" className="block mb-2">
-              Country
+              {t("country")}
             </Label>
             <Input
               defaultValue={user?.location?.country || ""}
@@ -224,7 +224,7 @@ export default function UserPage() {
           </div>
           <div>
             <Label htmlFor="fullAddress" className="block mb-2">
-              Full Address
+              {t("fullAddress")}
             </Label>
             <Input
               defaultValue={user?.location?.fullAddress || ""}
@@ -241,8 +241,8 @@ export default function UserPage() {
 
           <SubmitButton
             isLoading={updateUserProfile.isPending}
-            loadingText="Updating..."
-            text="Update Info"
+            loadingText={t("updating")}
+            text={t("updateInfo")}
           />
         </form>
       </div>

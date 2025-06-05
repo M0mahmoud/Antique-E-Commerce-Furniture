@@ -11,38 +11,40 @@ import {
   Truck,
   User,
 } from "lucide-react";
-
-const navigation = [
-  {
-    name: "Profile",
-    href: "/user",
-    icon: LayoutDashboard,
-  },
-  {
-    name: "Wishlist",
-    href: "/user/wishlist",
-    icon: Heart,
-  },
-  {
-    name: "Orders",
-    href: "/user/orders",
-    icon: ShoppingBag,
-  },
-  {
-    name: "Track Your Order",
-    href: "/user/track",
-    icon: Truck,
-  },
-  {
-    name: "Account details",
-    href: "/user/account",
-    icon: User,
-  },
-];
+import { useTranslations } from "next-intl";
 
 const UserSidebar = () => {
+  const t = useTranslations("userSidebar");
   const router = useRouter();
   const pathname = usePathname();
+
+  const navigation = [
+    {
+      name: t("profile"),
+      href: "/user",
+      icon: LayoutDashboard,
+    },
+    {
+      name: t("wishlist"),
+      href: "/user/wishlist",
+      icon: Heart,
+    },
+    {
+      name: t("orders"),
+      href: "/user/orders",
+      icon: ShoppingBag,
+    },
+    {
+      name: t("trackOrder"),
+      href: "/user/track",
+      icon: Truck,
+    },
+    {
+      name: t("accountDetails"),
+      href: "/user/account",
+      icon: User,
+    },
+  ];
 
   return (
     <nav className="md:w-64 flex-shrink-0">
@@ -72,7 +74,7 @@ const UserSidebar = () => {
           className="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
         >
           <LogOut className="h-5 w-5" />
-          <span className="hidden sm:inline-block">Logout</span>
+          <span className="hidden sm:inline-block">{t("logout")}</span>
         </button>
       </div>
     </nav>

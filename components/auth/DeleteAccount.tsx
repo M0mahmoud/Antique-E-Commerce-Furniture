@@ -14,44 +14,50 @@ import {
 import { apiClient } from "@/lib/apiClient";
 import Cookies from "js-cookie";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "../ui/button";
 
 export default function DeleteAccount() {
+  const t = useTranslations("deleteAccount");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   async function handleDeleteAccount() {
-    await apiClient(`/user/profile`, {
-      method: "DELETE",
-    });
-    Cookies.remove("AntiqueToken");
-    setIsDeleteDialogOpen(false);
+    try {
+      await apiClient(`/user/profile`, {
+        method: "DELETE",
+      });
+      Cookies.remove("AntiqueToken");
+      setIsDeleteDialogOpen(false);
+      // Optionally redirect to home page or login page
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      // Handle error appropriately
+    }
   }
 
   return (
     <div>
-      <h3 className="text-lg font-semibold">Delete Account</h3>
-      <p className="text-sm text-muted-foreground mb-4">
-        Once you delete your account, there is no going back. Please be certain.
-      </p>
+      <h3 className="text-lg font-semibold">{t("title")}</h3>
+      <p className="text-sm text-muted-foreground mb-4">{t("warning")}</p>
       <AlertDialog
         open={isDeleteDialogOpen}
         onOpenChange={setIsDeleteDialogOpen}
       >
         <AlertDialogTrigger asChild>
-          <Button variant="destructive">Delete Account</Button>
+          <Button variant="destructive">{t("deleteButton")}</Button>
         </AlertDialogTrigger>
         <AlertDialogContent className="w-[90%] mx-auto rounded-md">
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t("confirmTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
+              {t("confirmDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="gap-3">
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteAccount}>
-              Yes, delete my account
+              {t("confirmDelete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

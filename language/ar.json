@@ -244,5 +244,90 @@
         "quote": "التوصيل سريع والتعامل احترافي. سأكرر التسوق من هنا بالتأكيد."
       }
     ]
+  },
+  "userProfile": {
+    "title": "تعديل بياناتك الشخصية",
+    "emailVerificationMessage": "يرجى تأكيد عنوان بريدك الإلكتروني من خلال النقر على الرابط الذي أرسلناه إلى صندوق الوارد الخاص بك. إذا لم تتلق البريد الإلكتروني، تأكد من التحقق من مجلد الرسائل غير المرغوب فيها أو البريد العشوائي.",
+    "yourName": "اسمك",
+    "required": "*",
+    "nameMinLength": "يجب أن يكون 8 أحرف على الأقل",
+    "gender": "الجنس",
+    "male": "ذكر",
+    "female": "أنثى",
+    "city": "المدينة",
+    "state": "المحافظة/الولاية",
+    "country": "البلد",
+    "fullAddress": "العنوان الكامل",
+    "updateInfo": "تحديث المعلومات",
+    "updating": "جاري التحديث...",
+    "imageSizeError": "يجب أن يكون حجم الصورة أقل من 5 ميجابايت",
+    "allFieldsRequired": "جميع الحقول مطلوبة.",
+    "usernameMinLength": "يجب أن يكون اسم المستخدم 8 أحرف على الأقل.",
+    "failedToUploadImage": "فشل في رفع الصورة. يرجى المحاولة مرة أخرى.",
+    "updated": "تم التحديث"
+  },
+  "userSidebar": {
+    "profile": "الملف الشخصي",
+    "wishlist": "قائمة الأمنيات",
+    "orders": "الطلبات",
+    "trackOrder": "تتبع طلبك",
+    "accountDetails": "تفاصيل الحساب",
+    "logout": "تسجيل الخروج"
+  },
+  "wishlistPage": {
+    "title": "قائمة الأمنيات",
+    "loading": "جاري التحميل...",
+    "errorMessage": "حدث خطأ أثناء جلب قائمة الأمنيات. يرجى المحاولة مرة أخرى لاحقاً.",
+    "emptyWishlist": "قائمة الأمنيات فارغة.",
+    "emptyMessage": "لم تضف أي منتجات إلى قائمة الأمنيات بعد. تصفح منتجاتنا وأضف المفضلة لديك!",
+    "browseProducts": "تصفح المنتجات"
+  },
+  "ordersPage": {
+    "title": "طلباتك",
+    "searchPlaceholder": "البحث برقم الطلب",
+    "filterByStatus": "تصفية حسب الحالة",
+    "allStatuses": "جميع الحالات",
+    "processing": "قيد المعالجة",
+    "shipped": "تم الشحن",
+    "delivered": "تم التسليم",
+    "noOrdersFound": "لم يتم العثور على طلبات.",
+    "orderNumber": "طلب رقم",
+    "viewDetails": "عرض التفاصيل",
+    "trackOrder": "تتبع الطلب",
+    "item": "عنصر",
+    "items": "عناصر"
+  },
+  "changePassword": {
+    "currentPassword": "كلمة المرور الحالية",
+    "currentPasswordPlaceholder": "أدخل كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أدخل كلمة المرور مرة أخرى",
+    "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+    "changePasswordButton": "تغيير كلمة المرور",
+    "passwordUpdated": "تم تحديث كلمة المرور بنجاح",
+    "passwordUpdateFailed": "فشل في تحديث كلمة المرور"
+  },
+  "deleteAccount": {
+    "title": "حذف الحساب",
+    "warning": "بمجرد حذف حسابك، لا يمكن العودة. يرجى التأكد من قرارك.",
+    "deleteButton": "حذف الحساب",
+    "confirmTitle": "هل أنت متأكد تماماً؟",
+    "confirmDescription": "لا يمكن التراجع عن هذا الإجراء. سيؤدي هذا إلى حذف حسابك نهائياً وإزالة بياناتك من خوادمنا.",
+    "cancel": "إلغاء",
+    "confirmDelete": "نعم، احذف حسابي"
+  },
+  "updateEmail": {
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "updating": "جاري التحديث...",
+    "updateEmail": "تحديث البريد الإلكتروني"
+  },
+  "accountPage": {
+    "title": "إعدادات الحساب",
+    "changeEmail": "تغيير البريد الإلكتروني",
+    "changePassword": "تغيير كلمة المرور",
+    "deleteAccount": "حذف الحساب"
   }
 }
