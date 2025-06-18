@@ -34,7 +34,19 @@ export default function AccountPage() {
 
   const handleEmailUpdate = async (formData: FormData) => {
     setEmail(formData.get("email") as string);
-    await updateEmail.mutateAsync(formData);
+    await updateEmail.mutateAsync(formData, {
+      onSuccess: (data) => {
+        console.log("🚀 ~ handleEmailUpdate ~ data:", data);
+        if (data.status) {
+          setStep("otp");
+        } else {
+          console.error("Failed to update email:", data.message);
+        }
+      },
+      onError: (error) => {
+        console.error("Error updating email:", error);
+      },
+    });
   };
 
   const handleOTPVerification = async (formData: FormData) => {
@@ -58,6 +70,7 @@ export default function AccountPage() {
               emailState={updateEmail.data!}
               isEmailPending={updateEmail.isPending}
               setEmail={setEmail}
+              disableEmail={true} // Disable email input
             />
           )}
           {step === "otp" && (

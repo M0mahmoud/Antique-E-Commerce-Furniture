@@ -12,6 +12,7 @@ export default function UpdateEmail({
   emailState,
   emailAction,
   isEmailPending,
+  disableEmail,
 }: UpdateEmailFormProps) {
   const t = useTranslations("updateEmail");
 
@@ -28,6 +29,8 @@ export default function UpdateEmail({
         </Label>
         <Input
           required
+          disabled={disableEmail}
+          aria-disabled={disableEmail}
           type="email"
           autoComplete="email"
           id="email"
