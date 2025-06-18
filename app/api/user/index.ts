@@ -41,3 +41,14 @@ export async function updateEmailAction(formData: FormData) {
     },
   });
 }
+
+export async function updatePasswordAction(formData: FormData) {
+  return await apiClient("/user/change-password", {
+    method: "PUT",
+    body: {
+      currentPassword: formData.get("currentPassword"),
+      newPassword: formData.get("newPassword"),
+      confirmPassword: formData.get("confirmPassword"),
+    },
+  });
+}

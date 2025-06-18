@@ -1,6 +1,7 @@
 import {
   GetUser,
   updateEmailAction,
+  updatePasswordAction,
   updateUserAction,
   updateUserAvatar,
 } from "@/app/api/user";
@@ -38,6 +39,16 @@ export function useUpdateEmail() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (formData: FormData) => updateEmailAction(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
+}
+
+export function useUpdatePassword() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) => updatePasswordAction(formData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
