@@ -70,9 +70,10 @@ export default function UserPage() {
     const city = formData.get("city") as string;
     const state = formData.get("state") as string;
     const country = formData.get("country") as string;
-    const fullAddress = formData.get("fullAddress") as string;
+    const fullAddress = city + ", " + state + ", " + country;
+    formData.append("fullAddress", fullAddress);
 
-    if (!username || !gender || !city || !state || !country || !fullAddress) {
+    if (!username || !gender || !city || !state || !country) {
       toast.error(t("allFieldsRequired"));
       return;
     }
@@ -92,18 +93,14 @@ export default function UserPage() {
     return <Loading />;
   }
   return (
-    <Suspense
-      fallback={<Loader2 className="animate-spin w-8" />}
-    >
+    <Suspense fallback={<Loader2 className="animate-spin w-8" />}>
       <div className="w-full p-2">
         {!user?.verified && (
           <p className="bg-destructive text-white border-destructive/50 p-3 rounded-md mb-6 text-sm md:text-base">
             {t("emailVerificationMessage")}
           </p>
         )}
-        <h2 className="text-xl sm:text-2xl font-semibold mb-4">
-          {t("title")}
-        </h2>
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4">{t("title")}</h2>
         <div className="flex gap-4 justify-start mb-4 relative">
           <div className="relative">
             {updateAvatar.isPending ? (
@@ -132,7 +129,7 @@ export default function UserPage() {
             />
             <label
               htmlFor="avatarUpload"
-              className={`absolute bottom-0 start-0 p-1 cursor-pointer bg-primary/80 rounded-full ${
+              className={`size-6 absolute bottom-0 start-0 p-1 cursor-pointer bg-primary/80 text-xs rounded-full ${
                 updateAvatar.isPending ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
@@ -153,7 +150,8 @@ export default function UserPage() {
         <form onSubmit={handleUpdateUser} className="space-y-6">
           <div>
             <Label htmlFor="name" className="block mb-2">
-              {t("yourName")} <span className="text-destructive">{t("required")}</span>
+              {t("yourName")}{" "}
+              <span className="text-destructive">{t("required")}</span>
             </Label>
             <Input
               defaultValue={user?.username}
@@ -219,18 +217,6 @@ export default function UserPage() {
               type="text"
               id="country"
               name="country"
-              className="w-full"
-            />
-          </div>
-          <div>
-            <Label htmlFor="fullAddress" className="block mb-2">
-              {t("fullAddress")}
-            </Label>
-            <Input
-              defaultValue={user?.location?.fullAddress || ""}
-              type="text"
-              id="fullAddress"
-              name="fullAddress"
               className="w-full"
             />
           </div>
