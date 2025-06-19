@@ -7,6 +7,11 @@ A modern, multilingual e-commerce platform built with Next.js 15, featuring Arab
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
 
+## 🔗 Related Repositories
+
+- **Backend API**: [Antique Backend](https://github.com/Rewan-Adel/Online-Shop) - Node.js/Express API server
+- **Frontend**: This repository - Next.js 15 client application
+
 ## 👥 Development Team
 
 | Role                      | Developer | Contact                                                                                                                            |
