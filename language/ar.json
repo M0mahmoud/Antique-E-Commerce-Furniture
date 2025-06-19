@@ -182,7 +182,10 @@
     "showingProducts": "عرض {count} منتج",
     "searchPlaceholder": "البحث عن منتج",
     "searchLabel": "البحث عن منتج",
-    "errorLoading": "خطأ في تحميل المنتجات: {error}"
+    "errorLoading": "خطأ في تحميل المنتجات: {error}",
+    "previous": "السابق",
+    "next": "التالي",
+    "page": "صفحة {current} من {total}"
   },
   "productPage": {
     "backToProducts": "العودة إلى المنتجات",

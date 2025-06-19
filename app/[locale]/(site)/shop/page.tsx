@@ -10,7 +10,7 @@ import { Slider } from "@/components/ui/slider";
 import { useAllProducts } from "@/hooks/products";
 import { Product } from "@/types/products";
 import { useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
 const Sidebar = ({
@@ -121,6 +121,7 @@ export default function ShopPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -132,7 +133,19 @@ export default function ShopPage() {
     [searchParams]
   );
 
-  const { data, error, isLoading } = useAllProducts();
+  useEffect(() => {
+    const query = searchParams.get("page");
+    if (query) {
+      setCurrentPage(Number(query));
+    } else {
+      setCurrentPage(1);
+    }
+  }, [searchParams]);
+
+  const { data, error, isLoading } = useAllProducts({
+    page: currentPage,
+    // TODO: Add more filters as needed
+  });
 
   const filteredProducts = data?.products.filter(
     (product: Product) =>
@@ -152,6 +165,8 @@ export default function ShopPage() {
     new Set((data?.products ?? []).map((product) => product.brand))
   );
 
+  const totalPages = data?.total_pages || 1;
+
   return (
     <>
       <Hero langKey="Hero.Shop" id="HeroSection" />
@@ -159,7 +174,7 @@ export default function ShopPage() {
         <div className="flex flex-col md:flex-row gap-8">
           <aside className="block w-full md:w-1/4">
             <p className="px-2 text-primary">
-              {t("showingProducts", { count: filteredProducts?.length || 0 })}
+              {t("showingProducts", { count: data?.total_products || 0 })}
             </p>
             <Sidebar
               priceRange={priceRange}
@@ -188,7 +203,7 @@ export default function ShopPage() {
                 }}
               />
             </div>
-            <section className="product-section" id="all-product-section">
+            <main className="" id="all-product-section">
               {isLoading ? (
                 <Loading />
               ) : error ? (
@@ -202,7 +217,24 @@ export default function ShopPage() {
                   ))}
                 </div>
               )}
-            </section>
+            </main>
+            <div className="flex justify-center items-center mt-6">
+              <Button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                {t("previous")}
+              </Button>
+              <span className="mx-4">
+                {t("page", { current: currentPage, total: totalPages })}
+              </span>
+              <Button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                {t("next")}
+              </Button>
+            </div>
           </main>
         </div>
       </div>

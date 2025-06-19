@@ -181,7 +181,10 @@
     "showingProducts": "Showing {count} Products",
     "searchPlaceholder": "Search for product",
     "searchLabel": "Search for product",
-    "errorLoading": "Error loading products: {error}"
+    "errorLoading": "Error loading products: {error}",
+    "previous": "Prev",
+    "next": "Next",
+    "page": "Page {current} of {total}"
   },
   "productPage": {
     "backToProducts": "Back to Products",
