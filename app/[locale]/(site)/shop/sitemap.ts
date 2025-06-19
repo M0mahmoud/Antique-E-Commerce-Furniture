@@ -6,21 +6,15 @@ import { Locale } from "next-intl";
 const host = "https://antique05.vercel.app";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const products = await getAllProducts();
+  const products = await getAllProducts({
+    page: 1, // waitting backend to create new endpoint for all products
+  });
   const allProducts =
     products?.products.flatMap((product) =>
       routing.locales.map((locale) => ({
         url: getUrl(`/product/${product.slug}`, locale),
         lastModified: new Date(product.updatedAt),
         images: [product.main_image.url],
-        // alternates: {
-        //   languages: Object.fromEntries(
-        //     routing.locales.map((cur) => [
-        //       cur,
-        //       getUrl(`/product/${product.slug}`, cur),
-        //     ])
-        //   ),
-        // },
       }))
     ) || [];
   return [...allProducts];
