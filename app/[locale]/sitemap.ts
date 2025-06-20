@@ -7,7 +7,9 @@ import { getAllProducts } from "../api/products";
 const host = "https://antique05.vercel.app";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const products = await getAllProducts();
+  const products = await getAllProducts({
+    page: 1, // waitting backend to create new endpoint for all products
+  });
   const allProducts =
     products?.products.flatMap((product) =>
       routing.locales.map((locale) => ({
