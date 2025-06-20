@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { Poppins, Cairo } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import ClientProvider from "@/components/ClientProvider";
 import { Toaster } from "@/components/ui/sonner";
@@ -51,11 +52,13 @@ export default async function RootLayout({
         className={`${locale === "en" ? poppins.className : cairo.className}`}
       >
         <NextIntlClientProvider messages={messages}>
-          <ClientProvider>
-            {children}
-            <NextTopLoader color="#16a356" height={4} />
-          </ClientProvider>
-          <Toaster />
+          <NuqsAdapter>
+            <ClientProvider>
+              {children}
+              <NextTopLoader color="#16a356" height={4} />
+            </ClientProvider>
+            <Toaster />
+          </NuqsAdapter>
         </NextIntlClientProvider>
       </body>
     </html>

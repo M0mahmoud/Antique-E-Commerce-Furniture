@@ -3,158 +3,67 @@
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/layout/product/ProductCard";
 import Loading from "@/components/Loading";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
 import { useAllProducts } from "@/hooks/products";
 import { Product } from "@/types/products";
-import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-
-const Sidebar = ({
-  priceRange,
-  setPriceRange,
-  selectedCategories,
-  setSelectedCategories,
-  selectedBrands,
-  setSelectedBrands,
-  uniqueCategories,
-  uniqueBrands,
-}: {
-  priceRange: number[];
-  setPriceRange: (priceRange: number[]) => void;
-  selectedCategories: string[];
-  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
-  selectedBrands: string[];
-  setSelectedBrands: React.Dispatch<React.SetStateAction<string[]>>;
-  uniqueCategories: string[];
-  uniqueBrands: string[];
-}) => {
-  const t = useTranslations("shopPage");
-
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories((prevCategories) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((c) => c !== category)
-        : [...prevCategories, category]
-    );
-  };
-
-  const handleBrandChange = (brand: string) => {
-    setSelectedBrands((prevBrands) =>
-      prevBrands.includes(brand)
-        ? prevBrands.filter((b) => b !== brand)
-        : [...prevBrands, brand]
-    );
-  };
-
-  return (
-    <div className="bg-background p-4 rounded-lg shadow">
-      <h2 className="text-xl font-bold mb-4">{t("filters")}</h2>
-      <div className="mb-4">
-        <h3 className="font-semibold mb-2">{t("priceRange")}</h3>
-        <Slider
-          min={0}
-          max={10000}
-          step={10}
-          value={priceRange}
-          onValueChange={setPriceRange}
-        />
-        <div className="flex justify-between mt-2">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
-        </div>
-      </div>
-      <div className="mb-4">
-        <h3 className="font-semibold mb-2">{t("categories")}</h3>
-        {uniqueCategories.map((category) => (
-          <div key={category} className="flex items-center mb-2">
-            <Checkbox
-              id={`category-${category}`}
-              checked={selectedCategories.includes(category)}
-              onCheckedChange={() => handleCategoryChange(category)}
-            />
-            <label
-              htmlFor={`category-${category}`}
-              className="ms-2 cursor-pointer"
-            >
-              {category}
-            </label>
-          </div>
-        ))}
-      </div>
-      <div className="mb-4">
-        <h3 className="font-semibold mb-2">{t("brands")}</h3>
-        {uniqueBrands.map((brand) => (
-          <div key={brand} className="flex items-center mb-2">
-            <Checkbox
-              id={`brand-${brand}`}
-              checked={selectedBrands.includes(brand)}
-              onCheckedChange={() => handleBrandChange(brand)}
-            />
-            <label htmlFor={`brand-${brand}`} className="ms-2 cursor-pointer">
-              {brand}
-            </label>
-          </div>
-        ))}
-      </div>
-      <Button
-        className="w-full mt-4"
-        onClick={() => {
-          setPriceRange([0, 10000]);
-          setSelectedCategories([]);
-          setSelectedBrands([]);
-        }}
-      >
-        {t("resetFilters")}
-      </Button>
-    </div>
-  );
-};
+import {
+  useQueryStates,
+  parseAsInteger,
+  parseAsString,
+  parseAsArrayOf,
+} from "nuqs";
+import ShopPagination from "@/components/ui/ShopPagination";
+import ShopSidebar from "@/components/layout/ShopSidebar";
 
 export default function ShopPage() {
   const t = useTranslations("shopPage");
-  const searchParams = useSearchParams();
-  const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState(searchParams.get("q") || "");
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-      setSearchTerm(value);
-      return params.toString();
-    },
-    [searchParams]
-  );
+  const [
+    { page = 1, q = "", categories = [], brands = [], min = 0, max = 10000 },
+    setQuery,
+  ] = useQueryStates({
+    page: parseAsInteger.withDefault(1),
+    q: parseAsString.withDefault(""),
+    categories: parseAsArrayOf(parseAsString).withDefault([]),
+    brands: parseAsArrayOf(parseAsString).withDefault([]),
+    min: parseAsInteger.withDefault(0),
+    max: parseAsInteger.withDefault(10000),
+  });
 
-  useEffect(() => {
-    const query = searchParams.get("page");
-    if (query) {
-      setCurrentPage(Number(query));
-    } else {
-      setCurrentPage(1);
-    }
-  }, [searchParams]);
+  const priceRange = [min, max];
+  const setPriceRange = ([newMin, newMax]: number[]) => {
+    setQuery({ min: newMin, max: newMax, page: 1 });
+  };
+  const setSelectedCategories = (cats: string[]) => {
+    setQuery({ categories: cats, page: 1 });
+  };
+  const setSelectedBrands = (brandsArr: string[]) => {
+    setQuery({ brands: brandsArr, page: 1 });
+  };
+  const setSearchTerm = (term: string) => {
+    setQuery({ q: term, page: 1 });
+  };
+  const setCurrentPage = (p: number) => {
+    setQuery({ page: p });
+  };
 
   const { data, error, isLoading } = useAllProducts({
-    page: currentPage,
-    // TODO: Add more filters as needed
+    page,
+    name: q,
+    categoryName: categories[0], // adjust if you want multi-category
+    brand: brands[0], // adjust if you want multi-brand
+    min,
+    max,
   });
 
   const filteredProducts = data?.products.filter(
     (product: Product) =>
-      (selectedCategories.length === 0 ||
-        selectedCategories.includes(product.category.name)) &&
-      (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
-      product.original_price >= priceRange[0] &&
-      product.original_price <= priceRange[1] &&
-      product.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
+      (categories.length === 0 || categories.includes(product.category.name)) &&
+      (brands.length === 0 || brands.includes(product.brand)) &&
+      product.original_price >= min &&
+      product.original_price <= max &&
+      product.name.toLocaleLowerCase().includes(q.toLocaleLowerCase())
   );
 
   const uniqueCategories = Array.from(
@@ -176,12 +85,12 @@ export default function ShopPage() {
             <p className="px-2 text-primary">
               {t("showingProducts", { count: data?.total_products || 0 })}
             </p>
-            <Sidebar
+            <ShopSidebar
               priceRange={priceRange}
               setPriceRange={setPriceRange}
-              selectedCategories={selectedCategories}
+              selectedCategories={categories}
               setSelectedCategories={setSelectedCategories}
-              selectedBrands={selectedBrands}
+              selectedBrands={brands}
               setSelectedBrands={setSelectedBrands}
               uniqueCategories={uniqueCategories}
               uniqueBrands={uniqueBrands}
@@ -193,14 +102,8 @@ export default function ShopPage() {
               <Input
                 className="p-2 mb-4"
                 placeholder={t("searchPlaceholder")}
-                value={searchTerm}
-                onChange={(e) => {
-                  window.history.pushState(
-                    null,
-                    "",
-                    `?${createQueryString("q", e.target.value)}`
-                  );
-                }}
+                value={q}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
             <main className="" id="all-product-section">
@@ -219,21 +122,11 @@ export default function ShopPage() {
               )}
             </main>
             <div className="flex justify-center items-center mt-6">
-              <Button
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-              >
-                {t("previous")}
-              </Button>
-              <span className="mx-4">
-                {t("page", { current: currentPage, total: totalPages })}
-              </span>
-              <Button
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-              >
-                {t("next")}
-              </Button>
+              <ShopPagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+              />
             </div>
           </main>
         </div>
