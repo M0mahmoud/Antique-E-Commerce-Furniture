@@ -17,7 +17,7 @@ export function useAllProducts({
   max?: number;
 }) {
   return useQuery({
-    queryKey: ["products", page],
+    queryKey: ["products", page, name, categoryName, brand, min, max],
     queryFn: () =>
       getAllProducts({
         page,

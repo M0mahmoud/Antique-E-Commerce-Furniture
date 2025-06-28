@@ -5,7 +5,8 @@ export default function Loading() {
   return (
     <div
       className={
-        "fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-100"
+        "flex items-center justify-center  z-50 min-w-full w-full min-h-full h-full"
+        // "fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-100"
       }
     >
       <div className="flex flex-col items-center space-y-4">

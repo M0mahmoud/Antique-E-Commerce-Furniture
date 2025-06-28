@@ -23,15 +23,13 @@ const ShopPagination = ({
     <Pagination>
       <PaginationContent>
         {currentPage > 1 && (
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                onPageChange(currentPage - 1);
-              }}
-            />
-          </PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              onPageChange(currentPage - 1);
+            }}
+          />
         )}
         {/* Page numbers logic */}
         {(() => {
@@ -47,70 +45,73 @@ const ShopPagination = ({
           }
           if (start > 1) {
             pages.push(
-              <PaginationItem key={1}>
-                <PaginationLink
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onPageChange(1);
-                  }}
-                  isActive={currentPage === 1}
-                >
-                  1
-                </PaginationLink>
-              </PaginationItem>
+              <PaginationLink
+                key={1}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onPageChange(1);
+                }}
+                isActive={currentPage === 1}
+              >
+                1
+              </PaginationLink>
             );
             if (start > 2) {
-              pages.push(<PaginationEllipsis key="start-ellipsis" />);
+              pages.push(
+                <PaginationItem key="start-ellipsis">
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
             }
           }
           for (let i = start; i <= end; i++) {
             pages.push(
-              <PaginationItem key={i}>
-                <PaginationLink
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onPageChange(i);
-                  }}
-                  isActive={currentPage === i}
-                >
-                  {i}
-                </PaginationLink>
-              </PaginationItem>
+              <PaginationLink
+                key={i}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onPageChange(i);
+                }}
+                isActive={currentPage === i}
+              >
+                {i}
+              </PaginationLink>
             );
           }
           if (end < totalPages) {
             if (end < totalPages - 1) {
-              pages.push(<PaginationEllipsis key="end-ellipsis" />);
+              pages.push(
+                <PaginationItem key="end-ellipsis">
+                  <PaginationEllipsis />
+                </PaginationItem>
+              );
             }
             pages.push(
-              <PaginationItem key={totalPages}>
-                <PaginationLink
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onPageChange(totalPages);
-                  }}
-                  isActive={currentPage === totalPages}
-                >
-                  {totalPages}
-                </PaginationLink>
-              </PaginationItem>
+              <PaginationLink
+                key={totalPages}
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  onPageChange(totalPages);
+                }}
+                isActive={currentPage === totalPages}
+              >
+                {totalPages}
+              </PaginationLink>
             );
           }
           return pages;
         })()}
         {currentPage < totalPages && (
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                onPageChange(currentPage + 1);
-              }}
-            />
-          </PaginationItem>
+          <PaginationNext
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              onPageChange(currentPage + 1);
+            }}
+          />
         )}
       </PaginationContent>
     </Pagination>

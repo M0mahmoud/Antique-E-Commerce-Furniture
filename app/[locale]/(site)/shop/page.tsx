@@ -15,55 +15,129 @@ import {
 } from "nuqs";
 import ShopPagination from "@/components/ui/ShopPagination";
 import ShopSidebar from "@/components/layout/ShopSidebar";
+import { useState, useEffect, useRef } from "react";
 
 export default function ShopPage() {
   const t = useTranslations("shopPage");
 
   const [
-    { page = 1, q = "", categories = [], brands = [], min = 0, max = 10000 },
+    {
+      page = 1,
+      q: rawQ,
+      categories: rawCategories,
+      brands: rawBrands,
+      min: rawMin,
+      max: rawMax,
+    },
     setQuery,
-  ] = useQueryStates({
-    page: parseAsInteger.withDefault(1),
-    q: parseAsString.withDefault(""),
-    categories: parseAsArrayOf(parseAsString).withDefault([]),
-    brands: parseAsArrayOf(parseAsString).withDefault([]),
-    min: parseAsInteger.withDefault(0),
-    max: parseAsInteger.withDefault(10000),
-  });
+  ] = useQueryStates(
+    {
+      page: parseAsInteger.withDefault(1),
+      q: parseAsString.withDefault(""),
+      categories: parseAsString.withDefault(""),
+      brands: parseAsString.withDefault(""),
+      min: parseAsInteger.withDefault(0),
+      max: parseAsInteger.withDefault(100000),
+    },
+    {
+      clearOnDefault: true,
+    }
+  );
 
-  const priceRange = [min, max];
+  const q = rawQ ?? undefined;
+  const min = rawMin ?? undefined;
+  const max = rawMax ?? undefined;
+  const categories = rawCategories ? rawCategories.split(",") : [];
+  const brands = rawBrands ? rawBrands.split(",") : [];
+
+  // Local state for search input (before debouncing)
+  const [searchInput, setSearchInput] = useState(q ?? "");
+
+  // Debounce timer ref
+  const debounceTimer = useRef<NodeJS.Timeout>(null);
+
+  // Update local search input when URL query changes (e.g., browser back/forward)
+  useEffect(() => {
+    setSearchInput(q ?? "");
+  }, [q]);
+
+  // Debounced search function
+  useEffect(() => {
+    // Clear existing timer
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current);
+    }
+
+    // Set new timer for debounced search
+    debounceTimer.current = setTimeout(() => {
+      if (searchInput !== (q ?? "")) {
+        setQuery({ q: searchInput || undefined, page: 1 });
+      }
+    }, 500); // 500ms debounce delay
+
+    // Cleanup timer on unmount
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current);
+      }
+    };
+  }, [searchInput, q, setQuery]);
+
+  const priceRange = [min ?? 0, max ?? 10000];
   const setPriceRange = ([newMin, newMax]: number[]) => {
     setQuery({ min: newMin, max: newMax, page: 1 });
   };
+
+  // Optimized category selection - batch updates
   const setSelectedCategories = (cats: string[]) => {
-    setQuery({ categories: cats, page: 1 });
+    setQuery({
+      categories: cats.length > 0 ? cats.join(",") : undefined,
+      page: 1,
+    });
   };
+
+  // Optimized brand selection - batch updates
   const setSelectedBrands = (brandsArr: string[]) => {
-    setQuery({ brands: brandsArr, page: 1 });
+    setQuery({
+      brands: brandsArr.length > 0 ? brandsArr.join(",") : undefined,
+      page: 1,
+    });
   };
-  const setSearchTerm = (term: string) => {
-    setQuery({ q: term, page: 1 });
-  };
+
   const setCurrentPage = (p: number) => {
     setQuery({ page: p });
   };
 
-  const { data, error, isLoading } = useAllProducts({
+  // Reset all filters function
+  const resetFilters = () => {
+    setSearchInput(""); // Clear local search input
+    setQuery({
+      page: 1,
+      q: "",
+      categories: "",
+      brands: "",
+      min: 0,
+      max: 100000,
+    });
+  };
+
+  const { data, error, isPending } = useAllProducts({
     page,
     name: q,
-    categoryName: categories[0], // adjust if you want multi-category
-    brand: brands[0], // adjust if you want multi-brand
+    categoryName: categories[0],
+    brand: brands[0],
     min,
     max,
   });
 
   const filteredProducts = data?.products.filter(
     (product: Product) =>
-      (categories.length === 0 || categories.includes(product.category.name)) &&
-      (brands.length === 0 || brands.includes(product.brand)) &&
-      product.original_price >= min &&
-      product.original_price <= max &&
-      product.name.toLocaleLowerCase().includes(q.toLocaleLowerCase())
+      (categories.length === 0 ||
+        categories.includes(product.category.name ?? "")) &&
+      (brands.length === 0 || brands.includes(product.brand ?? "")) &&
+      product.original_price >= (min ?? 0) &&
+      product.original_price <= (max ?? 10000) &&
+      product.name.toLocaleLowerCase().includes((q ?? "").toLocaleLowerCase())
   );
 
   const uniqueCategories = Array.from(
@@ -94,20 +168,22 @@ export default function ShopPage() {
               setSelectedBrands={setSelectedBrands}
               uniqueCategories={uniqueCategories}
               uniqueBrands={uniqueBrands}
+              resetFilters={resetFilters}
             />
           </aside>
           <main className="w-full md:w-3/4">
             <h3>{t("searchLabel")}</h3>
             <div className="flex gap-2">
               <Input
+                disabled={isPending}
                 className="p-2 mb-4"
                 placeholder={t("searchPlaceholder")}
-                value={q}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
-            <main className="" id="all-product-section">
-              {isLoading ? (
+            <main className="w-full h-full" id="all-product-section">
+              {isPending ? (
                 <Loading />
               ) : error ? (
                 <p className="text-xl text-destructive font-light">
@@ -120,6 +196,7 @@ export default function ShopPage() {
                   ))}
                 </div>
               )}
+              {filteredProducts?.length === 0 && <p>No Products</p>}
             </main>
             <div className="flex justify-center items-center mt-6">
               <ShopPagination

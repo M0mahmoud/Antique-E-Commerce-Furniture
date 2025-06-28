@@ -13,6 +13,7 @@ export default function ShopSidebar({
   setSelectedBrands,
   uniqueCategories,
   uniqueBrands,
+  resetFilters,
 }: {
   priceRange: number[];
   setPriceRange: (priceRange: number[]) => void;
@@ -22,6 +23,7 @@ export default function ShopSidebar({
   selectedBrands: string[];
   uniqueCategories: string[];
   uniqueBrands: string[];
+  resetFilters: () => void;
 }) {
   const t = useTranslations("shopPage");
 
@@ -91,14 +93,7 @@ export default function ShopSidebar({
           </div>
         ))}
       </div>
-      <Button
-        className="w-full mt-4"
-        onClick={() => {
-          setPriceRange([0, 10000]);
-          setSelectedCategories([]);
-          setSelectedBrands([]);
-        }}
-      >
+      <Button className="w-full mt-4" onClick={resetFilters}>
         {t("resetFilters")}
       </Button>
     </div>
