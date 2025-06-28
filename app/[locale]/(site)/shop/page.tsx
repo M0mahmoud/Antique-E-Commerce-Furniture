@@ -197,14 +197,14 @@ export default function ShopPage() {
                 </div>
               )}
               {filteredProducts?.length === 0 && <p>No Products</p>}
+              <div className="flex justify-center items-center mt-6">
+                <ShopPagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              </div>
             </main>
-            <div className="flex justify-center items-center mt-6">
-              <ShopPagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            </div>
           </main>
         </div>
       </div>
