@@ -15,7 +15,7 @@ const Hero = ({
     return (
         <section key={id} className="relative">
             <Image
-                src="/bg.avif"
+                src="/bg.jpeg"
                 alt="Hero background"
                 className="object-cover object-center"
                 fill
